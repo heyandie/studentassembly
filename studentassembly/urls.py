@@ -21,6 +21,9 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index' ),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += [
+    url(r'', views.IndexView.as_view(), name='index')
+]
