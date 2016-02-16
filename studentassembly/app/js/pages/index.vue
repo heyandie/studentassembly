@@ -1,11 +1,18 @@
 <template lang="jade">
-navbar
-img(src="/static/img/student.jpg")
-h1 {{ msg }}
+v-header(header-class="header--landing")
+section.page__wrapper
+  .landing__wrapper
+    .landing__content
+      h1 You deserve to be heard.
+      p Student Assembly empowers students to increase transparency and accountability on their schools.
+      a.button File a Report
+  .content__wrapper
+    .content__section
+      h1 {{ msg }}
 </template>
 
 <script>
-var NavBar = require('../components/navbar.vue');
+var Header = require('../components/header.vue');
 
 module.exports = {
   data: function() {
@@ -14,7 +21,7 @@ module.exports = {
     }
   },
   components: {
-    'navbar': NavBar
+    'v-header': Header
   }
 }
 </script>

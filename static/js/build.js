@@ -12656,6 +12656,9 @@ window.router = router;
 'use strict';
 
 module.exports = {
+  props: {
+    headerClass: ''
+  },
   data: function data() {
     return {
       msg: 'Hello'
@@ -12663,12 +12666,12 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<nav><div class=\"nav__wrapper\"><div class=\"nav nav--left\"><a href=\"#0\" class=\"nav__link\"><img src=\"/static/img/logo.png\" height=\"40\" class=\"nav__logo\"/></a></div><div class=\"nav nav--right\"><a href=\"#0\" class=\"nav__link\">How It Works</a><a href=\"#0\" class=\"nav__link\">Partners</a><a href=\"#0\" class=\"nav__link\">About Us</a><a href=\"#0\" class=\"nav__link\">Contact Us</a></div></div></nav>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<header :class=\"headerClass\" class=\"header__wrapper\"><nav class=\"nav__wrapper\"><div class=\"nav nav--left\"><a href=\"#0\"><img src=\"/static/img/logo.png\" height=\"54\" class=\"nav__logo\"/></a></div><div class=\"nav nav--right\"><a href=\"#0\" class=\"nav__link\">How It Works</a><a href=\"#0\" class=\"nav__link\">Login</a></div></nav></header>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/components/navbar.vue"
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/components/header.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
@@ -12691,7 +12694,7 @@ if (module.hot) {(function () {  module.hot.accept()
 },{"vue":4,"vue-hot-reload-api":2}],9:[function(require,module,exports){
 'use strict';
 
-var NavBar = require('../components/navbar.vue');
+var Header = require('../components/header.vue');
 
 module.exports = {
   data: function data() {
@@ -12700,11 +12703,11 @@ module.exports = {
     };
   },
   components: {
-    'navbar': NavBar
+    'v-header': Header
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<navbar></navbar><img src=\"/static/img/student.jpg\"/><h1>{{ msg }}</h1>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header header-class=\"header--landing\"></v-header><section class=\"page__wrapper\"><div class=\"landing__wrapper\"><div class=\"landing__content\"><h1>You deserve to be heard.</h1><p>Student Assembly empowers students to increase transparency and accountability on their schools.</p><a class=\"button\">File a Report</a></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12716,7 +12719,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/navbar.vue":7,"vue":4,"vue-hot-reload-api":2}],10:[function(require,module,exports){
+},{"../components/header.vue":7,"vue":4,"vue-hot-reload-api":2}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = {

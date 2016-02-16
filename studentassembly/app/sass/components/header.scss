@@ -1,0 +1,43 @@
+.header__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: $brand-color;
+
+  &.header--landing {
+    background-color: transparent;
+  }
+}
+
+.nav__wrapper {
+  @include clearfix();
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 10px 0;
+}
+
+.nav {
+  &.nav--left {
+    float: left;
+  }
+
+  &.nav--right {
+    float: right;
+  }
+}
+
+.nav__logo {
+  // background-color: $brand-color;
+}
+
+.nav__link {
+  display: inline-block;
+  margin: 0 14px;
+  line-height: 54px;
+
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
