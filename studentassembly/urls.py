@@ -27,4 +27,5 @@ urlpatterns = [
 urlpatterns += [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'', include('account.urls', namespace='account')),
+    url(r'^api/auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
 ]
