@@ -12707,7 +12707,7 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header header-class=\"header--landing\"></v-header><section class=\"page__wrapper\"><div class=\"landing__wrapper\"><div class=\"landing__content\"><h1>You deserve to be heard.</h1><p>Student Assembly empowers students to increase transparency and accountability on their schools.</p><a class=\"button\">File a Report</a></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header header-class=\"header--landing\"></v-header><section class=\"page__wrapper\"><div class=\"landing__wrapper\"><div class=\"landing__overlay\"></div><div class=\"landing__content\"><h1>You deserve<br/>to be heard.</h1><p>Student Assembly empowers students to increase transparency and accountability on their schools.</p><a class=\"button button--inverted\">File a Report</a></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

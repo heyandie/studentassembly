@@ -40,4 +40,9 @@ img {
     background: linear-gradient(to top, rgba(17, 17, 17, 0.1), rgba(17, 17, 17, 0.1)),
                 $brand-color;
   }
+
+  &.button--inverted {
+    background-color: white;
+    color: $brand-color;
+  }
 }
