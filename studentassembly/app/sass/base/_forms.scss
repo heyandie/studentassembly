@@ -1,0 +1,33 @@
+input {
+  display: block;
+  margin-bottom: 12px;
+  width: 100%;
+
+  appearance: none;
+  border: 1px #e5e5dc solid;
+  border-radius: 4px;
+  padding: 9px 14px;
+
+  &.inline {
+    display: inline-block;
+  }
+
+  &:focus {
+    outline-style: none;
+    border-color: $brand-color;
+  }
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+
+  appearance: none;
+  border: none;
+
+  background-color: $brand-color;
+  border-radius: 4px;
+  padding: 10px 20px;
+
+  color: white;
+}

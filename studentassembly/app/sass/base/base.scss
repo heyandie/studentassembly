@@ -1,5 +1,6 @@
 @import "variables";
 @import "fonts";
+@import "forms";
 
 html {
   box-sizing: border-box;
@@ -15,10 +16,15 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  margin: 0 0 14px 0;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-smoothing: antialiased;
+
+  &:last-child {
+    margin: 0;
+  }
 }
 
 img {

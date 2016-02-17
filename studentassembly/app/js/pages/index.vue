@@ -1,6 +1,6 @@
 <template lang="jade">
 v-header(header-class="header--landing")
-section.page__wrapper
+section.page__wrapper.page--landing
   .landing__wrapper
     .landing__overlay
     .landing__content

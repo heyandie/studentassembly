@@ -6,13 +6,17 @@
 @import "components/header";
 
 .page__wrapper {
-  // padding-top: 54px;
+  padding-top: 78px;
+
+  &.page--landing {
+    padding-top: 0;
+  }
 }
 
 .content__wrapper {
   margin: 0 auto;
   max-width: 1200px;
-  background-color: #e5e5dc;
+  // background-color: #e5e5dc;
 }
 
 .content__section {

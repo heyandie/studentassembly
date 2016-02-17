@@ -26,5 +26,6 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'login/', views.IndexView.as_view(), name='index'),
     url(r'', include('account.urls', namespace='account')),
 ]
