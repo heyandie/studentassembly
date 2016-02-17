@@ -42,12 +42,17 @@ INSTALLED_APPS = [
     'report',
 ]
 
+# Email settings
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'studentassemblyph@gmail.com'
 EMAIL_HOST_PASSWORD = 'stopcorruption'
 DEFAULT_FROM_EMAIL = 'studentassemblyph@gmail.com'
+
+
+AUTH_USER_MODEL = 'account.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -58,6 +63,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
+}
+
+JWT_AUTH = {
+    'JWT_PAYLOAD_HANDLER':'account.api.jwt_payload_handler',
 }
 
 MIDDLEWARE_CLASSES = [

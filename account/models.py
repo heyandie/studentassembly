@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import UserManager
 
 def generate_username():
     while 1:
@@ -37,6 +38,7 @@ class User(AbstractBaseUser):
     is_verified = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
 
+    objects = UserManager()
 
 class VerificationToken(models.Model):
     user_id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
