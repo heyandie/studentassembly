@@ -17653,6 +17653,8 @@ module.exports = {
   },
   methods: {
     register: function register() {
+      // jason@example.com
+      // jasontest12
       var that = this;
       client({ path: 'register', entity: this.user }).then(function (response) {
         // that.$dispatch('userHasFetchedToken', response.entity.token);

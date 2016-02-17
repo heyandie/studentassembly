@@ -25,6 +25,8 @@ module.exports = {
   },
   methods: {
     register: function() {
+      // jason@example.com
+      // jasontest12
       var that = this;
       client({ path: 'register', entity: this.user }).then(
         function (response) {
