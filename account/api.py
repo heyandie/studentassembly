@@ -11,7 +11,7 @@ from django.template import Context
 from django.template.loader import get_template
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
-
+from django.utils.translation import ugettext as _
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -21,6 +21,7 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework_jwt.compat import get_username, get_username_field
 from rest_framework_jwt.settings import api_settings
+from rest_framework import exceptions
 
 from .models import User, VerificationToken
 from .serializers import CreateAccountSerializer
@@ -47,6 +48,9 @@ def jwt_payload_handler(user):
         '`email` and `user_id`. ',
         DeprecationWarning
     )
+    if not user.is_verified:
+        msg = _('Please verify your account.')
+        raise exceptions.AuthenticationFailed(msg)
 
     payload = {
         'user_id': str(user.id.hex),
