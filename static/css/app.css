@@ -379,7 +379,6 @@ th {
 
 input {
   display: block;
-  margin-bottom: 12px;
   width: 100%;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -404,6 +403,27 @@ button[type="submit"] {
   border-radius: 4px;
   padding: 10px 20px;
   color: white; }
+
+.form__wrapper {
+  background-color: #fafafa;
+  border: 1px #eee solid;
+  border-radius: 4px;
+  padding: 20px; }
+
+.form__element {
+  margin-bottom: 12px; }
+  .form__element:last-child {
+    margin-bottom: 0; }
+  .form__element.form--empty input {
+    background-color: rgba(235, 38, 73, 0.15);
+    border-color: #eb2649; }
+
+.form__error {
+  color: #eb2649;
+  font-size: 12px; }
+  .form__error span {
+    display: block;
+    margin: 6px; }
 
 html {
   box-sizing: border-box; }
@@ -494,6 +514,8 @@ img {
 .content__wrapper {
   margin: 0 auto;
   max-width: 1200px; }
+  .content__wrapper.content--small {
+    max-width: 440px; }
 
 .content__section {
   padding: 24px 12px; }

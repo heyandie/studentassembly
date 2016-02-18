@@ -21,7 +21,7 @@ var Header = require('../components/header.vue');
 module.exports = {
   data: function() {
     return {
-      msg: 'Hello StudentAssembly with Vue.js'
+      msg: 'Student Assembly Features'
     }
   },
   components: {

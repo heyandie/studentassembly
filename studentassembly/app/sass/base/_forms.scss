@@ -1,6 +1,5 @@
 input {
   display: block;
-  margin-bottom: 12px;
   width: 100%;
 
   appearance: none;
@@ -30,4 +29,34 @@ button[type="submit"] {
   padding: 10px 20px;
 
   color: white;
+}
+
+.form__wrapper {
+  background-color: #fafafa;
+  border: 1px #eee solid;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.form__element {
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.form--empty input {
+    background-color: rgba(#eb2649, 0.15);
+    border-color: #eb2649;
+  }
+}
+
+.form__error {
+  color: #eb2649;
+  font-size: 12px;
+
+  span {
+    display: block;
+    margin: 6px;
+  }
 }

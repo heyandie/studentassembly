@@ -12,6 +12,7 @@ section.page__wrapper
 
 <script>
 var Header = require('../components/header.vue');
+var Store = require('../store');
 
 module.exports = {
   data: function() {

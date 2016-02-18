@@ -25,7 +25,6 @@ urlpatterns = [
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'login/', views.IndexView.as_view(), name='index'),
     url(r'', include('account.urls', namespace='account')),
+    url(r'', views.IndexView.as_view(), name='index')
 ]

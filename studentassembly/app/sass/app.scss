@@ -17,6 +17,10 @@
   margin: 0 auto;
   max-width: 1200px;
   // background-color: #e5e5dc;
+
+  &.content--small {
+    max-width: 440px;
+  }
 }
 
 .content__section {
@@ -38,15 +42,13 @@
 
   height: 600px;
   overflow: hidden;
-
   color: white;
-  // text-align: center;
 
   h1 {
     margin: 0 0 10px 0;
     max-width: 500px;
     line-height: 64px;
-    font-size: 64px;;
+    font-size: 64px;
   }
 
   p {

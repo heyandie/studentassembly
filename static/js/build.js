@@ -717,7 +717,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":47}],7:[function(require,module,exports){
+},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":51}],7:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -884,7 +884,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":47}],8:[function(require,module,exports){
+},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":51}],8:[function(require,module,exports){
 /*
  * Copyright 2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1014,7 +1014,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"when":47}],10:[function(require,module,exports){
+},{"../interceptor":7,"when":51}],10:[function(require,module,exports){
 /*
  * Copyright 2012-2014 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1126,7 +1126,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":47}],11:[function(require,module,exports){
+},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":51}],11:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1415,7 +1415,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":47}],15:[function(require,module,exports){
+},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":51}],15:[function(require,module,exports){
 /*
  * Copyright 2013-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1556,7 +1556,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":47}],16:[function(require,module,exports){
+},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":51}],16:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1903,7 +1903,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"when":47}],22:[function(require,module,exports){
+},{"when":51}],22:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -2135,7 +2135,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./normalizeHeaderName":23,"when":47}],25:[function(require,module,exports){
+},{"./normalizeHeaderName":23,"when":51}],25:[function(require,module,exports){
 /*
  * Copyright 2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -15021,6 +15021,551 @@ if (devtools) {
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"_process":1}],30:[function(require,module,exports){
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createLogger = exports.Store = undefined;
+exports.install = install;
+
+var _util = require('./util');
+
+var _devtool = require('./middlewares/devtool');
+
+var _devtool2 = _interopRequireDefault(_devtool);
+
+var _logger = require('./middlewares/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Vue = undefined;
+
+var Store = exports.Store = (function () {
+
+  /**
+   * @param {Object} options
+   *        - {Object} state
+   *        - {Object} actions
+   *        - {Object} mutations
+   *        - {Array} middlewares
+   *        - {Boolean} strict
+   */
+
+  function Store() {
+    var _this = this;
+
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+    var _ref$state = _ref.state;
+    var state = _ref$state === undefined ? {} : _ref$state;
+    var _ref$actions = _ref.actions;
+    var actions = _ref$actions === undefined ? {} : _ref$actions;
+    var _ref$mutations = _ref.mutations;
+    var mutations = _ref$mutations === undefined ? {} : _ref$mutations;
+    var _ref$middlewares = _ref.middlewares;
+    var middlewares = _ref$middlewares === undefined ? [] : _ref$middlewares;
+    var _ref$getters = _ref.getters;
+    var getters = _ref$getters === undefined ? {} : _ref$getters;
+    var _ref$strict = _ref.strict;
+    var strict = _ref$strict === undefined ? false : _ref$strict;
+
+    _classCallCheck(this, Store);
+
+    // bind dispatch to self
+    var dispatch = this.dispatch;
+    this.dispatch = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      dispatch.apply(_this, args);
+    };
+    // use a Vue instance to store the state tree
+    this._vm = new Vue({
+      data: state
+    });
+    this._dispatching = false;
+    this.actions = Object.create(null);
+    this.getters = Object.create(null);
+    this._setupActions(actions);
+    this._setupMutations(mutations);
+    this._setupMiddlewares(middlewares, state);
+    this._setupGetters(getters);
+    // add extra warnings in strict mode
+    if (strict) {
+      this._setupMutationCheck();
+    }
+  }
+
+  /**
+   * Getter for the entire state tree.
+   * Read only.
+   *
+   * @return {Object}
+   */
+
+  _createClass(Store, [{
+    key: 'dispatch',
+
+    /**
+     * Dispatch an action.
+     *
+     * @param {String} type
+     */
+
+    value: function dispatch(type) {
+      for (var _len2 = arguments.length, payload = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        payload[_key2 - 1] = arguments[_key2];
+      }
+
+      var mutation = this._mutations[type];
+      var prevSnapshot = this._prevSnapshot;
+      var state = this.state;
+      var snapshot = undefined,
+          clonedPayload = undefined;
+      if (mutation) {
+        this._dispatching = true;
+        // apply the mutation
+        if (Array.isArray(mutation)) {
+          mutation.forEach(function (m) {
+            return m.apply(undefined, [state].concat(payload));
+          });
+        } else {
+          mutation.apply(undefined, [state].concat(payload));
+        }
+        this._dispatching = false;
+        // invoke middlewares
+        if (this._needSnapshots) {
+          snapshot = this._prevSnapshot = (0, _util.deepClone)(state);
+          clonedPayload = (0, _util.deepClone)(payload);
+        }
+        this._middlewares.forEach(function (m) {
+          if (m.onMutation) {
+            if (m.snapshot) {
+              m.onMutation({ type: type, payload: clonedPayload }, snapshot, prevSnapshot);
+            } else {
+              m.onMutation({ type: type, payload: payload }, state);
+            }
+          }
+        });
+      } else {
+        console.warn('[vuex] Unknown mutation: ' + type);
+      }
+    }
+
+    /**
+     * Hot update actions and mutations.
+     *
+     * @param {Object} options
+     *        - {Object} [actions]
+     *        - {Object} [mutations]
+     */
+
+  }, {
+    key: 'hotUpdate',
+    value: function hotUpdate() {
+      var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+      var actions = _ref2.actions;
+      var mutations = _ref2.mutations;
+      var getters = _ref2.getters;
+
+      if (actions) {
+        this._setupActions(actions, true);
+      }
+      if (mutations) {
+        this._setupMutations(mutations);
+      }
+      if (getters) {
+        this._setupGetters(getters, true);
+      }
+    }
+
+    /**
+     * Setup mutation check: if the vuex instance's state is mutated
+     * outside of a mutation handler, we throw en error. This effectively
+     * enforces all mutations to the state to be trackable and hot-reloadble.
+     * However, this comes at a run time cost since we are doing a deep
+     * watch on the entire state tree, so it is only enalbed with the
+     * strict option is set to true.
+     */
+
+  }, {
+    key: '_setupMutationCheck',
+    value: function _setupMutationCheck() {
+      var _this2 = this;
+
+      // a hack to get the watcher constructor from older versions of Vue
+      // mainly because the public $watch method does not allow sync
+      // watchers.
+      var unwatch = this._vm.$watch('__vuex__', function (a) {
+        return a;
+      });
+      var Watcher = this._vm._watchers[0].constructor;
+      unwatch();
+      new Watcher(this._vm, '$data', function () {
+        if (!_this2._dispatching) {
+          throw new Error('[vuex] Do not mutate vuex store state outside mutation handlers.');
+        }
+      }, { deep: true, sync: true });
+    }
+
+    /**
+     * Set up the callable action functions exposed to components.
+     * This method can be called multiple times for hot updates.
+     * We keep the real action functions in an internal object,
+     * and expose the public object which are just wrapper
+     * functions that point to the real ones. This is so that
+     * the reals ones can be hot reloaded.
+     *
+     * @param {Object} actions
+     * @param {Boolean} [hot]
+     */
+
+  }, {
+    key: '_setupActions',
+    value: function _setupActions(actions, hot) {
+      var _this3 = this;
+
+      this._actions = Object.create(null);
+      actions = Array.isArray(actions) ? (0, _util.mergeObjects)(actions) : actions;
+      Object.keys(actions).forEach(function (name) {
+        _this3._actions[name] = (0, _util.createAction)(actions[name], _this3);
+        if (!_this3.actions[name]) {
+          _this3.actions[name] = function () {
+            var _actions;
+
+            return (_actions = _this3._actions)[name].apply(_actions, arguments);
+          };
+        }
+      });
+      // delete public actions that are no longer present
+      // after a hot reload
+      if (hot) (0, _util.validateHotModules)(this.actions, actions);
+    }
+
+    /**
+     * Set up the callable getter functions exposed to components.
+     * This method can be called multiple times for hot updates.
+     * We keep the real getter functions in an internal object,
+     * and expose the public object which are just wrapper
+     * functions that point to the real ones. This is so that
+     * the reals ones can be hot reloaded.
+     *
+     * @param {Object} getters
+     * @param {Boolean} [hot]
+     */
+
+  }, {
+    key: '_setupGetters',
+    value: function _setupGetters(getters, hot) {
+      var _this4 = this;
+
+      this._getters = Object.create(null);
+      getters = Array.isArray(getters) ? (0, _util.mergeObjects)(getters) : getters;
+      Object.keys(getters).forEach(function (name) {
+        _this4._getters[name] = function () {
+          var _getters;
+
+          for (var _len3 = arguments.length, payload = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+            payload[_key3] = arguments[_key3];
+          }
+
+          return (_getters = getters)[name].apply(_getters, [_this4.state].concat(payload));
+        };
+        if (!_this4.getters[name]) {
+          _this4.getters[name] = function () {
+            var _getters2;
+
+            return (_getters2 = _this4._getters)[name].apply(_getters2, arguments);
+          };
+        }
+      });
+      // delete public getters that are no longer present
+      // after a hot reload
+      if (hot) (0, _util.validateHotModules)(this.getters, getters);
+    }
+
+    /**
+     * Setup the mutation handlers. Effectively a event listener.
+     * This method can be called multiple times for hot updates.
+     *
+     * @param {Object} mutations
+     */
+
+  }, {
+    key: '_setupMutations',
+    value: function _setupMutations(mutations) {
+      this._mutations = Array.isArray(mutations) ? (0, _util.mergeObjects)(mutations, true) : mutations;
+    }
+
+    /**
+     * Setup the middlewares. The devtools middleware is always
+     * included, since it does nothing if no devtool is detected.
+     *
+     * A middleware can demand the state it receives to be
+     * "snapshots", i.e. deep clones of the actual state tree.
+     *
+     * @param {Array} middlewares
+     * @param {Object} state
+     */
+
+  }, {
+    key: '_setupMiddlewares',
+    value: function _setupMiddlewares(middlewares, state) {
+      this._middlewares = [_devtool2.default].concat(middlewares);
+      this._needSnapshots = middlewares.some(function (m) {
+        return m.snapshot;
+      });
+      if (this._needSnapshots) {
+        console.log('[vuex] One or more of your middlewares are taking state snapshots ' + 'for each mutation. Make sure to use them only during development.');
+      }
+      var initialSnapshot = this._prevSnapshot = this._needSnapshots ? (0, _util.deepClone)(state) : null;
+      // call init hooks
+      this._middlewares.forEach(function (m) {
+        if (m.onInit) {
+          m.onInit(m.snapshot ? initialSnapshot : state);
+        }
+      });
+    }
+  }, {
+    key: 'state',
+    get: function get() {
+      return this._vm._data;
+    },
+    set: function set(v) {
+      throw new Error('[vuex] Vuex root state is read only.');
+    }
+  }]);
+
+  return Store;
+})();
+
+// export logger factory
+
+exports.createLogger = _logger2.default;
+
+// export install function
+
+function install(_Vue) {
+  Vue = _Vue;
+  var _init = Vue.prototype._init;
+  Vue.prototype._init = function (options) {
+    options = options || {};
+    if (options.store) {
+      this.$store = options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+    _init.call(this, options);
+  };
+}
+
+// also export the default
+exports.default = {
+  Store: Store,
+  createLogger: _logger2.default,
+  install: install
+};
+},{"./middlewares/devtool":31,"./middlewares/logger":32,"./util":33}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  onInit: function onInit(state) {
+    // TODO
+  },
+  onMutation: function onMutation(mutation, state) {
+    // TODO
+  }
+};
+module.exports = exports['default'];
+},{}],32:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createLogger;
+// Credits: borrowed code from fcomb/redux-logger
+
+function createLogger() {
+  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+  var _ref$collapsed = _ref.collapsed;
+  var collapsed = _ref$collapsed === undefined ? true : _ref$collapsed;
+  var _ref$transformer = _ref.transformer;
+  var transformer = _ref$transformer === undefined ? function (state) {
+    return state;
+  } : _ref$transformer;
+  var _ref$mutationTransfor = _ref.mutationTransformer;
+  var mutationTransformer = _ref$mutationTransfor === undefined ? function (mut) {
+    return mut;
+  } : _ref$mutationTransfor;
+
+  return {
+    snapshot: true,
+    onMutation: function onMutation(mutation, nextState, prevState) {
+      if (typeof console === 'undefined') {
+        return;
+      }
+      var time = new Date();
+      var formattedTime = ' @ ' + pad(time.getHours(), 2) + ':' + pad(time.getMinutes(), 2) + ':' + pad(time.getSeconds(), 2) + '.' + pad(time.getMilliseconds(), 3);
+      var formattedMutation = mutationTransformer(mutation);
+      var message = 'mutation ' + mutation.type + formattedTime;
+      var startMessage = collapsed ? console.groupCollapsed : console.group;
+
+      // render
+      try {
+        startMessage.call(console, message);
+      } catch (e) {
+        console.log(message);
+      }
+
+      console.log('%c prev state', 'color: #9E9E9E; font-weight: bold', prevState);
+      console.log('%c mutation', 'color: #03A9F4; font-weight: bold', formattedMutation);
+      console.log('%c next state', 'color: #4CAF50; font-weight: bold', nextState);
+
+      try {
+        console.groupEnd();
+      } catch (e) {
+        console.log('—— log end ——');
+      }
+    }
+  };
+}
+
+function repeat(str, times) {
+  return new Array(times + 1).join(str);
+}
+
+function pad(num, maxLength) {
+  return repeat('0', maxLength - num.toString().length) + num;
+}
+module.exports = exports['default'];
+},{}],33:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createAction = createAction;
+exports.validateHotModules = validateHotModules;
+exports.mergeObjects = mergeObjects;
+exports.deepClone = deepClone;
+
+function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+/**
+ * Create a actual callable action function.
+ *
+ * @param {String|Function} action
+ * @param {Vuex} store
+ * @return {Function} [description]
+ */
+
+function createAction(action, store) {
+  if (typeof action === 'string') {
+    // simple action string shorthand
+    return function () {
+      for (var _len = arguments.length, payload = Array(_len), _key = 0; _key < _len; _key++) {
+        payload[_key] = arguments[_key];
+      }
+
+      return store.dispatch.apply(store, [action].concat(payload));
+    };
+  } else if (typeof action === 'function') {
+    // normal action
+    return function () {
+      for (var _len2 = arguments.length, payload = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        payload[_key2] = arguments[_key2];
+      }
+
+      return action.apply(undefined, [store].concat(payload));
+    };
+  }
+}
+
+/**
+ * Validates hot api - unassigns any methods
+ * that do not exist.
+ *
+ * @param {Object} currentMethods
+ * @param {Object} newMethods
+ */
+
+function validateHotModules(currentMethods, newMethods) {
+  Object.keys(currentMethods).forEach(function (name) {
+    if (!newMethods[name]) {
+      delete currentMethods[name];
+    }
+  });
+}
+
+/**
+ * Merge an array of objects into one.
+ *
+ * @param {Array<Object>} arr
+ * @param {Boolean} allowDuplicate
+ * @return {Object}
+ */
+
+function mergeObjects(arr, allowDuplicate) {
+  return arr.reduce(function (prev, obj) {
+    Object.keys(obj).forEach(function (key) {
+      var existing = prev[key];
+      if (existing) {
+        // allow multiple mutation objects to contain duplicate
+        // handlers for the same mutation type
+        if (allowDuplicate) {
+          if (Array.isArray(existing)) {
+            existing.push(obj[key]);
+          } else {
+            prev[key] = [prev[key], obj[key]];
+          }
+        } else {
+          console.warn('[vuex] Duplicate action: ' + key);
+        }
+      } else {
+        prev[key] = obj[key];
+      }
+    });
+    return prev;
+  }, {});
+}
+
+/**
+ * Deep clone an object. Faster than JSON.parse(JSON.stringify()).
+ *
+ * @param {*} obj
+ * @return {*}
+ */
+
+function deepClone(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(deepClone);
+  } else if (obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
+    var cloned = {};
+    var keys = Object.keys(obj);
+    for (var i = 0, l = keys.length; i < l; i++) {
+      var key = keys[i];
+      cloned[key] = deepClone(obj[key]);
+    }
+    return cloned;
+  } else {
+    return obj;
+  }
+}
+},{}],34:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15039,7 +15584,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":31,"./env":43,"./makePromise":45}],31:[function(require,module,exports){
+},{"./Scheduler":35,"./env":47,"./makePromise":49}],35:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15121,7 +15666,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],32:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15149,7 +15694,7 @@ define(function() {
 	return TimeoutError;
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
-},{}],33:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15206,7 +15751,7 @@ define(function() {
 
 
 
-},{}],34:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15497,7 +16042,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../apply":33,"../state":46}],35:[function(require,module,exports){
+},{"../apply":37,"../state":50}],39:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15659,7 +16204,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],36:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15688,7 +16233,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],37:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15710,7 +16255,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../state":46}],38:[function(require,module,exports){
+},{"../state":50}],42:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15777,7 +16322,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],39:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15803,7 +16348,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],40:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15883,7 +16428,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../TimeoutError":32,"../env":43}],41:[function(require,module,exports){
+},{"../TimeoutError":36,"../env":47}],45:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15971,7 +16516,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../env":43,"../format":44}],42:[function(require,module,exports){
+},{"../env":47,"../format":48}],46:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16011,7 +16556,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 
-},{}],43:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -16088,7 +16633,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],44:[function(require,module,exports){
+},{"_process":1}],48:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16146,7 +16691,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],45:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -17077,7 +17622,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],46:[function(require,module,exports){
+},{"_process":1}],50:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -17114,7 +17659,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],47:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 
 /**
@@ -17344,7 +17889,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./lib/Promise":30,"./lib/TimeoutError":32,"./lib/apply":33,"./lib/decorators/array":34,"./lib/decorators/flow":35,"./lib/decorators/fold":36,"./lib/decorators/inspect":37,"./lib/decorators/iterate":38,"./lib/decorators/progress":39,"./lib/decorators/timed":40,"./lib/decorators/unhandledRejection":41,"./lib/decorators/with":42}],48:[function(require,module,exports){
+},{"./lib/Promise":34,"./lib/TimeoutError":36,"./lib/apply":37,"./lib/decorators/array":38,"./lib/decorators/flow":39,"./lib/decorators/fold":40,"./lib/decorators/inspect":41,"./lib/decorators/iterate":42,"./lib/decorators/progress":43,"./lib/decorators/timed":44,"./lib/decorators/unhandledRejection":45,"./lib/decorators/with":46}],52:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -17357,7 +17902,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],49:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],53:[function(require,module,exports){
 'use strict';
 
 var _routes = require('./routes');
@@ -17393,7 +17938,7 @@ var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;
 
-},{"./app.vue":48,"./config":52,"./interceptors/jwtAuth":55,"./routes":60,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],50:[function(require,module,exports){
+},{"./app.vue":52,"./config":56,"./interceptors/jwtAuth":59,"./routes":64,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],54:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -17419,7 +17964,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],51:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],55:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -17443,7 +17988,7 @@ var config = {
 
 module.exports = config;
 
-},{}],52:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -17458,7 +18003,7 @@ var config = {
 module.exports = config[env];
 
 }).call(this,require('_process'))
-},{"./development.config":51,"./production.config":53,"./staging.config":54,"_process":1}],53:[function(require,module,exports){
+},{"./development.config":55,"./production.config":57,"./staging.config":58,"_process":1}],57:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -17482,7 +18027,7 @@ var config = {
 
 module.exports = config;
 
-},{}],54:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -17505,7 +18050,7 @@ var config = {
 };
 module.exports = config;
 
-},{}],55:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 (function (define) {
@@ -17558,7 +18103,7 @@ module.exports = config;
 // Boilerplate for AMD and Node
 );
 
-},{"rest/interceptor":7}],56:[function(require,module,exports){
+},{"rest/interceptor":7}],60:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<h1>404</h1>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -17571,7 +18116,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],57:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],61:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -17579,7 +18124,7 @@ var Header = require('../components/header.vue');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Hello StudentAssembly with Vue.js'
+      msg: 'Student Assembly Features'
     };
   },
   components: {
@@ -17599,10 +18144,11 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":50,"vue":29,"vue-hot-reload-api":27}],58:[function(require,module,exports){
+},{"../components/header.vue":54,"vue":29,"vue-hot-reload-api":27}],62:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
+var Store = require('../store');
 
 module.exports = {
   data: function data() {
@@ -17636,7 +18182,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":50,"vue":29,"vue-hot-reload-api":27}],59:[function(require,module,exports){
+},{"../components/header.vue":54,"../store":65,"vue":29,"vue-hot-reload-api":27}],63:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -17644,17 +18190,20 @@ var Header = require('../components/header.vue');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Register',
+      msg: 'Create an account',
       user: {
         email: null,
-        password: null
-      }
+        password: null,
+        repeatPassword: null
+      },
+      emailTaken: true,
+      passwordShort: true,
+      passwordsMismatch: true
     };
   },
   methods: {
-    register: function register() {
-      // jason@example.com
-      // jasontest12
+    validateInput: function validateInput() {},
+    sendRequest: function sendRequest() {
       var that = this;
       client({ path: 'register', entity: this.user }).then(function (response) {
         // that.$dispatch('userHasFetchedToken', response.entity.token);
@@ -17665,6 +18214,10 @@ module.exports = {
         console.log('fail', response);
         if (response.status && response.status.code === 401) that.messages.push({ type: 'danger', message: 'Sorry, you provided invalid credentials' });
       });
+    },
+    register: function register() {
+      validateInput();
+      sendRequest();
     }
   },
   components: {
@@ -17672,7 +18225,7 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1><form><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><button type=\"submit\" @click.prevent=\"register\">Register</button></form></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span v-if=\"emailTaken\">This email is already taken.</span></div></div><div class=\"form__element form--empty\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span v-if=\"passwordShort\">Your password should at least be 8 characters long.</span></div></div><div class=\"form__element\"><input type=\"password\" v-model=\"user.repeatPassword\" placeholder=\"Repeat password\"/><div class=\"form__error\"><span v-if=\"passwordsMismatch\">Oops, the passwords did not match.</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"register\">Register</button></div></form></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -17684,7 +18237,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":50,"vue":29,"vue-hot-reload-api":27}],60:[function(require,module,exports){
+},{"../components/header.vue":54,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -17713,6 +18266,32 @@ module.exports = {
   }
 };
 
-},{"./pages/404.vue":56,"./pages/index.vue":57,"./pages/login.vue":58,"./pages/register.vue":59}]},{},[49]);
+},{"./pages/404.vue":60,"./pages/index.vue":61,"./pages/login.vue":62,"./pages/register.vue":63}],65:[function(require,module,exports){
+'use strict';
+
+var _vuex = require('vuex');
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Vue
+var Vue = require('vue'); // Vuex is an ES6 module
+
+
+Vue.use(_vuex2.default);
+
+module.exports = new _vuex2.default.Store({
+  state: {
+    counter: 0
+  },
+  mutations: {
+    INCREMENT: function INCREMENT(state) {
+      state.counter++;
+    }
+  }
+});
+
+},{"vue":29,"vuex":30}]},{},[53]);
 
 //# sourceMappingURL=build.js.map

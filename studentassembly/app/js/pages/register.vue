@@ -1,13 +1,25 @@
 <template lang="jade">
 v-header
 section.page__wrapper
-  .content__wrapper
+  .content__wrapper.content--small
     .content__section
-      h1 {{ msg }}
-      form
-        input(type="email" v-model="user.email" placeholder="Email")
-        input(type="password" v-model="user.password" placeholder="Password")
-        button(type="submit" @click.prevent="register") Register
+      .form__wrapper
+        h2 {{ msg }}
+        form
+          .form__element
+            input(type="email" v-model="user.email" placeholder="Email")
+            .form__error
+              span(v-if="emailTaken") This email is already taken.
+          .form__element.form--empty
+            input(type="password" v-model="user.password" placeholder="Password")
+            .form__error
+              span(v-if="passwordShort") Your password should at least be 8 characters long.
+          .form__element
+            input(type="password" v-model="user.repeatPassword" placeholder="Repeat password")
+            .form__error
+              span(v-if="passwordsMismatch") Oops, the passwords did not match.
+          .form__element
+            button(type="submit" @click.prevent="register") Register
 </template>
 
 <script>
@@ -16,17 +28,22 @@ var Header = require('../components/header.vue');
 module.exports = {
   data: function() {
     return {
-      msg: 'Register',
+      msg: 'Create an account',
       user: {
         email: null,
-        password: null
-      }
+        password: null,
+        repeatPassword: null
+      },
+      emailTaken: true,
+      passwordShort: true,
+      passwordsMismatch: true
     }
   },
   methods: {
-    register: function() {
-      // jason@example.com
-      // jasontest12
+    validateInput: function() {
+
+    },
+    sendRequest: function() {
       var that = this;
       client({ path: 'register', entity: this.user }).then(
         function (response) {
@@ -41,6 +58,10 @@ module.exports = {
             that.messages.push({type: 'danger', message: 'Sorry, you provided invalid credentials'});
         }
       );
+    },
+    register: function() {
+      validateInput();
+      sendRequest();
     }
   },
   components: {
