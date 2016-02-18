@@ -6,8 +6,8 @@ from rest_framework import serializers
 from .models import User
 
 class PasswordValidator(RegexValidator):
-    regex = r'^(?=.*\d)[A-Za-z\d]{8,}$'
-    message = "Passwords must be minimum of 8 characters and only contain letters or numbers with at least 1 number."
+    regex = r'^[A-Za-z\d]{8,}$'
+    message = "Password must be at least 8 characters containing only letters and numbers."
 
 class CreateAccountSerializer(serializers.ModelSerializer):
     password = serializers.CharField(min_length=8, required=True, validators=[PasswordValidator()])
