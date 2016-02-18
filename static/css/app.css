@@ -403,6 +403,8 @@ button[type="submit"] {
   border-radius: 4px;
   padding: 10px 20px;
   color: white; }
+  button[type="submit"][disabled] {
+    background-color: rgba(250, 105, 0, 0.5); }
 
 .form__wrapper {
   background-color: #fafafa;
@@ -424,6 +426,16 @@ button[type="submit"] {
   .form__error span {
     display: block;
     margin: 6px; }
+
+.button__spinner {
+  margin-top: 3px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  height: 16px; }
 
 html {
   box-sizing: border-box; }

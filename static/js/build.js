@@ -717,7 +717,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":51}],7:[function(require,module,exports){
+},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":52}],7:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -884,7 +884,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":51}],8:[function(require,module,exports){
+},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":52}],8:[function(require,module,exports){
 /*
  * Copyright 2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1014,7 +1014,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"when":51}],10:[function(require,module,exports){
+},{"../interceptor":7,"when":52}],10:[function(require,module,exports){
 /*
  * Copyright 2012-2014 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1126,7 +1126,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":51}],11:[function(require,module,exports){
+},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":52}],11:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1415,7 +1415,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":51}],15:[function(require,module,exports){
+},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":52}],15:[function(require,module,exports){
 /*
  * Copyright 2013-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1556,7 +1556,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":51}],16:[function(require,module,exports){
+},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":52}],16:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1903,7 +1903,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"when":51}],22:[function(require,module,exports){
+},{"when":52}],22:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -2135,7 +2135,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./normalizeHeaderName":23,"when":51}],25:[function(require,module,exports){
+},{"./normalizeHeaderName":23,"when":52}],25:[function(require,module,exports){
 /*
  * Copyright 2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -15021,6 +15021,26 @@ if (devtools) {
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"_process":1}],30:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}],31:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -15374,7 +15394,7 @@ exports.default = {
   createLogger: _logger2.default,
   install: install
 };
-},{"./middlewares/devtool":31,"./middlewares/logger":32,"./util":33}],31:[function(require,module,exports){
+},{"./middlewares/devtool":32,"./middlewares/logger":33,"./util":34}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15389,7 +15409,7 @@ exports.default = {
   }
 };
 module.exports = exports['default'];
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15452,7 +15472,7 @@ function pad(num, maxLength) {
   return repeat('0', maxLength - num.toString().length) + num;
 }
 module.exports = exports['default'];
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15565,7 +15585,7 @@ function deepClone(obj) {
     return obj;
   }
 }
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15584,7 +15604,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":35,"./env":47,"./makePromise":49}],35:[function(require,module,exports){
+},{"./Scheduler":36,"./env":48,"./makePromise":50}],36:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15666,7 +15686,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15694,7 +15714,7 @@ define(function() {
 	return TimeoutError;
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15751,7 +15771,7 @@ define(function() {
 
 
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16042,7 +16062,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../apply":37,"../state":50}],39:[function(require,module,exports){
+},{"../apply":38,"../state":51}],40:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16204,7 +16224,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16233,7 +16253,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16255,7 +16275,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../state":50}],42:[function(require,module,exports){
+},{"../state":51}],43:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16322,7 +16342,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16348,7 +16368,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16428,7 +16448,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../TimeoutError":36,"../env":47}],45:[function(require,module,exports){
+},{"../TimeoutError":37,"../env":48}],46:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16516,7 +16536,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../env":47,"../format":48}],46:[function(require,module,exports){
+},{"../env":48,"../format":49}],47:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16556,7 +16576,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -16633,7 +16653,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],48:[function(require,module,exports){
+},{"_process":1}],49:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16691,7 +16711,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -17622,7 +17642,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],50:[function(require,module,exports){
+},{"_process":1}],51:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -17659,7 +17679,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 
 /**
@@ -17889,7 +17909,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./lib/Promise":34,"./lib/TimeoutError":36,"./lib/apply":37,"./lib/decorators/array":38,"./lib/decorators/flow":39,"./lib/decorators/fold":40,"./lib/decorators/inspect":41,"./lib/decorators/iterate":42,"./lib/decorators/progress":43,"./lib/decorators/timed":44,"./lib/decorators/unhandledRejection":45,"./lib/decorators/with":46}],52:[function(require,module,exports){
+},{"./lib/Promise":35,"./lib/TimeoutError":37,"./lib/apply":38,"./lib/decorators/array":39,"./lib/decorators/flow":40,"./lib/decorators/fold":41,"./lib/decorators/inspect":42,"./lib/decorators/iterate":43,"./lib/decorators/progress":44,"./lib/decorators/timed":45,"./lib/decorators/unhandledRejection":46,"./lib/decorators/with":47}],53:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -17902,7 +17922,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],53:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],54:[function(require,module,exports){
 'use strict';
 
 var _routes = require('./routes');
@@ -17938,7 +17958,7 @@ var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;
 
-},{"./app.vue":52,"./config":56,"./interceptors/jwtAuth":59,"./routes":64,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],54:[function(require,module,exports){
+},{"./app.vue":53,"./config":57,"./interceptors/jwtAuth":61,"./routes":66,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],55:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -17964,7 +17984,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],55:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],56:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -17988,7 +18008,7 @@ var config = {
 
 module.exports = config;
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -18003,7 +18023,7 @@ var config = {
 module.exports = config[env];
 
 }).call(this,require('_process'))
-},{"./development.config":55,"./production.config":57,"./staging.config":58,"_process":1}],57:[function(require,module,exports){
+},{"./development.config":56,"./production.config":58,"./staging.config":59,"_process":1}],58:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -18027,7 +18047,7 @@ var config = {
 
 module.exports = config;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -18050,7 +18070,149 @@ var config = {
 };
 module.exports = config;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
+var __vueify_style__ = require("vueify-insert-css").insert("\n\n.v-spinner .v-fade\n{\n    -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n            animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n    -webkit-animation-fill-mode: both;\n\t          animation-fill-mode: both;\n    position: absolute;\n}\n\n@-webkit-keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n\n@keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  props: {
+    loading: {
+      type: Boolean,
+      default: true
+    },
+    color: {
+      type: String,
+      default: '#555'
+    },
+    height: {
+      type: String,
+      default: '12px'
+    },
+    width: {
+      type: String,
+      default: '5px'
+    },
+    margin: {
+      type: String,
+      default: '4px'
+    },
+    borderRadius: {
+      type: String,
+      default: '3px'
+    },
+    radius: {
+      type: String,
+      default: '16px'
+    }
+  },
+  data: function data() {
+    return {
+      spinnerStyle: {
+        backgroundColor: this.color,
+        height: this.height,
+        width: this.width,
+        margin: this.margin,
+        borderRadius: this.borderRadius
+      }
+    };
+  },
+
+  computed: {
+    ngRadius: function ngRadius() {
+      return '-' + this.radius;
+    },
+    quarter: function quarter() {
+      return parseFloat(this.radius) / 2 + parseFloat(this.radius) / 5.5 + 'px';
+    },
+    ngQuarter: function ngQuarter() {
+      return '-' + this.quarter;
+    },
+    animationStyle1: function animationStyle1() {
+      return {
+        top: this.radius,
+        left: 0,
+        animationDelay: '0.12s'
+      };
+    },
+    animationStyle2: function animationStyle2() {
+      return {
+        top: this.quarter,
+        left: this.quarter,
+        animationDelay: '0.24s',
+        transform: 'rotate(-45deg)'
+      };
+    },
+    animationStyle3: function animationStyle3() {
+      return {
+        top: 0,
+        left: this.radius,
+        animationDelay: '0.36s',
+        transform: 'rotate(90deg)'
+      };
+    },
+    animationStyle4: function animationStyle4() {
+      return {
+        top: this.ngQuarter,
+        left: this.quarter,
+        animationDelay: '0.48s',
+        transform: 'rotate(45deg)'
+      };
+    },
+    animationStyle5: function animationStyle5() {
+      return {
+        top: this.ngRadius,
+        left: 0,
+        animationDelay: '0.60s'
+      };
+    },
+    animationStyle6: function animationStyle6() {
+      return {
+        top: this.ngQuarter,
+        left: this.ngQuarter,
+        animationDelay: '0.72s',
+        transform: 'rotate(-45deg)'
+      };
+    },
+    animationStyle7: function animationStyle7() {
+      return {
+        top: 0,
+        left: this.ngRadius,
+        animationDelay: '0.84s',
+        transform: 'rotate(90deg)'
+      };
+    },
+    animationStyle8: function animationStyle8() {
+      return {
+        top: this.quarter,
+        left: this.ngQuarter,
+        animationDelay: '0.96s',
+        transform: 'rotate(45deg)'
+      };
+    }
+  }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"v-spinner\" v-bind:style=\"{position: 'relative', fontSize: 0}\" v-show=\"loading\">\n<!-- <div class=\"v-spinner\" v-bind:style=\"containerStyle\"> -->\n  <div class=\"v-fade v-fade1\" v-bind:style=\"[spinnerStyle,animationStyle1]\">\n  </div><div class=\"v-fade v-fade2\" v-bind:style=\"[spinnerStyle,animationStyle2]\">\n  </div><div class=\"v-fade v-fade3\" v-bind:style=\"[spinnerStyle,animationStyle3]\">\n  </div><div class=\"v-fade v-fade4\" v-bind:style=\"[spinnerStyle,animationStyle4]\">\n  </div><div class=\"v-fade v-fade5\" v-bind:style=\"[spinnerStyle,animationStyle5]\">\n  </div><div class=\"v-fade v-fade6\" v-bind:style=\"[spinnerStyle,animationStyle6]\">\n  </div><div class=\"v-fade v-fade7\" v-bind:style=\"[spinnerStyle,animationStyle7]\">\n  </div><div class=\"v-fade v-fade8\" v-bind:style=\"[spinnerStyle,animationStyle8]\">\n  </div>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/elements/spinner.vue"
+  module.hot.dispose(function () {
+    require("vueify-insert-css").cache["\n\n.v-spinner .v-fade\n{\n    -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n            animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n    -webkit-animation-fill-mode: both;\n\t          animation-fill-mode: both;\n    position: absolute;\n}\n\n@-webkit-keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n\n@keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":29,"vue-hot-reload-api":27,"vueify-insert-css":30}],61:[function(require,module,exports){
 'use strict';
 
 (function (define) {
@@ -18103,7 +18265,7 @@ module.exports = config;
 // Boilerplate for AMD and Node
 );
 
-},{"rest/interceptor":7}],60:[function(require,module,exports){
+},{"rest/interceptor":7}],62:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<h1>404</h1>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -18116,7 +18278,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],61:[function(require,module,exports){
+},{"vue":29,"vue-hot-reload-api":27}],63:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -18144,7 +18306,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":54,"vue":29,"vue-hot-reload-api":27}],62:[function(require,module,exports){
+},{"../components/header.vue":55,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -18153,16 +18315,47 @@ var Store = require('../store');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Login',
+      msg: 'Login to StudentAssembly',
       user: {
         email: null,
         password: null
-      }
+      },
+      emailError: null,
+      passwordError: null,
+      loggedInMessage: null
     };
   },
   methods: {
-    attemptLogin: function attemptLogin() {
-      console.log('yay');
+    clearErrors: function clearErrors() {
+      this.emailError = null;
+      this.passwordError = null;
+    },
+    validateInput: function validateInput() {
+      this.clearErrors();
+      return true;
+    },
+    sendRequest: function sendRequest() {
+      var that = this;
+      client({ path: 'token-auth', entity: this.user }).then(function (response) {
+        that.loggedInMessage = "You are logged in.";
+      }, function (response) {
+        console.log(response);
+        if (response.status && response.status.code === 400) {
+          for (var key in response.entity) {
+            if (key === 'non_field_errors') {
+              try {
+                that.emailError = response.entity[key];
+                that.passwordError = response.entity[key];
+              } catch (e) {
+                console.log(e);
+              }
+            }
+          }
+        }
+      });
+    },
+    login: function login() {
+      if (this.validateInput()) this.sendRequest();
     }
   },
   components: {
@@ -18170,7 +18363,7 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1><form><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><button type=\"submit\" @click.prevent=\"attemptLogin\">Login</button></form></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><h1 v-if=\"loggedInMessage\">{{ loggedInMessage }}</h1><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"login\">Login</button></div></form></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18182,10 +18375,11 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":54,"../store":65,"vue":29,"vue-hot-reload-api":27}],63:[function(require,module,exports){
+},{"../components/header.vue":55,"../store":67,"vue":29,"vue-hot-reload-api":27}],65:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
+var Spinner = require('../elements/spinner.vue');
 
 module.exports = {
   data: function data() {
@@ -18196,36 +18390,67 @@ module.exports = {
         password: null,
         repeatPassword: null
       },
-      emailTaken: true,
-      passwordShort: true,
-      passwordsMismatch: true
+      emailError: null,
+      passwordError: null,
+      passwordsMismatch: false,
+      loading: false
     };
   },
   methods: {
-    validateInput: function validateInput() {},
+    clearErrors: function clearErrors() {
+      this.emailError = null;
+      this.passwordError = null;
+      this.passwordsMismatch = false;
+    },
+    validateInput: function validateInput() {
+      this.clearErrors();
+
+      if (this.user.password !== this.user.repeatPassword) {
+        this.passwordsMismatch = true;
+        return false;
+      }
+
+      return true;
+    },
     sendRequest: function sendRequest() {
       var that = this;
+      that.loading = true;
       client({ path: 'register', entity: this.user }).then(function (response) {
-        // that.$dispatch('userHasFetchedToken', response.entity.token);
-        // that.getUserData();
-        console.log('success', response);
+        that.$route.router.go({ name: 'login' });
       }, function (response) {
-        that.messages = [];
-        console.log('fail', response);
-        if (response.status && response.status.code === 401) that.messages.push({ type: 'danger', message: 'Sorry, you provided invalid credentials' });
+        if (response.status && response.status.code === 400) {
+          for (var key in response.entity) {
+            if (key === 'email') {
+              try {
+                that.emailError = response.entity[key];
+              } catch (e) {
+                console.log(e);
+              }
+            }
+
+            if (key === 'password') {
+              try {
+                that.passwordError = response.entity[key];
+              } catch (e) {
+                console.log(e);
+              }
+            }
+          }
+        }
+        that.loading = false;
       });
     },
     register: function register() {
-      validateInput();
-      sendRequest();
+      if (this.validateInput()) this.sendRequest();
     }
   },
   components: {
-    'v-header': Header
+    'v-header': Header,
+    'v-spinner': Spinner
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span v-if=\"emailTaken\">This email is already taken.</span></div></div><div class=\"form__element form--empty\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span v-if=\"passwordShort\">Your password should at least be 8 characters long.</span></div></div><div class=\"form__element\"><input type=\"password\" v-model=\"user.repeatPassword\" placeholder=\"Repeat password\"/><div class=\"form__error\"><span v-if=\"passwordsMismatch\">Oops, the passwords did not match.</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"register\">Register</button></div></form></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><input type=\"password\" v-model=\"user.repeatPassword\" placeholder=\"Repeat password\"/><div class=\"form__error\"><span v-if=\"passwordsMismatch\">Oops, the passwords did not match.</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"register\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Register</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18237,7 +18462,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":54,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
+},{"../components/header.vue":55,"../elements/spinner.vue":60,"vue":29,"vue-hot-reload-api":27}],66:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -18266,7 +18491,7 @@ module.exports = {
   }
 };
 
-},{"./pages/404.vue":60,"./pages/index.vue":61,"./pages/login.vue":62,"./pages/register.vue":63}],65:[function(require,module,exports){
+},{"./pages/404.vue":62,"./pages/index.vue":63,"./pages/login.vue":64,"./pages/register.vue":65}],67:[function(require,module,exports){
 'use strict';
 
 var _vuex = require('vuex');
@@ -18292,6 +18517,6 @@ module.exports = new _vuex2.default.Store({
   }
 });
 
-},{"vue":29,"vuex":30}]},{},[53]);
+},{"vue":29,"vuex":31}]},{},[54]);
 
 //# sourceMappingURL=build.js.map

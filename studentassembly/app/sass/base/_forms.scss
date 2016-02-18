@@ -29,6 +29,10 @@ button[type="submit"] {
   padding: 10px 20px;
 
   color: white;
+
+  &[disabled] {
+    background-color: rgba($brand-color, 0.5);
+  }
 }
 
 .form__wrapper {
@@ -59,4 +63,11 @@ button[type="submit"] {
     display: block;
     margin: 6px;
   }
+}
+
+.button__spinner {
+  margin-top: 3px;
+  display: flex;
+  justify-content: center;
+  height: 16px;
 }

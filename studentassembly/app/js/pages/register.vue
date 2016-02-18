@@ -6,24 +6,28 @@ section.page__wrapper
       .form__wrapper
         h2 {{ msg }}
         form
-          .form__element
+          .form__element(:class="emailError ? 'form--empty' : ''")
             input(type="email" v-model="user.email" placeholder="Email")
             .form__error
-              span(v-if="emailTaken") This email is already taken.
-          .form__element.form--empty
+              span {{ emailError }}
+          .form__element(:class="passwordError ? 'form--empty' : ''")
             input(type="password" v-model="user.password" placeholder="Password")
             .form__error
-              span(v-if="passwordShort") Your password should at least be 8 characters long.
+              span {{ passwordError }}
           .form__element
             input(type="password" v-model="user.repeatPassword" placeholder="Repeat password")
             .form__error
               span(v-if="passwordsMismatch") Oops, the passwords did not match.
           .form__element
-            button(type="submit" @click.prevent="register") Register
+            button(type="submit" @click.prevent="register" v-bind:disabled="loading")
+              span(v-show="!loading") Register
+              .button__spinner(v-show="loading")
+                v-spinner(color="#fff" height="6px" width="3px" radius="8px")
 </template>
 
 <script>
 var Header = require('../components/header.vue');
+var Spinner = require('../elements/spinner.vue');
 
 module.exports = {
   data: function() {
@@ -34,38 +38,67 @@ module.exports = {
         password: null,
         repeatPassword: null
       },
-      emailTaken: true,
-      passwordShort: true,
-      passwordsMismatch: true
+      emailError: null,
+      passwordError: null,
+      passwordsMismatch: false,
+      loading: false
     }
   },
   methods: {
+    clearErrors: function() {
+      this.emailError = null;
+      this.passwordError = null;
+      this.passwordsMismatch = false;
+    },
     validateInput: function() {
+      this.clearErrors();
 
+      if (this.user.password !== this.user.repeatPassword) {
+        this.passwordsMismatch = true;
+        return false;
+      }
+
+      return true;
     },
     sendRequest: function() {
       var that = this;
+      that.loading = true;
       client({ path: 'register', entity: this.user }).then(
         function (response) {
-          // that.$dispatch('userHasFetchedToken', response.entity.token);
-          // that.getUserData();
-          console.log('success', response);
+          that.$route.router.go({ name: 'login' });
         },
         function (response) {
-          that.messages = [];
-          console.log('fail', response);
-          if (response.status && response.status.code === 401)
-            that.messages.push({type: 'danger', message: 'Sorry, you provided invalid credentials'});
+          if (response.status && response.status.code === 400) {
+            for (var key in response.entity) {
+              if (key === 'email') {
+                try {
+                  that.emailError = response.entity[key];
+                } catch(e) {
+                  console.log(e);
+                }
+              }
+
+              if (key === 'password') {
+                try {
+                  that.passwordError = response.entity[key];
+                } catch(e) {
+                  console.log(e);
+                }
+              }
+            }
+          }
+          that.loading = false;
         }
       );
     },
     register: function() {
-      validateInput();
-      sendRequest();
+      if (this.validateInput())
+        this.sendRequest();
     }
   },
   components: {
-    'v-header': Header
+    'v-header': Header,
+    'v-spinner': Spinner
   }
 }
 </script>
