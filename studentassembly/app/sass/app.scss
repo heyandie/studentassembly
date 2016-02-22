@@ -1,4 +1,5 @@
 @import "vendor/normalize";
+@import "node_modules/include-media/dist/include-media";
 
 @import "mixins/mixins";
 @import "base/base";
@@ -39,42 +40,62 @@
   background-position: center center;
   background-size: cover;
   padding: 88px 0;
-
-  height: 600px;
   overflow: hidden;
   color: white;
+
+  @include media("<=tablet") {
+    height: 500px;
+  }
+  @include media(">tablet") {
+    height: 600px;
+  }
 
   h1 {
     margin: 0 0 10px 0;
     max-width: 500px;
-    line-height: 64px;
-    font-size: 64px;
+
+    @include media("<=tablet") {
+      font-size: 44px;
+      line-height: 44px;
+    }
+    @include media(">tablet") {
+      font-size: 64px;
+      line-height: 64px;
+    }
   }
 
   p {
     margin: 0 0 24px 0;
     max-width: 500px;
-    line-height: 24px;
-    font-size: 18px;
     font-weight: 300;
+
+    @include media("<=tablet") {
+      line-height: 22px;
+      font-size: 16px;
+    }
+    @include media(">tablet") {
+      line-height: 24px;
+      font-size: 18px;
+    }
   }
 
   .landing__overlay {
     position: absolute;
-    top: -50%;
-    right: 0;
-    left: 0;
+    top: 0;
+    right: 50%;
+    bottom: 0;
+    left: -100%;
 
-    height: 150%;
     background-color: $brand-color;
 
-    transform: translateX(-35%) rotate(-45deg);
+    transform: skewX(-45deg);
   }
 
   .landing__content {
     position: relative;
-    z-index: 1;
     margin: 0 auto;
+    z-index: 1;
     flex-basis: 1200px;
+    padding: 0 12px;
   }
 }
