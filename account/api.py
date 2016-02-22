@@ -114,3 +114,22 @@ class ActivateAccountAPIView(APIView):
                 return Response({'success':'Account has been verified'}, status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({'error': 'Invalid activation key'}, status.HTTP_400_BAD_REQUEST)
+
+
+class ResendVerificationAPIView(APIView):
+
+    permission_classes = (AllowAny,)
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Email address is not registered'}, status.HTTP_400_BAD_REQUEST)
+
+        if user.is_verified:
+            return Response({'error': 'Account has been already verified'}, status.HTTP_400_BAD_REQUEST)
+
+        token = VerificationToken.objects.get(user_id=user.id)
+        verification_link = request.build_absolute_uri(reverse('account:verify', kwargs={'token':token.token}))
+        send_verification_request(email, verification_link)
+        return Response({},status.HTTP_200_OK)
