@@ -17954,11 +17954,12 @@ var jwtAuth = require('./interceptors/jwtAuth');
 window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url }).wrap(mime).wrap(defaultRequest, config.api.defaultRequest).wrap(errorCode, { code: 400 }).wrap(jwtAuth);
 
 // Bootstrap app
+localStorage.removeItem('jwt-token');
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;
 
-},{"./app.vue":53,"./config":57,"./interceptors/jwtAuth":61,"./routes":66,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],55:[function(require,module,exports){
+},{"./app.vue":53,"./config":57,"./interceptors/jwtAuth":61,"./routes":68,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],55:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -18281,36 +18282,9 @@ if (module.hot) {(function () {  module.hot.accept()
 },{"vue":29,"vue-hot-reload-api":27}],63:[function(require,module,exports){
 'use strict';
 
-var Header = require('../components/header.vue');
-
-module.exports = {
-  data: function data() {
-    return {
-      msg: 'Student Assembly Features'
-    };
-  },
-  components: {
-    'v-header': Header
-  }
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header header-class=\"header--landing\"></v-header><section class=\"page__wrapper page--landing\"><div class=\"landing__wrapper\"><div class=\"landing__overlay\"></div><div class=\"landing__content\"><h1>You deserve<br/>to be heard.</h1><p>Student Assembly empowers students to increase transparency and accountability on their schools.</p><a class=\"button button--inverted\">File a Report</a></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1></div></div></section>"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/index.vue"
-  if (!module.hot.data) {
-    hotAPI.createRecord(id, module.exports)
-  } else {
-    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"../components/header.vue":55,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
-'use strict';
-
-var Header = require('../components/header.vue');
-var Store = require('../store');
+var Header = require('../../components/header.vue');
+var Spinner = require('../../elements/spinner.vue');
+var Store = require('../../store');
 
 module.exports = {
   data: function data() {
@@ -18322,7 +18296,8 @@ module.exports = {
       },
       emailError: null,
       passwordError: null,
-      loggedInMessage: null
+      loggedInMessage: null,
+      loading: false
     };
   },
   methods: {
@@ -18336,8 +18311,11 @@ module.exports = {
     },
     sendRequest: function sendRequest() {
       var that = this;
-      client({ path: 'token-auth', entity: this.user }).then(function (response) {
+      that.loading = true;
+      client({ path: 'token_auth', entity: this.user }).then(function (response) {
         that.loggedInMessage = "You are logged in.";
+        that.loading = false;
+        console.log(localStorage.getItem('jwt-token'));
       }, function (response) {
         console.log(response);
         if (response.status && response.status.code === 400) {
@@ -18352,6 +18330,7 @@ module.exports = {
             }
           }
         }
+        that.loading = false;
       });
     },
     login: function login() {
@@ -18359,27 +18338,56 @@ module.exports = {
     }
   },
   components: {
-    'v-header': Header
+    'v-header': Header,
+    'v-spinner': Spinner
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><h1 v-if=\"loggedInMessage\">{{ loggedInMessage }}</h1><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"login\">Login</button></div></form></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><h1 v-if=\"loggedInMessage\">{{ loggedInMessage }}</h1><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"login\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Login</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/login.vue"
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/auth/login.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":55,"../store":67,"vue":29,"vue-hot-reload-api":27}],65:[function(require,module,exports){
+},{"../../components/header.vue":55,"../../elements/spinner.vue":60,"../../store":69,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
 'use strict';
 
-var Header = require('../components/header.vue');
-var Spinner = require('../elements/spinner.vue');
+module.exports = {
+
+  route: {
+    activate: function activate(transition) {
+      this.$root.authenticated = false;
+      this.$root.user = null;
+      localStorage.removeItem('user');
+      localStorage.removeItem('jwt-token');
+      transition.redirect('/');
+    }
+  }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/auth/logout.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":29,"vue-hot-reload-api":27}],65:[function(require,module,exports){
+'use strict';
+
+var Header = require('../../components/header.vue');
+var Spinner = require('../../elements/spinner.vue');
 
 module.exports = {
   data: function data() {
@@ -18455,14 +18463,73 @@ if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/register.vue"
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/auth/register.vue"
   if (!module.hot.data) {
     hotAPI.createRecord(id, module.exports)
   } else {
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":55,"../elements/spinner.vue":60,"vue":29,"vue-hot-reload-api":27}],66:[function(require,module,exports){
+},{"../../components/header.vue":55,"../../elements/spinner.vue":60,"vue":29,"vue-hot-reload-api":27}],66:[function(require,module,exports){
+'use strict';
+
+var Header = require('../components/header.vue');
+
+module.exports = {
+  data: function data() {
+    return {
+      msg: 'Student Assembly Features'
+    };
+  },
+  components: {
+    'v-header': Header
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header header-class=\"header--landing\"></v-header><section class=\"page__wrapper page--landing\"><div class=\"landing__wrapper\"><div class=\"landing__overlay\"></div><div class=\"landing__content\"><h1>You deserve<br/>to be heard.</h1><p>Student Assembly empowers students to increase transparency and accountability on their schools.</p><a v-link=\"{ name: 'report' }\" class=\"button button--inverted\">File a Report</a></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><h1>{{ msg }}</h1></div></div></section>"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/index.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../components/header.vue":55,"vue":29,"vue-hot-reload-api":27}],67:[function(require,module,exports){
+'use strict';
+
+var Header = require('../components/header.vue');
+var Spinner = require('../elements/spinner.vue');
+
+module.exports = {
+  data: function data() {
+    return {
+      msg: 'Create an account'
+    };
+  },
+  methods: {},
+  components: {
+    'v-header': Header,
+    'v-spinner': Spinner
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>Test</h1></div></div></section>"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  var id = "/Users/acezoncay/studentassembly/studentassembly/app/js/pages/report.vue"
+  if (!module.hot.data) {
+    hotAPI.createRecord(id, module.exports)
+  } else {
+    hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../components/header.vue":55,"../elements/spinner.vue":60,"vue":29,"vue-hot-reload-api":27}],68:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -18474,11 +18541,21 @@ module.exports = {
       },
       '/login': {
         name: 'login',
-        component: require('./pages/login.vue')
+        component: require('./pages/auth/login.vue')
+      },
+      '/logout': {
+        name: 'logout',
+        needAuth: true,
+        component: require('./pages/auth/logout.vue')
       },
       '/register': {
         name: 'register',
-        component: require('./pages/register.vue')
+        component: require('./pages/auth/register.vue')
+      },
+      '/report': {
+        name: 'report',
+        needAuth: true,
+        component: require('./pages/report.vue')
       },
       '*': {
         component: require('./pages/404.vue')
@@ -18488,10 +18565,25 @@ module.exports = {
     router.alias({
       '': '/index'
     });
+
+    router.beforeEach(function (transition) {
+      var token = localStorage.getItem('jwt-token');
+      if (transition.to.needAuth) {
+        if (!token || token === null) {
+          transition.redirect('/login');
+        }
+      }
+      if (transition.to.guest) {
+        if (token) {
+          transition.redirect('/');
+        }
+      }
+      transition.next();
+    });
   }
 };
 
-},{"./pages/404.vue":62,"./pages/index.vue":63,"./pages/login.vue":64,"./pages/register.vue":65}],67:[function(require,module,exports){
+},{"./pages/404.vue":62,"./pages/auth/login.vue":63,"./pages/auth/logout.vue":64,"./pages/auth/register.vue":65,"./pages/index.vue":66,"./pages/report.vue":67}],69:[function(require,module,exports){
 'use strict';
 
 var _vuex = require('vuex');

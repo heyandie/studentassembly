@@ -41,7 +41,6 @@
   background-size: cover;
   padding: 88px 0;
   overflow: hidden;
-  color: white;
 
   @include media("<=tablet") {
     height: 500px;
@@ -53,6 +52,7 @@
   h1 {
     margin: 0 0 10px 0;
     max-width: 500px;
+    color: white;
 
     @include media("<=tablet") {
       font-size: 44px;
@@ -68,6 +68,7 @@
     margin: 0 0 24px 0;
     max-width: 500px;
     font-weight: 300;
+    color: white;
 
     @include media("<=tablet") {
       line-height: 22px;

@@ -3,6 +3,7 @@ v-header
 section.page__wrapper
   .content__wrapper.content--small
     .content__section
+      h1(v-if="loggedInMessage") {{ loggedInMessage }}
       .form__wrapper
         h2 {{ msg }}
         form
@@ -15,32 +16,28 @@ section.page__wrapper
             .form__error
               span {{ passwordError }}
           .form__element
-            input(type="password" v-model="user.repeatPassword" placeholder="Repeat password")
-            .form__error
-              span(v-if="passwordsMismatch") Oops, the passwords did not match.
-          .form__element
-            button(type="submit" @click.prevent="register" v-bind:disabled="loading")
-              span(v-show="!loading") Register
+            button(type="submit" @click.prevent="login" v-bind:disabled="loading")
+              span(v-show="!loading") Login
               .button__spinner(v-show="loading")
                 v-spinner(color="#fff" height="6px" width="3px" radius="8px")
 </template>
 
 <script>
-var Header = require('../components/header.vue');
-var Spinner = require('../elements/spinner.vue');
+var Header = require('../../components/header.vue');
+var Spinner = require('../../elements/spinner.vue');
+var Store = require('../../store');
 
 module.exports = {
   data: function() {
     return {
-      msg: 'Create an account',
+      msg: 'Login to StudentAssembly',
       user: {
         email: null,
-        password: null,
-        repeatPassword: null
+        password: null
       },
       emailError: null,
       passwordError: null,
-      passwordsMismatch: false,
+      loggedInMessage: null,
       loading: false
     }
   },
@@ -48,38 +45,27 @@ module.exports = {
     clearErrors: function() {
       this.emailError = null;
       this.passwordError = null;
-      this.passwordsMismatch = false;
     },
     validateInput: function() {
       this.clearErrors();
-
-      if (this.user.password !== this.user.repeatPassword) {
-        this.passwordsMismatch = true;
-        return false;
-      }
-
       return true;
     },
     sendRequest: function() {
       var that = this;
       that.loading = true;
-      client({ path: 'register', entity: this.user }).then(
+      client({ path: 'token_auth', entity: this.user }).then(
         function (response) {
-          that.$route.router.go({ name: 'login' });
+          that.loggedInMessage = "You are logged in.";
+          that.loading = false;
+          console.log(localStorage.getItem('jwt-token'));
         },
         function (response) {
+          console.log(response);
           if (response.status && response.status.code === 400) {
             for (var key in response.entity) {
-              if (key === 'email') {
+              if (key === 'non_field_errors') {
                 try {
                   that.emailError = response.entity[key];
-                } catch(e) {
-                  console.log(e);
-                }
-              }
-
-              if (key === 'password') {
-                try {
                   that.passwordError = response.entity[key];
                 } catch(e) {
                   console.log(e);
@@ -91,7 +77,7 @@ module.exports = {
         }
       );
     },
-    register: function() {
+    login: function() {
       if (this.validateInput())
         this.sendRequest();
     }

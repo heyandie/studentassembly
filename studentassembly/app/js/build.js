@@ -29,6 +29,7 @@ window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url })
                     .wrap(jwtAuth);
 
 // Bootstrap app
+localStorage.removeItem('jwt-token');
 const App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;

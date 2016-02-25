@@ -390,7 +390,7 @@ input {
     display: inline-block; }
   input:focus {
     outline-style: none;
-    border-color: #fa6900; }
+    border-color: #ff5f2e; }
 
 button[type="submit"] {
   display: block;
@@ -399,12 +399,12 @@ button[type="submit"] {
   -moz-appearance: none;
   appearance: none;
   border: none;
-  background-color: #fa6900;
+  background-color: #ff5f2e;
   border-radius: 4px;
   padding: 10px 20px;
   color: white; }
   button[type="submit"][disabled] {
-    background-color: rgba(250, 105, 0, 0.5); }
+    background-color: rgba(255, 95, 46, 0.5); }
 
 .form__wrapper {
   background-color: #fafafa;
@@ -450,6 +450,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 14px 0;
+  color: #1e2022;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-smoothing: antialiased; }
@@ -461,19 +462,20 @@ img {
 
 .button {
   display: inline-block;
-  background-color: #fa6900;
+  background-color: #ff5f2e;
   border-radius: 4px;
   padding: 10px 20px;
   color: white;
   font-size: 15px;
   font-weight: 400;
   text-transform: uppercase;
+  text-decoration: none;
   cursor: pointer; }
   .button:hover {
-    background: linear-gradient(to top, rgba(17, 17, 17, 0.1), rgba(17, 17, 17, 0.1)), #fa6900; }
+    background: linear-gradient(to top, rgba(17, 17, 17, 0.1), rgba(17, 17, 17, 0.1)), #ff5f2e; }
   .button.button--inverted {
     background-color: white;
-    color: #fa6900; }
+    color: #ff5f2e; }
 
 .header__wrapper {
   position: fixed;
@@ -481,7 +483,7 @@ img {
   left: 0;
   right: 0;
   z-index: 100;
-  background-color: #fa6900; }
+  background-color: #ff5f2e; }
   .header__wrapper.header--landing {
     background-color: transparent; }
 
@@ -544,8 +546,7 @@ img {
   background-position: center center;
   background-size: cover;
   padding: 88px 0;
-  overflow: hidden;
-  color: white; }
+  overflow: hidden; }
   @media (max-width: 768px) {
     .landing__wrapper {
       height: 500px; } }
@@ -554,7 +555,8 @@ img {
       height: 600px; } }
   .landing__wrapper h1 {
     margin: 0 0 10px 0;
-    max-width: 500px; }
+    max-width: 500px;
+    color: white; }
     @media (max-width: 768px) {
       .landing__wrapper h1 {
         font-size: 44px;
@@ -566,7 +568,8 @@ img {
   .landing__wrapper p {
     margin: 0 0 24px 0;
     max-width: 500px;
-    font-weight: 300; }
+    font-weight: 300;
+    color: white; }
     @media (max-width: 768px) {
       .landing__wrapper p {
         line-height: 22px;
@@ -581,7 +584,7 @@ img {
     right: 50%;
     bottom: 0;
     left: -100%;
-    background-color: #fa6900;
+    background-color: #ff5f2e;
     -webkit-transform: skewX(-45deg);
     transform: skewX(-45deg); }
   .landing__wrapper .landing__content {

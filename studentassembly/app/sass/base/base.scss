@@ -17,6 +17,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 14px 0;
+  color: #1e2022;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -40,6 +41,7 @@ img {
   font-size: 15px;
   font-weight: 400;
   text-transform: uppercase;
+  text-decoration: none;
   cursor: pointer;
 
   &:hover {

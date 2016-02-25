@@ -9,7 +9,7 @@ section.page__wrapper.page--landing
         br
         | to be heard.
       p Student Assembly empowers students to increase transparency and accountability on their schools.
-      a.button.button--inverted File a Report
+      a.button.button--inverted(v-link="{ name: 'report' }") File a Report
   .content__wrapper
     .content__section
       h1 {{ msg }}
