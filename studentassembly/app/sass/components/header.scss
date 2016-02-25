@@ -15,7 +15,7 @@
   @include clearfix();
   margin: 0 auto;
   max-width: 1200px;
-  padding: 10px 0;
+  padding: 10px 12px;
 }
 
 .nav {
@@ -35,7 +35,7 @@
 .nav__link {
   display: inline-block;
   position: relative;
-  margin: 0 14px;
+  margin-left: 28px;
   line-height: 54px;
 
   color: white;
