@@ -1,0 +1,35 @@
+[
+{
+  "model": "account.user",
+  "pk": "2a0b5cc1-530e-4e2a-9cd3-bcd3c29de637",
+  "fields": {
+    "password": "bcrypt_sha256$$2b$12$UlWsvDHtQ3ULZbhm1ky4qu7qXHpJnZPTBrfxlvW5H75Jqj3/pl.Dm",
+    "last_login": null,
+    "username": "FZRYUJ",
+    "email": "rabinoandie@gmail.com",
+    "registered_at": "2016-02-22T07:45:06.091Z",
+    "is_verified": true
+  }
+},
+{
+  "model": "account.verificationtoken",
+  "pk": "0bff4e88-5abe-4dc1-88dd-c23c88df91e7",
+  "fields": {
+    "token": "MM267BYUH66G4ZQYJUQIGP71SCXV4PS4"
+  }
+},
+{
+  "model": "account.verificationtoken",
+  "pk": "ddf9bfa1-417a-412a-9628-564c90fbea19",
+  "fields": {
+    "token": "YJPARR0RRZBZ5O9PMXVYR628FL9MQAYE"
+  }
+},
+{
+  "model": "account.verificationtoken",
+  "pk": "e0e3b388-31ee-42fb-9d3d-8b42c158b3db",
+  "fields": {
+    "token": "EMT7IRTE07E1ZGEX565BUGCN27B8CT48"
+  }
+}
+]

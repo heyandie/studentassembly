@@ -26,5 +26,6 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'', include('account.urls', namespace='account')),
+    url(r'', include('report.urls', namespace='report')),
     url(r'', views.IndexView.as_view(), name='index')
 ]
