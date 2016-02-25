@@ -1,7 +1,7 @@
 var config = {
   env: 'staging',
   api: {
-    base_url: 'http://studentassembly.herokuapp.com',
+    base_url: 'https://studentassembly.herokuapp.com/api',
     defaultRequest: {
       headers: {
         'X-Requested-With': 'rest.js',
