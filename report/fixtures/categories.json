@@ -1,0 +1,110 @@
+[
+{
+    "pk": 1,
+    "model": "report.category",
+    "fields": {
+        "name": "Discrimination",
+        "category_type": 1,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 2,
+    "model": "report.category",
+    "fields": {
+        "name": "Harassment",
+        "category_type": 1,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 3,
+    "model": "report.category",
+    "fields": {
+        "name": "Environmental Cleanliness",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 4,
+    "model": "report.category",
+    "fields": {
+        "name": "Curriculum",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 5,
+    "model": "report.category",
+    "fields": {
+        "name": "Distance/Accessibility",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 6,
+    "model": "report.category",
+    "fields": {
+        "name": "Supplies",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 7,
+    "model": "report.category",
+    "fields": {
+        "name": "Enrollment Process",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 8,
+    "model": "report.category",
+    "fields": {
+        "name": "School Fees",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 9,
+    "model": "report.category",
+    "fields": {
+        "name": "Grades",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 10,
+    "model": "report.category",
+    "fields": {
+        "name": "Maintenance",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 11,
+    "model": "report.category",
+    "fields": {
+        "name": "Policies",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+},
+{
+    "pk": 12,
+    "model": "report.category",
+    "fields": {
+        "name": "Administrative Process",
+        "category_type": 2,
+        "questions": "[{\"id\": 1, \"text\": \"What is your major concern?\"}]"
+    }
+}
+]
