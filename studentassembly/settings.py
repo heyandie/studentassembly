@@ -52,7 +52,7 @@ EMAIL_HOST_PASSWORD = 'stopcorruption'
 DEFAULT_FROM_EMAIL = 'studentassemblyph@gmail.com'
 
 
-# AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'account.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
