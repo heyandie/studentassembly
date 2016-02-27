@@ -65,8 +65,11 @@ REST_FRAMEWORK = {
     ),
 }
 
+from datetime import timedelta
+
 JWT_AUTH = {
     'JWT_PAYLOAD_HANDLER':'account.api.jwt_payload_handler',
+    'JWT_EXPIRATION_DELTA':timedelta(hours=12)
 }
 
 MIDDLEWARE_CLASSES = [
