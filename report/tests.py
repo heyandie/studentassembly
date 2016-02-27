@@ -24,13 +24,27 @@ class CreateReportTest(APITestCase):
         auth = 'JWT {0}'.format(self.token)
 
         response = self.client.post('/api/report/', {
-            'user_id': self.user.id,
-            'category': 1,
-            'text': 'I really hate you.'
+            'report': {
+                'user_id': self.user.id,
+                'category': 1,
+                'text': 'I really hate you.'
+            },
+            'contact': {
+                'name': 'Andie Rabino',
+                'contact_number': '09175226502'
+            }
+
         }, HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        self.user = User.objects.get(email='rabinoandie@gmail.com')
+        self.assertEqual(self.user.name, 'Andie Rabino')
+        self.assertEqual(self.user.contact_number, '09175226502')
+
         response = self.client.get('/api/report/1', HTTP_AUTHORIZATION=auth, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get('/api/report', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

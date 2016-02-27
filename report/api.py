@@ -7,6 +7,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 
+from account.models import User
 from .models import Category, Report
 from .serializers import CategorySerializer, ReportSerializer
 
@@ -29,12 +30,22 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
 
     def create(self, request, format=None):
         data = request.data
-        serializer = ReportSerializer(data=data)
+        report_data = data.get('report')
+        report_data['user_id'] = request.user.id
+
+        contact = data.get('contact', {})
+        user = User.objects.get(pk=request.user.id)
+        user.name = contact.get('name', None)
+        user.contact_number = contact.get('contact_number', None)
+        user.save()
+
+        serializer = ReportSerializer(data=report_data)
 
         if serializer.is_valid():
             report = serializer.save()
-            data['id'] = report.id
-            return Response(data, status=status.HTTP_201_CREATED)
+            serializer.is_valid(raise_exception=False)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
