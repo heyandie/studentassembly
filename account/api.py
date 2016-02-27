@@ -14,7 +14,7 @@ from django.contrib.auth import login
 from django.utils.translation import ugettext as _
 
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -24,7 +24,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework import exceptions
 
 from .models import User, VerificationToken
-from .serializers import CreateAccountSerializer
+from .serializers import AccountSerializer, CreateAccountSerializer
 
 def send_verification_request(recepient, link):
     from django.conf import settings
@@ -114,6 +114,26 @@ class ActivateAccountAPIView(APIView):
                 return Response({'success':'Account has been verified'}, status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({'error': 'Invalid activation key'}, status.HTTP_400_BAD_REQUEST)
+
+
+class UserContactDetailsAPIView(APIView):
+
+    permission_classes = (IsAuthenticated,)
+    def get(self, request):
+        if request.GET.get('contact', None) == 'true':
+            data = {
+                'name': request.user.name,
+                'email': request.user.email,
+                'contact_number': request.user.contact_number
+            }
+        else:
+            data = {
+                'id': str(request.user.id),
+                'name': request.user.name,
+                'email': request.user.email,
+                'contact_number': request.user.contact_number
+            }
+        return Response(data)
 
 
 class ResendVerificationAPIView(APIView):

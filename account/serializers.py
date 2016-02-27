@@ -20,3 +20,10 @@ class CreateAccountSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'].encode('utf-8'), salt=None, hasher='bcrypt')
         return User.objects.create(**validated_data)
+
+
+class AccountSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('contact_number', 'email', 'id', 'is_verified', 'name')

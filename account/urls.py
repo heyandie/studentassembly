@@ -4,6 +4,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from .api import (
     RegisterAPIView,
     ActivateAccountAPIView,
+    UserContactDetailsAPIView,
     ResendVerificationAPIView
     )
 
@@ -12,7 +13,8 @@ urlpatterns = [
     url(r'^api/register$', RegisterAPIView.as_view({'post':'create'}), name='register'),
     url(r'^verify_account/(?P<token>[0-9A-Za-z]+)$', ActivateAccountAPIView.as_view(), name='verify'),
     url(r'^api/token_auth$', obtain_jwt_token, name='auth'),
-    url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend_verification'),
+    url(r'^api/user$', UserContactDetailsAPIView.as_view(), name='user-details'),
+    url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend-verification'),
 ]
 
 """
@@ -74,5 +76,9 @@ or
 {
     'success': 'An verification email has been sent.'
 }
+
+# api/user
+method: GET
+returns contact details of an authorized user
 
 """
