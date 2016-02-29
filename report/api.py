@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 
 from account.models import User
-from .models import Category, Report
-from .serializers import CategorySerializer, ReportSerializer
+from .models import Category, Report, School
+from .serializers import CategorySerializer, ReportSerializer, SchoolSerializer
 
 class ListCreateReportAPIView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -75,6 +75,19 @@ class ListCategoryAPIView(mixins.ListModelMixin,
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def list(self, request):
+        serializer = self.serializer_class(data=self.queryset, many=True)
+        serializer.is_valid(raise_exception=False)
+        return Response(serializer.data)
+
+
+class ListSchoolsAPIView(mixins.ListModelMixin,
+                            viewsets.GenericViewSet):
+
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
 
     def list(self, request):
         serializer = self.serializer_class(data=self.queryset, many=True)

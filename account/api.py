@@ -100,22 +100,6 @@ class RegisterAPIView(mixins.CreateModelMixin,
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class ActivateAccountAPIView(APIView):
-
-    permission_classes = (AllowAny,)
-    def get(self, request, token):
-        try:
-            token = VerificationToken.objects.get(token=token)
-            user = User.objects.get(id=token.user_id)
-            if not user.is_verified:
-                user.is_verified = True
-                user.save()
-                token.delete()
-                return Response({'success':'Account has been verified'}, status.HTTP_200_OK)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Invalid activation key'}, status.HTTP_400_BAD_REQUEST)
-
-
 class UserContactDetailsAPIView(APIView):
 
     permission_classes = (IsAuthenticated,)

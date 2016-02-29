@@ -3,13 +3,15 @@ from django.conf.urls import url
 from .api import (
     ListCreateReportAPIView,
     RetrieveReportAPIView,
-    ListCategoryAPIView
+    ListCategoryAPIView,
+    ListSchoolsAPIView,
 )
 
 urlpatterns = [
     url(r'^api/report/(?P<pk>[0-9]+)', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),
     url(r'^api/report', ListCreateReportAPIView.as_view(), name="create-report"),
     url(r'^api/categories',ListCategoryAPIView.as_view({'get': 'list'}), name="list-categories"),
+    url(r'^api/schools',ListSchoolsAPIView.as_view({'get': 'list'}), name="list-schools"),
 ]
 
 
@@ -45,5 +47,8 @@ Report object or 404 if not found
 
 # api/categories
 Returns list of all categories with the questions associated with it
+
+# api/schools
+Returns list of all schools
 
 """
