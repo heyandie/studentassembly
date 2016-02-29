@@ -1,0 +1,7 @@
+[{
+    "pk": 1,
+    "model": "report.school",
+    "fields": {
+        "name": "Polytechnic University of the Philippines - Sta. Mesa"
+    }
+}]

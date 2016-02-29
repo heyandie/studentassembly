@@ -11,9 +11,13 @@ class Category(models.Model):
     questions = JSONField(null=True)
 
 
+class School(models.Model):
+    name = models.CharField(max_length=128, unique=True, blank=False)
+
+
 class Report(models.Model):
 
-    category = models.IntegerField(blank=False)
+    category = models.IntegerField(null=False)
     text = models.TextField(blank=False)
     answers = JSONField(null=True)
     user_id = models.UUIDField()
@@ -21,3 +25,4 @@ class Report(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     allow_publish = models.BooleanField(default=False)
+    school = models.CharField(max_length=128, blank=False)

@@ -1,13 +1,6 @@
 from rest_framework import serializers
 
-from .models import Category, Report
-
-class JSONSerializerField(serializers.Field):
-    def to_internal_value(self, data):
-        return data
-
-    def to_representation(self, value):
-        return value
+from .models import Category, Report, School
 
 
 class ReportSerializer(serializers.ModelSerializer):
@@ -16,9 +9,14 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
 
 
+class SchoolSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = School
+
+
 class CategorySerializer(serializers.ModelSerializer):
 
-    questions = serializers.ListField(child=JSONSerializerField(), allow_null=True)
     class Meta:
         model = Category
         fields = (
