@@ -5,22 +5,32 @@ module.exports = {
         name: 'home',
         component: require('./pages/index.vue')
       },
+      '/register': {
+        name: 'register',
+        component: require('./pages/auth/register.vue')
+      },
       '/login': {
         name: 'login',
-        component: require('./pages/auth/login.vue')
+        component: require('./pages/auth/login.vue'),
+        subRoutes: {
+          '/verified': {
+            component: require('./pages/auth/verified.vue')
+          }
+        }
       },
       '/logout': {
         name: 'logout',
         needAuth: true,
         component: require('./pages/auth/logout.vue')
       },
-      '/register': {
-        name: 'register',
-        component: require('./pages/auth/register.vue')
+      '/profile': {
+        name: 'profile',
+        // needAuth: true,
+        component: require('./pages/profile.vue')
       },
       '/report': {
         name: 'report',
-        needAuth: true,
+        // needAuth: true,
         component: require('./pages/report.vue')
       },
       '*': {
@@ -33,17 +43,13 @@ module.exports = {
     });
 
     router.beforeEach(function (transition) {
-      var token = localStorage.getItem('jwt-token');
       if (transition.to.needAuth) {
+        var token = localStorage.getItem('jwt-token');
         if (!token || token === null) {
           transition.redirect('/login');
         }
       }
-      if (transition.to.guest) {
-        if (token) {
-          transition.redirect('/');
-        }
-      }
+
       transition.next();
     });
   }

@@ -3,6 +3,11 @@ v-header
 section.page__wrapper
   .content__wrapper.content--small
     .content__section
+      .alert__wrapper.alert--success(v-if="registered")
+        h3 Verify your email
+        p
+          | We've sent a link to your email address so we can verify you. After doing so, you can start&nbsp;
+          a(v-link="{ name: 'login' }") logging in.
       .form__wrapper
         h2 {{ msg }}
         form
@@ -27,7 +32,7 @@ section.page__wrapper
 
 <script>
 var Header = require('../../components/header.vue');
-var Spinner = require('../../elements/spinner.vue');
+var Spinner = require('../../components/spinner.vue');
 
 module.exports = {
   data: function() {
@@ -41,6 +46,7 @@ module.exports = {
       emailError: null,
       passwordError: null,
       passwordsMismatch: false,
+      registered: false,
       loading: false
     }
   },
@@ -65,7 +71,8 @@ module.exports = {
       that.loading = true;
       client({ path: 'register', entity: this.user }).then(
         function (response) {
-          that.$route.router.go({ name: 'login' });
+          that.registered = true;
+          that.loading = false;
         },
         function (response) {
           if (response.status && response.status.code === 400) {

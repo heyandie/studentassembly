@@ -1,0 +1,95 @@
+.landing__wrapper {
+  display: flex;
+  position: relative;
+  align-items: center;
+
+  // Photo Credit: https://www.flickr.com/photos/quinnanya/3570356861/
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)),
+              linear-gradient(to top, rgba(50, 50, 50, 0.5), rgba(50, 50, 50, 0.5)),
+              url('/static/img/student.jpg');
+  background-position: center center;
+  background-size: cover;
+  padding: 88px 0;
+  overflow: hidden;
+
+  @include media("<=tablet") {
+    height: 500px;
+  }
+  @include media(">tablet") {
+    height: 600px;
+  }
+
+  h1 {
+    margin: 0 0 10px 0;
+    max-width: 500px;
+    color: white;
+
+    @include media("<=tablet") {
+      font-size: 44px;
+      line-height: 44px;
+    }
+    @include media(">tablet") {
+      font-size: 64px;
+      line-height: 64px;
+    }
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    max-width: 500px;
+    font-weight: 400;
+    letter-spacing: -0.3px;
+    color: white;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+
+    @include media("<=tablet") {
+      line-height: 22px;
+      font-size: 16px;
+    }
+    @include media(">tablet") {
+      line-height: 24px;
+      font-size: 18px;
+    }
+  }
+
+  .landing__overlay {
+    position: absolute;
+    top: 0;
+    right: 50%;
+    bottom: 0;
+    left: -100%;
+
+    background-color: $brand-color;
+
+    transform: skewX(-45deg) translateX(-100%);
+    animation: slide-right-skewed 750ms cubic-bezier(.2, 1, .2, 1) 250ms forwards;
+  }
+
+  .landing__content {
+    position: relative;
+    margin: 0 auto;
+    z-index: 1;
+    flex-basis: 1200px;
+    padding: 0 12px;
+
+    opacity: 0;
+    transform: translateY(100%);
+    animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 750ms forwards;
+  }
+}
+
+@keyframes slide-right-skewed {
+  to {
+    transform: skewX(-45deg) translateX(0);
+  }
+}
+
+@keyframes slide-up-fade {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

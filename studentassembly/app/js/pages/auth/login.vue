@@ -3,9 +3,9 @@ v-header
 section.page__wrapper
   .content__wrapper.content--small
     .content__section
-      h1(v-if="loggedInMessage") {{ loggedInMessage }}
+      router-view
       .form__wrapper
-        h2 {{ msg }}
+        h2 Login to StudentAssembly
         form
           .form__element(:class="emailError ? 'form--empty' : ''")
             input(type="email" v-model="user.email" placeholder="Email")
@@ -24,20 +24,18 @@ section.page__wrapper
 
 <script>
 var Header = require('../../components/header.vue');
-var Spinner = require('../../elements/spinner.vue');
+var Spinner = require('../../components/spinner.vue');
 var Store = require('../../store');
 
 module.exports = {
   data: function() {
     return {
-      msg: 'Login to StudentAssembly',
       user: {
         email: null,
         password: null
       },
       emailError: null,
       passwordError: null,
-      loggedInMessage: null,
       loading: false
     }
   },
@@ -55,9 +53,8 @@ module.exports = {
       that.loading = true;
       client({ path: 'token_auth', entity: this.user }).then(
         function (response) {
-          that.loggedInMessage = "You are logged in.";
           that.loading = false;
-          console.log(localStorage.getItem('jwt-token'));
+          that.$route.router.go('/profile');
         },
         function (response) {
           console.log(response);

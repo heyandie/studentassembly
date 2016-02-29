@@ -11,7 +11,7 @@ configRouter(router);
 
 // Configure app
 window.config = require('./config');
-Vue.config.debug = true;
+Vue.config.debug = config.env === 'development' ? true : false;
 
 // Configure HTTP client
 var rest = require('rest')
