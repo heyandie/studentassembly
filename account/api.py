@@ -7,7 +7,6 @@ from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.template import Context
 from django.template.loader import get_template
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
@@ -31,8 +30,7 @@ def send_verification_request(recepient, link):
     from django.core.mail import EmailMessage
 
     template = get_template('email/verify_account.html')
-    context = Context({'verification_link': link})
-    content = template.render(context)
+    content = template.render({'verification_link': link})
     subject = 'Please verfiy your email address'
     msg = EmailMessage(subject, content, settings.DEFAULT_FROM_EMAIL, [recepient])
     msg.content_subtype = "html"
