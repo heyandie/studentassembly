@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from .api import (
     RegisterAPIView,
@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^api/register$', RegisterAPIView.as_view({'post':'create'}), name='register'),
     url(r'^verify_account/(?P<token>[0-9A-Za-z]+)$', ActivateAccountView, name='verify'),
     url(r'^api/token_auth$', obtain_jwt_token, name='auth'),
+    url(r'^api/token_refresh$', refresh_jwt_token, name='refresh-token'),
     url(r'^api/user$', UserContactDetailsAPIView.as_view(), name='user-details'),
     url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend-verification'),
 ]
