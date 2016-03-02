@@ -1,18 +1,18 @@
-// Vuex is an ES6 module
-import Vuex from 'vuex';
-
-// Vue
-var Vue = require('vue');
+import Vuex from 'vuex'
+import Vue from 'vue'
 
 Vue.use(Vuex);
 
 module.exports = new Vuex.Store({
   state: {
-    counter: 0
+    token: null
   },
   mutations: {
-    INCREMENT (state) {
-      state.counter++;
+    SET_LOGIN (state, token) {
+      state.token = token;
+    },
+    SET_LOGOUT (state) {
+      state.token = null;
     }
   }
 });

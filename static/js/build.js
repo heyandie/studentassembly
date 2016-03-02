@@ -717,7 +717,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":52}],7:[function(require,module,exports){
+},{"../UrlBuilder":2,"../client":4,"../util/normalizeHeaderName":23,"../util/responsePromise":24,"when":76}],7:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -884,7 +884,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":52}],8:[function(require,module,exports){
+},{"./client":4,"./client/default":5,"./util/mixin":22,"./util/responsePromise":24,"when":76}],8:[function(require,module,exports){
 /*
  * Copyright 2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1014,7 +1014,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"when":52}],10:[function(require,module,exports){
+},{"../interceptor":7,"when":76}],10:[function(require,module,exports){
 /*
  * Copyright 2012-2014 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1126,7 +1126,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":52}],11:[function(require,module,exports){
+},{"../interceptor":7,"../mime":13,"../mime/registry":14,"when":76}],11:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1415,7 +1415,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":52}],15:[function(require,module,exports){
+},{"../mime":13,"./type/application/hal":15,"./type/application/json":16,"./type/application/x-www-form-urlencoded":17,"./type/multipart/form-data":18,"./type/text/plain":19,"when":76}],15:[function(require,module,exports){
 /*
  * Copyright 2013-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1556,7 +1556,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":52}],16:[function(require,module,exports){
+},{"../../../interceptor/pathPrefix":11,"../../../interceptor/template":12,"../../../util/find":20,"../../../util/lazyPromise":21,"../../../util/responsePromise":24,"when":76}],16:[function(require,module,exports){
 /*
  * Copyright 2012-2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -1903,7 +1903,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"when":52}],22:[function(require,module,exports){
+},{"when":76}],22:[function(require,module,exports){
 /*
  * Copyright 2012-2013 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -2135,7 +2135,7 @@ process.umask = function() { return 0; };
 	// Boilerplate for AMD and Node
 ));
 
-},{"./normalizeHeaderName":23,"when":52}],25:[function(require,module,exports){
+},{"./normalizeHeaderName":23,"when":76}],25:[function(require,module,exports){
 /*
  * Copyright 2015 the original author or authors
  * @license MIT, see LICENSE.txt for details
@@ -2791,6 +2791,1534 @@ function format (id) {
 }
 
 },{}],28:[function(require,module,exports){
+/**
+ * Before Interceptor.
+ */
+
+var _ = require('../util');
+
+module.exports = {
+
+    request: function (request) {
+
+        if (_.isFunction(request.beforeSend)) {
+            request.beforeSend.call(this, request);
+        }
+
+        return request;
+    }
+
+};
+
+},{"../util":51}],29:[function(require,module,exports){
+/**
+ * Base client.
+ */
+
+var _ = require('../../util');
+var Promise = require('../../promise');
+var xhrClient = require('./xhr');
+
+module.exports = function (request) {
+
+    var response = (request.client || xhrClient)(request);
+
+    return Promise.resolve(response).then(function (response) {
+
+        if (response.headers) {
+
+            var headers = parseHeaders(response.headers);
+
+            response.headers = function (name) {
+
+                if (name) {
+                    return headers[_.toLower(name)];
+                }
+
+                return headers;
+            };
+
+        }
+
+        response.ok = response.status >= 200 && response.status < 300;
+
+        return response;
+    });
+
+};
+
+function parseHeaders(str) {
+
+    var headers = {}, value, name, i;
+
+    if (_.isString(str)) {
+        _.each(str.split('\n'), function (row) {
+
+            i = row.indexOf(':');
+            name = _.trim(_.toLower(row.slice(0, i)));
+            value = _.trim(row.slice(i + 1));
+
+            if (headers[name]) {
+
+                if (_.isArray(headers[name])) {
+                    headers[name].push(value);
+                } else {
+                    headers[name] = [headers[name], value];
+                }
+
+            } else {
+
+                headers[name] = value;
+            }
+
+        });
+    }
+
+    return headers;
+}
+
+},{"../../promise":44,"../../util":51,"./xhr":32}],30:[function(require,module,exports){
+/**
+ * JSONP client.
+ */
+
+var _ = require('../../util');
+var Promise = require('../../promise');
+
+module.exports = function (request) {
+    return new Promise(function (resolve) {
+
+        var callback = '_jsonp' + Math.random().toString(36).substr(2), response = {request: request, data: null}, handler, script;
+
+        request.params[request.jsonp] = callback;
+        request.cancel = function () {
+            handler({type: 'cancel'});
+        };
+
+        script = document.createElement('script');
+        script.src = _.url(request);
+        script.type = 'text/javascript';
+        script.async = true;
+
+        window[callback] = function (data) {
+            response.data = data;
+        };
+
+        handler = function (event) {
+
+            if (event.type === 'load' && response.data !== null) {
+                response.status = 200;
+            } else if (event.type === 'error') {
+                response.status = 404;
+            } else {
+                response.status = 0;
+            }
+
+            resolve(response);
+
+            delete window[callback];
+            document.body.removeChild(script);
+        };
+
+        script.onload = handler;
+        script.onerror = handler;
+
+        document.body.appendChild(script);
+    });
+};
+
+},{"../../promise":44,"../../util":51}],31:[function(require,module,exports){
+/**
+ * XDomain client (Internet Explorer).
+ */
+
+var _ = require('../../util');
+var Promise = require('../../promise');
+
+module.exports = function (request) {
+    return new Promise(function (resolve) {
+
+        var xdr = new XDomainRequest(), response = {request: request}, handler;
+
+        request.cancel = function () {
+            xdr.abort();
+        };
+
+        xdr.open(request.method, _.url(request), true);
+
+        handler = function (event) {
+
+            response.data = xdr.responseText;
+            response.status = xdr.status;
+            response.statusText = xdr.statusText;
+
+            resolve(response);
+        };
+
+        xdr.timeout = 0;
+        xdr.onload = handler;
+        xdr.onabort = handler;
+        xdr.onerror = handler;
+        xdr.ontimeout = function () {};
+        xdr.onprogress = function () {};
+
+        xdr.send(request.data);
+    });
+};
+
+},{"../../promise":44,"../../util":51}],32:[function(require,module,exports){
+/**
+ * XMLHttp client.
+ */
+
+var _ = require('../../util');
+var Promise = require('../../promise');
+
+module.exports = function (request) {
+    return new Promise(function (resolve) {
+
+        var xhr = new XMLHttpRequest(), response = {request: request}, handler;
+
+        request.cancel = function () {
+            xhr.abort();
+        };
+
+        xhr.open(request.method, _.url(request), true);
+
+        handler = function (event) {
+
+            response.data = xhr.responseText;
+            response.status = xhr.status;
+            response.statusText = xhr.statusText;
+            response.headers = xhr.getAllResponseHeaders();
+
+            resolve(response);
+        };
+
+        xhr.timeout = 0;
+        xhr.onload = handler;
+        xhr.onabort = handler;
+        xhr.onerror = handler;
+        xhr.ontimeout = function () {};
+        xhr.onprogress = function () {};
+
+        if (_.isPlainObject(request.xhr)) {
+            _.extend(xhr, request.xhr);
+        }
+
+        if (_.isPlainObject(request.upload)) {
+            _.extend(xhr.upload, request.upload);
+        }
+
+        _.each(request.headers || {}, function (value, header) {
+            xhr.setRequestHeader(header, value);
+        });
+
+        xhr.send(request.data);
+    });
+};
+
+},{"../../promise":44,"../../util":51}],33:[function(require,module,exports){
+/**
+ * CORS Interceptor.
+ */
+
+var _ = require('../util');
+var xdrClient = require('./client/xdr');
+var xhrCors = 'withCredentials' in new XMLHttpRequest();
+var originUrl = _.url.parse(location.href);
+
+module.exports = {
+
+    request: function (request) {
+
+        if (request.crossOrigin === null) {
+            request.crossOrigin = crossOrigin(request);
+        }
+
+        if (request.crossOrigin) {
+
+            if (!xhrCors) {
+                request.client = xdrClient;
+            }
+
+            request.emulateHTTP = false;
+        }
+
+        return request;
+    }
+
+};
+
+function crossOrigin(request) {
+
+    var requestUrl = _.url.parse(_.url(request));
+
+    return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
+}
+
+},{"../util":51,"./client/xdr":31}],34:[function(require,module,exports){
+/**
+ * Header Interceptor.
+ */
+
+var _ = require('../util');
+
+module.exports = {
+
+    request: function (request) {
+
+        request.method = request.method.toUpperCase();
+        request.headers = _.extend({}, _.http.headers.common,
+            !request.crossOrigin ? _.http.headers.custom : {},
+            _.http.headers[request.method.toLowerCase()],
+            request.headers
+        );
+
+        if (_.isPlainObject(request.data) && /^(GET|JSONP)$/i.test(request.method)) {
+            _.extend(request.params, request.data);
+            delete request.data;
+        }
+
+        return request;
+    }
+
+};
+
+},{"../util":51}],35:[function(require,module,exports){
+/**
+ * Service for sending network requests.
+ */
+
+var _ = require('../util');
+var Client = require('./client');
+var Promise = require('../promise');
+var interceptor = require('./interceptor');
+var jsonType = {'Content-Type': 'application/json'};
+
+function Http(url, options) {
+
+    var client = Client, request, promise;
+
+    Http.interceptors.forEach(function (handler) {
+        client = interceptor(handler, this.$vm)(client);
+    }, this);
+
+    options = _.isObject(url) ? url : _.extend({url: url}, options);
+    request = _.merge({}, Http.options, this.$options, options);
+    promise = client(request).bind(this.$vm).then(function (response) {
+
+        return response.ok ? response : Promise.reject(response);
+
+    }, function (response) {
+
+        if (response instanceof Error) {
+            _.error(response);
+        }
+
+        return Promise.reject(response);
+    });
+
+    if (request.success) {
+        promise.success(request.success);
+    }
+
+    if (request.error) {
+        promise.error(request.error);
+    }
+
+    return promise;
+}
+
+Http.options = {
+    method: 'get',
+    data: '',
+    params: {},
+    headers: {},
+    xhr: null,
+    upload: null,
+    jsonp: 'callback',
+    beforeSend: null,
+    crossOrigin: null,
+    emulateHTTP: false,
+    emulateJSON: false,
+    timeout: 0
+};
+
+Http.interceptors = [
+    require('./before'),
+    require('./timeout'),
+    require('./jsonp'),
+    require('./method'),
+    require('./mime'),
+    require('./header'),
+    require('./cors')
+];
+
+Http.headers = {
+    put: jsonType,
+    post: jsonType,
+    patch: jsonType,
+    delete: jsonType,
+    common: {'Accept': 'application/json, text/plain, */*'},
+    custom: {'X-Requested-With': 'XMLHttpRequest'}
+};
+
+['get', 'put', 'post', 'patch', 'delete', 'jsonp'].forEach(function (method) {
+
+    Http[method] = function (url, data, success, options) {
+
+        if (_.isFunction(data)) {
+            options = success;
+            success = data;
+            data = undefined;
+        }
+
+        if (_.isObject(success)) {
+            options = success;
+            success = undefined;
+        }
+
+        return this(url, _.extend({method: method, data: data, success: success}, options));
+    };
+});
+
+module.exports = _.http = Http;
+
+},{"../promise":44,"../util":51,"./before":28,"./client":29,"./cors":33,"./header":34,"./interceptor":36,"./jsonp":37,"./method":38,"./mime":39,"./timeout":40}],36:[function(require,module,exports){
+/**
+ * Interceptor factory.
+ */
+
+var _ = require('../util');
+var Promise = require('../promise');
+
+module.exports = function (handler, vm) {
+
+    return function (client) {
+
+        if (_.isFunction(handler)) {
+            handler = handler.call(vm, Promise);
+        }
+
+        return function (request) {
+
+            if (_.isFunction(handler.request)) {
+                request = handler.request.call(vm, request);
+            }
+
+            return when(request, function (request) {
+                return when(client(request), function (response) {
+
+                    if (_.isFunction(handler.response)) {
+                        response = handler.response.call(vm, response);
+                    }
+
+                    return response;
+                });
+            });
+        };
+    };
+};
+
+function when(value, fulfilled, rejected) {
+
+    var promise = Promise.resolve(value);
+
+    if (arguments.length < 2) {
+        return promise;
+    }
+
+    return promise.then(fulfilled, rejected);
+}
+
+},{"../promise":44,"../util":51}],37:[function(require,module,exports){
+/**
+ * JSONP Interceptor.
+ */
+
+var jsonpClient = require('./client/jsonp');
+
+module.exports = {
+
+    request: function (request) {
+
+        if (request.method == 'JSONP') {
+            request.client = jsonpClient;
+        }
+
+        return request;
+    }
+
+};
+
+},{"./client/jsonp":30}],38:[function(require,module,exports){
+/**
+ * HTTP method override Interceptor.
+ */
+
+module.exports = {
+
+    request: function (request) {
+
+        if (request.emulateHTTP && /^(PUT|PATCH|DELETE)$/i.test(request.method)) {
+            request.headers['X-HTTP-Method-Override'] = request.method;
+            request.method = 'POST';
+        }
+
+        return request;
+    }
+
+};
+
+},{}],39:[function(require,module,exports){
+/**
+ * Mime Interceptor.
+ */
+
+var _ = require('../util');
+
+module.exports = {
+
+    request: function (request) {
+
+        if (request.emulateJSON && _.isPlainObject(request.data)) {
+            request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            request.data = _.url.params(request.data);
+        }
+
+        if (_.isObject(request.data) && /FormData/i.test(request.data.toString())) {
+            delete request.headers['Content-Type'];
+        }
+
+        if (_.isPlainObject(request.data)) {
+            request.data = JSON.stringify(request.data);
+        }
+
+        return request;
+    },
+
+    response: function (response) {
+
+        try {
+            response.data = JSON.parse(response.data);
+        } catch (e) {}
+
+        return response;
+    }
+
+};
+
+},{"../util":51}],40:[function(require,module,exports){
+/**
+ * Timeout Interceptor.
+ */
+
+module.exports = function () {
+
+    var timeout;
+
+    return {
+
+        request: function (request) {
+
+            if (request.timeout) {
+                timeout = setTimeout(function () {
+                    request.cancel();
+                }, request.timeout);
+            }
+
+            return request;
+        },
+
+        response: function (response) {
+
+            clearTimeout(timeout);
+
+            return response;
+        }
+
+    };
+};
+
+},{}],41:[function(require,module,exports){
+/**
+ * Install plugin.
+ */
+
+function install(Vue) {
+
+    var _ = require('./util');
+
+    _.config = Vue.config;
+    _.warning = Vue.util.warn;
+    _.nextTick = Vue.util.nextTick;
+
+    Vue.url = require('./url');
+    Vue.http = require('./http');
+    Vue.resource = require('./resource');
+    Vue.Promise = require('./promise');
+
+    Object.defineProperties(Vue.prototype, {
+
+        $url: {
+            get: function () {
+                return _.options(Vue.url, this, this.$options.url);
+            }
+        },
+
+        $http: {
+            get: function () {
+                return _.options(Vue.http, this, this.$options.http);
+            }
+        },
+
+        $resource: {
+            get: function () {
+                return Vue.resource.bind(this);
+            }
+        },
+
+        $promise: {
+            get: function () {
+                return function (executor) {
+                    return new Vue.Promise(executor, this);
+                }.bind(this);
+            }
+        }
+
+    });
+}
+
+if (window.Vue) {
+    Vue.use(install);
+}
+
+module.exports = install;
+
+},{"./http":35,"./promise":44,"./resource":45,"./url":46,"./util":51}],42:[function(require,module,exports){
+/**
+ * Promises/A+ polyfill v1.1.4 (https://github.com/bramstein/promis)
+ */
+
+var _ = require('../util');
+
+var RESOLVED = 0;
+var REJECTED = 1;
+var PENDING  = 2;
+
+function Promise(executor) {
+
+    this.state = PENDING;
+    this.value = undefined;
+    this.deferred = [];
+
+    var promise = this;
+
+    try {
+        executor(function (x) {
+            promise.resolve(x);
+        }, function (r) {
+            promise.reject(r);
+        });
+    } catch (e) {
+        promise.reject(e);
+    }
+}
+
+Promise.reject = function (r) {
+    return new Promise(function (resolve, reject) {
+        reject(r);
+    });
+};
+
+Promise.resolve = function (x) {
+    return new Promise(function (resolve, reject) {
+        resolve(x);
+    });
+};
+
+Promise.all = function all(iterable) {
+    return new Promise(function (resolve, reject) {
+        var count = 0, result = [];
+
+        if (iterable.length === 0) {
+            resolve(result);
+        }
+
+        function resolver(i) {
+            return function (x) {
+                result[i] = x;
+                count += 1;
+
+                if (count === iterable.length) {
+                    resolve(result);
+                }
+            };
+        }
+
+        for (var i = 0; i < iterable.length; i += 1) {
+            Promise.resolve(iterable[i]).then(resolver(i), reject);
+        }
+    });
+};
+
+Promise.race = function race(iterable) {
+    return new Promise(function (resolve, reject) {
+        for (var i = 0; i < iterable.length; i += 1) {
+            Promise.resolve(iterable[i]).then(resolve, reject);
+        }
+    });
+};
+
+var p = Promise.prototype;
+
+p.resolve = function resolve(x) {
+    var promise = this;
+
+    if (promise.state === PENDING) {
+        if (x === promise) {
+            throw new TypeError('Promise settled with itself.');
+        }
+
+        var called = false;
+
+        try {
+            var then = x && x['then'];
+
+            if (x !== null && typeof x === 'object' && typeof then === 'function') {
+                then.call(x, function (x) {
+                    if (!called) {
+                        promise.resolve(x);
+                    }
+                    called = true;
+
+                }, function (r) {
+                    if (!called) {
+                        promise.reject(r);
+                    }
+                    called = true;
+                });
+                return;
+            }
+        } catch (e) {
+            if (!called) {
+                promise.reject(e);
+            }
+            return;
+        }
+
+        promise.state = RESOLVED;
+        promise.value = x;
+        promise.notify();
+    }
+};
+
+p.reject = function reject(reason) {
+    var promise = this;
+
+    if (promise.state === PENDING) {
+        if (reason === promise) {
+            throw new TypeError('Promise settled with itself.');
+        }
+
+        promise.state = REJECTED;
+        promise.value = reason;
+        promise.notify();
+    }
+};
+
+p.notify = function notify() {
+    var promise = this;
+
+    _.nextTick(function () {
+        if (promise.state !== PENDING) {
+            while (promise.deferred.length) {
+                var deferred = promise.deferred.shift(),
+                    onResolved = deferred[0],
+                    onRejected = deferred[1],
+                    resolve = deferred[2],
+                    reject = deferred[3];
+
+                try {
+                    if (promise.state === RESOLVED) {
+                        if (typeof onResolved === 'function') {
+                            resolve(onResolved.call(undefined, promise.value));
+                        } else {
+                            resolve(promise.value);
+                        }
+                    } else if (promise.state === REJECTED) {
+                        if (typeof onRejected === 'function') {
+                            resolve(onRejected.call(undefined, promise.value));
+                        } else {
+                            reject(promise.value);
+                        }
+                    }
+                } catch (e) {
+                    reject(e);
+                }
+            }
+        }
+    });
+};
+
+p.then = function then(onResolved, onRejected) {
+    var promise = this;
+
+    return new Promise(function (resolve, reject) {
+        promise.deferred.push([onResolved, onRejected, resolve, reject]);
+        promise.notify();
+    });
+};
+
+p.catch = function (onRejected) {
+    return this.then(undefined, onRejected);
+};
+
+module.exports = Promise;
+
+},{"../util":51}],43:[function(require,module,exports){
+/**
+ * URL Template v2.0.6 (https://github.com/bramstein/url-template)
+ */
+
+exports.expand = function (url, params, variables) {
+
+    var tmpl = this.parse(url), expanded = tmpl.expand(params);
+
+    if (variables) {
+        variables.push.apply(variables, tmpl.vars);
+    }
+
+    return expanded;
+};
+
+exports.parse = function (template) {
+
+    var operators = ['+', '#', '.', '/', ';', '?', '&'], variables = [];
+
+    return {
+        vars: variables,
+        expand: function (context) {
+            return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function (_, expression, literal) {
+                if (expression) {
+
+                    var operator = null, values = [];
+
+                    if (operators.indexOf(expression.charAt(0)) !== -1) {
+                        operator = expression.charAt(0);
+                        expression = expression.substr(1);
+                    }
+
+                    expression.split(/,/g).forEach(function (variable) {
+                        var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+                        values.push.apply(values, exports.getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+                        variables.push(tmp[1]);
+                    });
+
+                    if (operator && operator !== '+') {
+
+                        var separator = ',';
+
+                        if (operator === '?') {
+                            separator = '&';
+                        } else if (operator !== '#') {
+                            separator = operator;
+                        }
+
+                        return (values.length !== 0 ? operator : '') + values.join(separator);
+                    } else {
+                        return values.join(',');
+                    }
+
+                } else {
+                    return exports.encodeReserved(literal);
+                }
+            });
+        }
+    };
+};
+
+exports.getValues = function (context, operator, key, modifier) {
+
+    var value = context[key], result = [];
+
+    if (this.isDefined(value) && value !== '') {
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+            value = value.toString();
+
+            if (modifier && modifier !== '*') {
+                value = value.substring(0, parseInt(modifier, 10));
+            }
+
+            result.push(this.encodeValue(operator, value, this.isKeyOperator(operator) ? key : null));
+        } else {
+            if (modifier === '*') {
+                if (Array.isArray(value)) {
+                    value.filter(this.isDefined).forEach(function (value) {
+                        result.push(this.encodeValue(operator, value, this.isKeyOperator(operator) ? key : null));
+                    }, this);
+                } else {
+                    Object.keys(value).forEach(function (k) {
+                        if (this.isDefined(value[k])) {
+                            result.push(this.encodeValue(operator, value[k], k));
+                        }
+                    }, this);
+                }
+            } else {
+                var tmp = [];
+
+                if (Array.isArray(value)) {
+                    value.filter(this.isDefined).forEach(function (value) {
+                        tmp.push(this.encodeValue(operator, value));
+                    }, this);
+                } else {
+                    Object.keys(value).forEach(function (k) {
+                        if (this.isDefined(value[k])) {
+                            tmp.push(encodeURIComponent(k));
+                            tmp.push(this.encodeValue(operator, value[k].toString()));
+                        }
+                    }, this);
+                }
+
+                if (this.isKeyOperator(operator)) {
+                    result.push(encodeURIComponent(key) + '=' + tmp.join(','));
+                } else if (tmp.length !== 0) {
+                    result.push(tmp.join(','));
+                }
+            }
+        }
+    } else {
+        if (operator === ';') {
+            result.push(encodeURIComponent(key));
+        } else if (value === '' && (operator === '&' || operator === '?')) {
+            result.push(encodeURIComponent(key) + '=');
+        } else if (value === '') {
+            result.push('');
+        }
+    }
+
+    return result;
+};
+
+exports.isDefined = function (value) {
+    return value !== undefined && value !== null;
+};
+
+exports.isKeyOperator = function (operator) {
+    return operator === ';' || operator === '&' || operator === '?';
+};
+
+exports.encodeValue = function (operator, value, key) {
+
+    value = (operator === '+' || operator === '#') ? this.encodeReserved(value) : encodeURIComponent(value);
+
+    if (key) {
+        return encodeURIComponent(key) + '=' + value;
+    } else {
+        return value;
+    }
+};
+
+exports.encodeReserved = function (str) {
+    return str.split(/(%[0-9A-Fa-f]{2})/g).map(function (part) {
+        if (!/%[0-9A-Fa-f]/.test(part)) {
+            part = encodeURI(part);
+        }
+        return part;
+    }).join('');
+};
+
+},{}],44:[function(require,module,exports){
+/**
+ * Promise adapter.
+ */
+
+var _ = require('./util');
+var PromiseObj = window.Promise || require('./lib/promise');
+
+function Promise(executor, context) {
+
+    if (executor instanceof PromiseObj) {
+        this.promise = executor;
+    } else {
+        this.promise = new PromiseObj(executor.bind(context));
+    }
+
+    this.context = context;
+}
+
+Promise.all = function (iterable, context) {
+    return new Promise(PromiseObj.all(iterable), context);
+};
+
+Promise.resolve = function (value, context) {
+    return new Promise(PromiseObj.resolve(value), context);
+};
+
+Promise.reject = function (reason, context) {
+    return new Promise(PromiseObj.reject(reason), context);
+};
+
+Promise.race = function (iterable, context) {
+    return new Promise(PromiseObj.race(iterable), context);
+};
+
+var p = Promise.prototype;
+
+p.bind = function (context) {
+    this.context = context;
+    return this;
+};
+
+p.then = function (fulfilled, rejected) {
+
+    if (fulfilled && fulfilled.bind && this.context) {
+        fulfilled = fulfilled.bind(this.context);
+    }
+
+    if (rejected && rejected.bind && this.context) {
+        rejected = rejected.bind(this.context);
+    }
+
+    this.promise = this.promise.then(fulfilled, rejected);
+
+    return this;
+};
+
+p.catch = function (rejected) {
+
+    if (rejected && rejected.bind && this.context) {
+        rejected = rejected.bind(this.context);
+    }
+
+    this.promise = this.promise.catch(rejected);
+
+    return this;
+};
+
+p.finally = function (callback) {
+
+    return this.then(function (value) {
+            callback.call(this);
+            return value;
+        }, function (reason) {
+            callback.call(this);
+            return PromiseObj.reject(reason);
+        }
+    );
+};
+
+p.success = function (callback) {
+
+    _.warn('The `success` method has been deprecated. Use the `then` method instead.');
+
+    return this.then(function (response) {
+        return callback.call(this, response.data, response.status, response) || response;
+    });
+};
+
+p.error = function (callback) {
+
+    _.warn('The `error` method has been deprecated. Use the `catch` method instead.');
+
+    return this.catch(function (response) {
+        return callback.call(this, response.data, response.status, response) || response;
+    });
+};
+
+p.always = function (callback) {
+
+    _.warn('The `always` method has been deprecated. Use the `finally` method instead.');
+
+    var cb = function (response) {
+        return callback.call(this, response.data, response.status, response) || response;
+    };
+
+    return this.then(cb, cb);
+};
+
+module.exports = Promise;
+
+},{"./lib/promise":42,"./util":51}],45:[function(require,module,exports){
+/**
+ * Service for interacting with RESTful services.
+ */
+
+var _ = require('./util');
+
+function Resource(url, params, actions, options) {
+
+    var self = this, resource = {};
+
+    actions = _.extend({},
+        Resource.actions,
+        actions
+    );
+
+    _.each(actions, function (action, name) {
+
+        action = _.merge({url: url, params: params || {}}, options, action);
+
+        resource[name] = function () {
+            return (self.$http || _.http)(opts(action, arguments));
+        };
+    });
+
+    return resource;
+}
+
+function opts(action, args) {
+
+    var options = _.extend({}, action), params = {}, data, success, error;
+
+    switch (args.length) {
+
+        case 4:
+
+            error = args[3];
+            success = args[2];
+
+        case 3:
+        case 2:
+
+            if (_.isFunction(args[1])) {
+
+                if (_.isFunction(args[0])) {
+
+                    success = args[0];
+                    error = args[1];
+
+                    break;
+                }
+
+                success = args[1];
+                error = args[2];
+
+            } else {
+
+                params = args[0];
+                data = args[1];
+                success = args[2];
+
+                break;
+            }
+
+        case 1:
+
+            if (_.isFunction(args[0])) {
+                success = args[0];
+            } else if (/^(POST|PUT|PATCH)$/i.test(options.method)) {
+                data = args[0];
+            } else {
+                params = args[0];
+            }
+
+            break;
+
+        case 0:
+
+            break;
+
+        default:
+
+            throw 'Expected up to 4 arguments [params, data, success, error], got ' + args.length + ' arguments';
+    }
+
+    options.data = data;
+    options.params = _.extend({}, options.params, params);
+
+    if (success) {
+        options.success = success;
+    }
+
+    if (error) {
+        options.error = error;
+    }
+
+    return options;
+}
+
+Resource.actions = {
+
+    get: {method: 'GET'},
+    save: {method: 'POST'},
+    query: {method: 'GET'},
+    update: {method: 'PUT'},
+    remove: {method: 'DELETE'},
+    delete: {method: 'DELETE'}
+
+};
+
+module.exports = _.resource = Resource;
+
+},{"./util":51}],46:[function(require,module,exports){
+/**
+ * Service for URL templating.
+ */
+
+var _ = require('../util');
+var ie = document.documentMode;
+var el = document.createElement('a');
+
+function Url(url, params) {
+
+    var options = url, transform;
+
+    if (_.isString(url)) {
+        options = {url: url, params: params};
+    }
+
+    options = _.merge({}, Url.options, this.$options, options);
+
+    Url.transforms.forEach(function (handler) {
+        transform = factory(handler, transform, this.$vm);
+    }, this);
+
+    return transform(options);
+};
+
+/**
+ * Url options.
+ */
+
+Url.options = {
+    url: '',
+    root: null,
+    params: {}
+};
+
+/**
+ * Url transforms.
+ */
+
+Url.transforms = [
+    require('./template'),
+    require('./legacy'),
+    require('./query'),
+    require('./root')
+];
+
+/**
+ * Encodes a Url parameter string.
+ *
+ * @param {Object} obj
+ */
+
+Url.params = function (obj) {
+
+    var params = [], escape = encodeURIComponent;
+
+    params.add = function (key, value) {
+
+        if (_.isFunction(value)) {
+            value = value();
+        }
+
+        if (value === null) {
+            value = '';
+        }
+
+        this.push(escape(key) + '=' + escape(value));
+    };
+
+    serialize(params, obj);
+
+    return params.join('&').replace(/%20/g, '+');
+};
+
+/**
+ * Parse a URL and return its components.
+ *
+ * @param {String} url
+ */
+
+Url.parse = function (url) {
+
+    if (ie) {
+        el.href = url;
+        url = el.href;
+    }
+
+    el.href = url;
+
+    return {
+        href: el.href,
+        protocol: el.protocol ? el.protocol.replace(/:$/, '') : '',
+        port: el.port,
+        host: el.host,
+        hostname: el.hostname,
+        pathname: el.pathname.charAt(0) === '/' ? el.pathname : '/' + el.pathname,
+        search: el.search ? el.search.replace(/^\?/, '') : '',
+        hash: el.hash ? el.hash.replace(/^#/, '') : ''
+    };
+};
+
+function factory(handler, next, vm) {
+    return function (options) {
+        return handler.call(vm, options, next);
+    };
+}
+
+function serialize(params, obj, scope) {
+
+    var array = _.isArray(obj), plain = _.isPlainObject(obj), hash;
+
+    _.each(obj, function (value, key) {
+
+        hash = _.isObject(value) || _.isArray(value);
+
+        if (scope) {
+            key = scope + '[' + (plain || hash ? key : '') + ']';
+        }
+
+        if (!scope && array) {
+            params.add(value.name, value.value);
+        } else if (hash) {
+            serialize(params, value, key);
+        } else {
+            params.add(key, value);
+        }
+    });
+}
+
+module.exports = _.url = Url;
+
+},{"../util":51,"./legacy":47,"./query":48,"./root":49,"./template":50}],47:[function(require,module,exports){
+/**
+ * Legacy Transform.
+ */
+
+var _ = require('../util');
+
+module.exports = function (options, next) {
+
+    var variables = [], url = next(options);
+
+    url = url.replace(/(\/?):([a-z]\w*)/gi, function (match, slash, name) {
+
+        _.warn('The `:' + name + '` parameter syntax has been deprecated. Use the `{' + name + '}` syntax instead.');
+
+        if (options.params[name]) {
+            variables.push(name);
+            return slash + encodeUriSegment(options.params[name]);
+        }
+
+        return '';
+    });
+
+    variables.forEach(function (key) {
+        delete options.params[key];
+    });
+
+    return url;
+};
+
+function encodeUriSegment(value) {
+
+    return encodeUriQuery(value, true).
+        replace(/%26/gi, '&').
+        replace(/%3D/gi, '=').
+        replace(/%2B/gi, '+');
+}
+
+function encodeUriQuery(value, spaces) {
+
+    return encodeURIComponent(value).
+        replace(/%40/gi, '@').
+        replace(/%3A/gi, ':').
+        replace(/%24/g, '$').
+        replace(/%2C/gi, ',').
+        replace(/%20/g, (spaces ? '%20' : '+'));
+}
+
+},{"../util":51}],48:[function(require,module,exports){
+/**
+ * Query Parameter Transform.
+ */
+
+var _ = require('../util');
+
+module.exports = function (options, next) {
+
+    var urlParams = Object.keys(_.url.options.params), query = {}, url = next(options);
+
+   _.each(options.params, function (value, key) {
+        if (urlParams.indexOf(key) === -1) {
+            query[key] = value;
+        }
+    });
+
+    query = _.url.params(query);
+
+    if (query) {
+        url += (url.indexOf('?') == -1 ? '?' : '&') + query;
+    }
+
+    return url;
+};
+
+},{"../util":51}],49:[function(require,module,exports){
+/**
+ * Root Prefix Transform.
+ */
+
+var _ = require('../util');
+
+module.exports = function (options, next) {
+
+    var url = next(options);
+
+    if (_.isString(options.root) && !url.match(/^(https?:)?\//)) {
+        url = options.root + '/' + url;
+    }
+
+    return url;
+};
+
+},{"../util":51}],50:[function(require,module,exports){
+/**
+ * URL Template (RFC 6570) Transform.
+ */
+
+var UrlTemplate = require('../lib/url-template');
+
+module.exports = function (options) {
+
+    var variables = [], url = UrlTemplate.expand(options.url, options.params, variables);
+
+    variables.forEach(function (key) {
+        delete options.params[key];
+    });
+
+    return url;
+};
+
+},{"../lib/url-template":43}],51:[function(require,module,exports){
+/**
+ * Utility functions.
+ */
+
+var _ = exports, array = [], console = window.console;
+
+_.warn = function (msg) {
+    if (console && _.warning && (!_.config.silent || _.config.debug)) {
+        console.warn('[VueResource warn]: ' + msg);
+    }
+};
+
+_.error = function (msg) {
+    if (console) {
+        console.error(msg);
+    }
+};
+
+_.trim = function (str) {
+    return str.replace(/^\s*|\s*$/g, '');
+};
+
+_.toLower = function (str) {
+    return str ? str.toLowerCase() : '';
+};
+
+_.isArray = Array.isArray;
+
+_.isString = function (val) {
+    return typeof val === 'string';
+};
+
+_.isFunction = function (val) {
+    return typeof val === 'function';
+};
+
+_.isObject = function (obj) {
+    return obj !== null && typeof obj === 'object';
+};
+
+_.isPlainObject = function (obj) {
+    return _.isObject(obj) && Object.getPrototypeOf(obj) == Object.prototype;
+};
+
+_.options = function (fn, obj, options) {
+
+    options = options || {};
+
+    if (_.isFunction(options)) {
+        options = options.call(obj);
+    }
+
+    return _.merge(fn.bind({$vm: obj, $options: options}), fn, {$options: options});
+};
+
+_.each = function (obj, iterator) {
+
+    var i, key;
+
+    if (typeof obj.length == 'number') {
+        for (i = 0; i < obj.length; i++) {
+            iterator.call(obj[i], obj[i], i);
+        }
+    } else if (_.isObject(obj)) {
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                iterator.call(obj[key], obj[key], key);
+            }
+        }
+    }
+
+    return obj;
+};
+
+_.defaults = function (target, source) {
+
+    for (var key in source) {
+        if (target[key] === undefined) {
+            target[key] = source[key];
+        }
+    }
+
+    return target;
+};
+
+_.extend = function (target) {
+
+    var args = array.slice.call(arguments, 1);
+
+    args.forEach(function (arg) {
+        merge(target, arg);
+    });
+
+    return target;
+};
+
+_.merge = function (target) {
+
+    var args = array.slice.call(arguments, 1);
+
+    args.forEach(function (arg) {
+        merge(target, arg, true);
+    });
+
+    return target;
+};
+
+function merge(target, source, deep) {
+    for (var key in source) {
+        if (deep && (_.isPlainObject(source[key]) || _.isArray(source[key]))) {
+            if (_.isPlainObject(source[key]) && !_.isPlainObject(target[key])) {
+                target[key] = {};
+            }
+            if (_.isArray(source[key]) && !_.isArray(target[key])) {
+                target[key] = [];
+            }
+            merge(target[key], source[key], deep);
+        } else if (source[key] !== undefined) {
+            target[key] = source[key];
+        }
+    }
+}
+
+},{}],52:[function(require,module,exports){
 /*!
  * vue-router v0.7.10
  * (c) 2016 Evan You
@@ -5425,7 +6953,7 @@ function format (id) {
   return Router;
 
 }));
-},{}],29:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.16
@@ -15020,7 +16548,7 @@ if (devtools) {
 
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":1}],30:[function(require,module,exports){
+},{"_process":1}],54:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 exports.insert = function (css) {
@@ -15040,7 +16568,7 @@ exports.insert = function (css) {
   return elem
 }
 
-},{}],31:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -15394,7 +16922,7 @@ exports.default = {
   createLogger: _logger2.default,
   install: install
 };
-},{"./middlewares/devtool":32,"./middlewares/logger":33,"./util":34}],32:[function(require,module,exports){
+},{"./middlewares/devtool":56,"./middlewares/logger":57,"./util":58}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15409,7 +16937,7 @@ exports.default = {
   }
 };
 module.exports = exports['default'];
-},{}],33:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15472,7 +17000,7 @@ function pad(num, maxLength) {
   return repeat('0', maxLength - num.toString().length) + num;
 }
 module.exports = exports['default'];
-},{}],34:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15585,7 +17113,7 @@ function deepClone(obj) {
     return obj;
   }
 }
-},{}],35:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15604,7 +17132,7 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./Scheduler":36,"./env":48,"./makePromise":50}],36:[function(require,module,exports){
+},{"./Scheduler":60,"./env":72,"./makePromise":74}],60:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15686,7 +17214,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],37:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15714,7 +17242,7 @@ define(function() {
 	return TimeoutError;
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
-},{}],38:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -15771,7 +17299,7 @@ define(function() {
 
 
 
-},{}],39:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16062,7 +17590,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../apply":38,"../state":51}],40:[function(require,module,exports){
+},{"../apply":62,"../state":75}],64:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16224,7 +17752,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],41:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16253,7 +17781,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],42:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16275,7 +17803,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../state":51}],43:[function(require,module,exports){
+},{"../state":75}],67:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16342,7 +17870,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],44:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16368,7 +17896,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],45:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16448,7 +17976,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../TimeoutError":37,"../env":48}],46:[function(require,module,exports){
+},{"../TimeoutError":61,"../env":72}],70:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16536,7 +18064,7 @@ define(function(require) {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
-},{"../env":48,"../format":49}],47:[function(require,module,exports){
+},{"../env":72,"../format":73}],71:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16576,7 +18104,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 
-},{}],48:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -16653,7 +18181,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],49:[function(require,module,exports){
+},{"_process":1}],73:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -16711,7 +18239,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],50:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 (function (process){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
@@ -17642,7 +19170,7 @@ define(function() {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
 }).call(this,require('_process'))
-},{"_process":1}],51:[function(require,module,exports){
+},{"_process":1}],75:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -17679,7 +19207,7 @@ define(function() {
 });
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(); }));
 
-},{}],52:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 
 /**
@@ -17909,7 +19437,40 @@ define(function (require) {
 });
 })(typeof define === 'function' && define.amd ? define : function (factory) { module.exports = factory(require); });
 
-},{"./lib/Promise":35,"./lib/TimeoutError":37,"./lib/apply":38,"./lib/decorators/array":39,"./lib/decorators/flow":40,"./lib/decorators/fold":41,"./lib/decorators/inspect":42,"./lib/decorators/iterate":43,"./lib/decorators/progress":44,"./lib/decorators/timed":45,"./lib/decorators/unhandledRejection":46,"./lib/decorators/with":47}],53:[function(require,module,exports){
+},{"./lib/Promise":59,"./lib/TimeoutError":61,"./lib/apply":62,"./lib/decorators/array":63,"./lib/decorators/flow":64,"./lib/decorators/fold":65,"./lib/decorators/inspect":66,"./lib/decorators/iterate":67,"./lib/decorators/progress":68,"./lib/decorators/timed":69,"./lib/decorators/unhandledRejection":70,"./lib/decorators/with":71}],77:[function(require,module,exports){
+'use strict';
+
+// TEMPORARY STATE MANAGEMENT; WAITING FOR NPM RELEASE OF VUEX 0.4.0
+module.exports = {
+  data: function data() {
+    return {
+      token: null
+    };
+  },
+  methods: {
+    setLogin: function setLogin() {
+      this.token = localStorage.getItem('jwt-token');
+    },
+    destroyLogin: function destroyLogin() {
+      this.token = null;
+      localStorage.removeItem('jwt-token');
+    }
+  },
+  ready: function ready() {
+    this.$on('userHasLoggedIn', function () {
+      this.setLogin();
+    });
+    this.$on('userHasLoggedOut', function () {
+      this.destroyLogin();
+    });
+
+    var token = localStorage.getItem('jwt-token');
+    if (token !== null && token !== 'undefined') {
+      this.setLogin();
+    }
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <router-view></router-view>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -17922,12 +19483,13 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],54:[function(require,module,exports){
+},{"vue":53,"vue-hot-reload-api":27}],78:[function(require,module,exports){
 'use strict';
 
 var _routes = require('./routes');
 
 window.Vue = require('vue');
+window.VueResource = require('vue-resource');
 window.VueRouter = require('vue-router');
 
 // Configure routes
@@ -17953,18 +19515,24 @@ var jwtAuth = require('./interceptors/jwtAuth');
 
 window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url }).wrap(mime).wrap(defaultRequest, config.api.defaultRequest).wrap(errorCode, { code: 400 }).wrap(jwtAuth);
 
+Vue.use(VueResource);
+
 // Bootstrap app
-localStorage.removeItem('jwt-token');
 var App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;
 
-},{"./app.vue":53,"./config":58,"./interceptors/jwtAuth":61,"./routes":70,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":29,"vue-router":28}],55:[function(require,module,exports){
+},{"./app.vue":77,"./config":82,"./interceptors/jwtAuth":85,"./routes":94,"rest":3,"rest/interceptor":7,"rest/interceptor/defaultRequest":8,"rest/interceptor/errorCode":9,"rest/interceptor/mime":10,"rest/interceptor/pathPrefix":11,"vue":53,"vue-resource":41,"vue-router":52}],79:[function(require,module,exports){
 'use strict';
 
 module.exports = {
   props: {
     headerClass: ''
+  },
+  computed: {
+    loggedIn: function loggedIn() {
+      return this.$root.token !== null;
+    }
   },
   data: function data() {
     return {
@@ -17973,7 +19541,7 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<header :class=\"headerClass\" class=\"header__wrapper\"><nav class=\"nav__wrapper\"><div class=\"nav nav--left\"><a v-link=\"{ name: 'home' }\"><img src=\"/static/img/logo.png\" height=\"54\" class=\"nav__logo\"/></a></div><div class=\"nav nav--right\"><a href=\"#0\" class=\"nav__link\">How It Works</a><a v-link=\"{ name: 'login' }\" class=\"nav__link\">Login</a><a v-link=\"{ name: 'register' }\" class=\"nav__link\">Register</a></div></nav></header>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<header :class=\"headerClass\" class=\"header__wrapper\"><nav class=\"nav__wrapper\"><div class=\"nav nav--left\"><a v-link=\"{ name: 'home' }\"><img src=\"/static/img/logo.png\" height=\"54\" class=\"nav__logo\"/></a></div><div class=\"nav nav--right\"><template v-if=\"loggedIn\"><a v-link=\"{ name: 'report' }\" class=\"nav__link\">Report</a><a v-link=\"{ name: 'profile' }\" class=\"nav__link\">Profile</a><a v-link=\"{ name: 'logout' }\" class=\"nav__link\">Logout</a></template><template v-else=\"v-else\"><a href=\"#0\" class=\"nav__link\">How It Works</a><a v-link=\"{ name: 'login' }\" class=\"nav__link\">Login</a><a v-link=\"{ name: 'register' }\" class=\"nav__link\">Register</a></template></div></nav></header>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -17985,7 +19553,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],56:[function(require,module,exports){
+},{"vue":53,"vue-hot-reload-api":27}],80:[function(require,module,exports){
 var __vueify_style__ = require("vueify-insert-css").insert("\n\n.v-spinner .v-fade\n{\n    -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n            animation: v-fadeStretchDelay 1.2s infinite ease-in-out;\n    -webkit-animation-fill-mode: both;\n\t          animation-fill-mode: both;\n    position: absolute;\n}\n\n@-webkit-keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n\n@keyframes v-fadeStretchDelay\n{\n    50%\n    {\n        -webkit-opacity: 0.3;\n                opacity: 0.3;\n    }\n    100%\n    {\n        -webkit-opacity: 1;\n                opacity: 1;\n    }\n}\n")
 'use strict';
 
@@ -18127,7 +19695,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27,"vueify-insert-css":30}],57:[function(require,module,exports){
+},{"vue":53,"vue-hot-reload-api":27,"vueify-insert-css":54}],81:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -18151,7 +19719,7 @@ var config = {
 
 module.exports = config;
 
-},{}],58:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -18170,7 +19738,7 @@ var config = {
 module.exports = config[env];
 
 }).call(this,require('_process'))
-},{"./development.config":57,"./production.config":59,"./staging.config":60,"_process":1}],59:[function(require,module,exports){
+},{"./development.config":81,"./production.config":83,"./staging.config":84,"_process":1}],83:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -18194,7 +19762,7 @@ var config = {
 
 module.exports = config;
 
-},{}],60:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 'use strict';
 
 var config = {
@@ -18217,7 +19785,7 @@ var config = {
 };
 module.exports = config;
 
-},{}],61:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 'use strict';
 
 (function (define) {
@@ -18258,7 +19826,7 @@ module.exports = config;
 					localStorage.setItem('jwt-token', _response.headers.Authorization);
 				}
 				if (_response.entity && _response.entity.token && _response.entity.token.length > 10) {
-					localStorage.setItem('jwt-token', 'Bearer ' + _response.entity.token);
+					localStorage.setItem('jwt-token', 'JWT ' + _response.entity.token);
 				}
 				return _response;
 			}
@@ -18270,7 +19838,7 @@ module.exports = config;
 // Boilerplate for AMD and Node
 );
 
-},{"rest/interceptor":7}],62:[function(require,module,exports){
+},{"rest/interceptor":7}],86:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<h1>404</h1>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -18283,12 +19851,11 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],63:[function(require,module,exports){
+},{"vue":53,"vue-hot-reload-api":27}],87:[function(require,module,exports){
 'use strict';
 
 var Header = require('../../components/header.vue');
 var Spinner = require('../../components/spinner.vue');
-var Store = require('../../store');
 
 module.exports = {
   data: function data() {
@@ -18315,10 +19882,10 @@ module.exports = {
       var that = this;
       that.loading = true;
       client({ path: 'token_auth', entity: this.user }).then(function (response) {
+        that.$dispatch('userHasLoggedIn');
         that.loading = false;
         that.$route.router.go('/profile');
       }, function (response) {
-        console.log(response);
         if (response.status && response.status.code === 400) {
           for (var key in response.entity) {
             if (key === 'non_field_errors') {
@@ -18344,7 +19911,7 @@ module.exports = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><router-view></router-view><div class=\"form__wrapper\"><h2>Login to StudentAssembly</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"login\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Login</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><router-view></router-view><h2>Login to Student Assembly</h2><div class=\"form__wrapper\"><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><div class=\"form__label\">Email</div><input type=\"email\" v-model=\"user.email\" placeholder=\"juan@student.ph\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><div class=\"form__label pull-left\">Password</div><div class=\"form__note pull-right u-mg-t-0\"><a v-link=\"{ name: 'login' }\">Forgot your password?</a></div><input type=\"password\" v-model=\"user.password\" placeholder=\"••••••••\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"login\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Login</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div><p class=\"small\">Don't have an account yet?&nbsp;<a v-link=\"{ name: 'register' }\">Create one.</a></p></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18356,21 +19923,18 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/header.vue":55,"../../components/spinner.vue":56,"../../store":71,"vue":29,"vue-hot-reload-api":27}],64:[function(require,module,exports){
+},{"../../components/header.vue":79,"../../components/spinner.vue":80,"vue":53,"vue-hot-reload-api":27}],88:[function(require,module,exports){
 'use strict';
 
-module.exports = {
+var Store = require('../../store');
 
+module.exports = {
   route: {
     activate: function activate(transition) {
-      this.$root.authenticated = false;
-      this.$root.user = null;
-      localStorage.removeItem('user');
-      localStorage.removeItem('jwt-token');
+      this.$dispatch('userHasLoggedOut');
       transition.redirect('/');
     }
   }
-
 };
 if (module.exports.__esModule) module.exports = module.exports.default
 if (module.hot) {(function () {  module.hot.accept()
@@ -18384,7 +19948,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],65:[function(require,module,exports){
+},{"../../store":95,"vue":53,"vue-hot-reload-api":27}],89:[function(require,module,exports){
 'use strict';
 
 var Header = require('../../components/header.vue');
@@ -18393,7 +19957,6 @@ var Spinner = require('../../components/spinner.vue');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Create an account',
       user: {
         email: null,
         password: null,
@@ -18448,6 +20011,9 @@ module.exports = {
             }
           }
         }
+
+        if (response.status) {}
+
         that.loading = false;
       });
     },
@@ -18460,8 +20026,13 @@ module.exports = {
     'v-spinner': Spinner
   }
 };
+
+// Registration information
+// Please enter a valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.
+// We aspire to make you feel as comfortable as possible using this website. We therefore do not ask for your name and do not require you to tell us your university or department. This enables you to remain as anonymous as possible. We also will assign you a random username so that the username is not personally linked to you. We require an email address simply to help us reduce fraud.
+// For security reasons, we recommend that you do not use a university email address.
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><div v-if=\"registered\" class=\"alert__wrapper alert--success\"><h3>Verify your email</h3><p>We've sent a link to your email address so we can verify you. After doing so, you can start&nbsp;<a v-link=\"{ name: 'login' }\">logging in.</a></p></div><div class=\"form__wrapper\"><h2>{{ msg }}</h2><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"email\" v-model=\"user.email\" placeholder=\"Email\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><input type=\"password\" v-model=\"user.password\" placeholder=\"Password\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><input type=\"password\" v-model=\"user.repeatPassword\" placeholder=\"Repeat password\"/><div class=\"form__error\"><span v-if=\"passwordsMismatch\">Oops, the passwords did not match.</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"register\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Register</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper content--small\"><div class=\"content__section\"><div v-if=\"registered\" class=\"alert__wrapper alert--success\"><h3>Verify your email</h3><p>We've sent a link to your email address so we can verify you. After doing so, you can start&nbsp;<a v-link=\"{ name: 'login' }\">logging in.</a></p></div><h2>Create an account</h2><div class=\"form__wrapper\"><form><div :class=\"emailError ? 'form--empty' : ''\" class=\"form__element\"><div class=\"form__label\">Email</div><input type=\"email\" v-model=\"user.email\" placeholder=\"Use a valid email!\"/><div class=\"form__error\"><span>{{ emailError }}</span></div></div><div :class=\"passwordError ? 'form--empty' : ''\" class=\"form__element\"><div class=\"form__label\">Password</div><input type=\"password\" v-model=\"user.password\" placeholder=\"Must be at least 8 characters long.\"/><div class=\"form__error\"><span>{{ passwordError }}</span></div></div><div class=\"form__element\"><div class=\"form__label\">Repeat password</div><input type=\"password\" v-model=\"user.repeatPassword\" placeholder=\"Just to be sure.\"/><div class=\"form__error\"><span v-if=\"passwordsMismatch\">Oops, the passwords did not match.</span></div></div><div class=\"form__element\"><button type=\"submit\" @click.prevent=\"register\" v-bind:disabled=\"loading\"><span v-show=\"!loading\">Register</span><div v-show=\"loading\" class=\"button__spinner\"><v-spinner color=\"#fff\" height=\"6px\" width=\"3px\" radius=\"8px\"></v-spinner></div></button></div></form></div><p class=\"small\">Already have an account?&nbsp;<a v-link=\"{ name: 'login' }\">Log in.</a></p></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18473,7 +20044,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../components/header.vue":55,"../../components/spinner.vue":56,"vue":29,"vue-hot-reload-api":27}],66:[function(require,module,exports){
+},{"../../components/header.vue":79,"../../components/spinner.vue":80,"vue":53,"vue-hot-reload-api":27}],90:[function(require,module,exports){
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<div class=\"alert__wrapper alert--success\"><h3>Your account has been verified!</h3><p>Log in using your email and password to start using Student Assembly.</p></div>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
@@ -18486,7 +20057,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":29,"vue-hot-reload-api":27}],67:[function(require,module,exports){
+},{"vue":53,"vue-hot-reload-api":27}],91:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -18514,7 +20085,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":55,"vue":29,"vue-hot-reload-api":27}],68:[function(require,module,exports){
+},{"../components/header.vue":79,"vue":53,"vue-hot-reload-api":27}],92:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -18523,17 +20094,29 @@ var Spinner = require('../components/spinner.vue');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Create an account'
+      username: null
     };
   },
   methods: {},
+  ready: function ready() {
+    var that = this;
+    client({ path: 'user' }).then(function (response) {
+      try {
+        that.username = response.entity.username;
+      } catch (e) {
+        console.log(e);
+      }
+    }, function (response) {
+      // Fail
+    });
+  },
   components: {
     'v-header': Header,
     'v-spinner': Spinner
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>Profile</h1></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>Profile</h1><h3>Hello, {{ username }}!</h3></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18545,7 +20128,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":55,"../components/spinner.vue":56,"vue":29,"vue-hot-reload-api":27}],69:[function(require,module,exports){
+},{"../components/header.vue":79,"../components/spinner.vue":80,"vue":53,"vue-hot-reload-api":27}],93:[function(require,module,exports){
 'use strict';
 
 var Header = require('../components/header.vue');
@@ -18554,17 +20137,32 @@ var Spinner = require('../components/spinner.vue');
 module.exports = {
   data: function data() {
     return {
-      msg: 'Create an account'
+      allowContact: false,
+      schools: null,
+      categories: null
     };
   },
   methods: {},
+  ready: function ready() {
+    var that = this;
+    client({ path: 'schools' }).then(function (response) {
+      that.schools = response.entity;
+    }, function (response) {
+      console.log('Error trying to fetch schools. Contact the server again.');
+    });
+    client({ path: 'categories' }).then(function (response) {
+      that.categories = response.entity;
+    }, function (response) {
+      console.log('Error trying to fetch categories. Contact the server again.');
+    });
+  },
   components: {
     'v-header': Header,
     'v-spinner': Spinner
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>File a report</h1><div class=\"form__wrapper\"><form><div class=\"form__element\"><div class=\"form__label\">School</div><select><option>University of the Philippines - Diliman</option><option>Ateneo de Manila University</option><option>De La Salle University - Manila</option></select></div><div class=\"form__element\"><div class=\"form__label\">Type of Report</div><select><option>Cleanliness / Environmental</option><option>Curriculum</option><option>Distance or Accesibility</option><option>Discrimination</option><option>Enrollment Process</option><option>Fees</option><option>Grades</option><option>Harassment</option><option>Maintenance</option><option>Policies</option><option>Process (Administrative)</option><option>Supplies</option></select></div><div class=\"form__element\"><div class=\"form__label\">Report Details</div><textarea rows=\"10\"></textarea></div><div class=\"form__element\"><div class=\"form__label\">Attachments</div><div class=\"form__note\">Each file has a 5MB limit.</div><div class=\"form__attachments\"><div class=\"form__attachment\"></div><div class=\"form__attachment\"></div><div class=\"form__attachment\"></div></div></div><div class=\"form__element\"><div class=\"form__label\">Do you want to publish your report?</div><div class=\"form__note\">Agreeing to publish your report does not guarantee its posting. Student Assembly reserves the right to not publish reports that may be damaging / harmful to others.</div><div class=\"form__radio\"><input type=\"radio\" name=\"publish\" value=\"yes\"/><label>Yes</label></div><div class=\"form__radio\"><input type=\"radio\" name=\"publish\" value=\"no\"/><label>No</label></div></div><div class=\"form__element\"><div class=\"form__label\">Are you willing to provide your contact details?</div><div class=\"form__note\">If this is a sexual harassment or discrimination report and you would like to pursue legal action, kindly give your contact information.</div><input type=\"text\" placeholder=\"Name\"/><input type=\"email\" placeholder=\"Email Address\"/><input type=\"text\" placeholder=\"Mobile Number\"/></div><div class=\"form__element\"><button type=\"submit\"><span>Submit</span></button></div></form></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<v-header></v-header><section class=\"page__wrapper\"><div class=\"content__wrapper\"><div class=\"content__section\"><h1>File a report</h1><div class=\"form__wrapper\"><form><div class=\"form__element\"><div class=\"form__label\">School</div><div class=\"form__select\"><select name=\"school\"><option disabled=\"disabled\" selected=\"selected\" hidden=\"hidden\">Choose a school...</option><option v-for=\"school in schools\" value=\"{{ school.id }}\">{{ school.name }}</option></select></div></div><div class=\"form__element\"><div class=\"form__label\">Type of Report</div><div class=\"form__select\"><select name=\"category\"><option disabled=\"disabled\" selected=\"selected\" hidden=\"hidden\">Choose a category..</option><option v-for=\"category in categories\" value=\"{{ category.id }}\">{{ category.name }}</option></select></div></div><div class=\"form__element\"><div class=\"form__label\">Report Details</div><textarea rows=\"10\" name=\"text\" placeholder=\"State the corruption case in detail.\"></textarea></div><div class=\"form__element\"><div class=\"form__label\">Attachments</div><div class=\"form__note\">It can be a document or an image. Each file has a 3MB limit.</div><div class=\"form__attachments\"><div class=\"form__attachment\"><input type=\"file\" id=\"file1\" name=\"files[]\"/><label for=\"file1\">Choose</label></div><div class=\"form__attachment\"><input type=\"file\" id=\"file2\" name=\"files[]\"/><label for=\"file2\">Choose</label></div><div class=\"form__attachment\"><input type=\"file\" id=\"file3\" name=\"files[]\"/><label for=\"file3\">Choose</label></div></div></div><div class=\"form__element\"><div class=\"form__label\">Do you want to publish your report?</div><div class=\"form__note\">Agreeing to publish your report does not guarantee its posting. Student Assembly reserves the right to not publish reports that may be damaging / harmful to others.</div><div class=\"form__radio\"><input type=\"radio\" name=\"allow_publish\" id=\"allow_publish_1\" value=\"yes\"/><label for=\"allow_publish_1\">Yes, publish my report.</label></div><div class=\"form__radio\"><input type=\"radio\" name=\"allow_publish\" id=\"allow_publish_2\" value=\"no\" checked=\"checked\"/><label for=\"allow_publish_2\">No, don't publish my report.</label></div></div><div class=\"form__element\"><div class=\"form__label\">Are you willing to provide your contact details?</div><div class=\"form__note\">If this is a sexual harassment or discrimination report and you would like to pursue legal action, kindly give your contact information.</div><div class=\"form__radio\"><input type=\"radio\" name=\"allow_contact\" id=\"allow_contact_1\" value=\"yes\" @click=\"allowContact = true\"/><label for=\"allow_contact_1\">Yes, I would to give my contact.</label></div><div class=\"form__radio\"><input type=\"radio\" name=\"allow_contact\" id=\"allow_contact_2\" value=\"no\" @click=\"allowContact = false\" checked=\"checked\"/><label for=\"allow_contact_2\">No, I don't want to give my contact.</label></div><template v-if=\"allowContact\"><input type=\"text\" placeholder=\"Name\"/><input type=\"email\" placeholder=\"Email Address\"/><input type=\"text\" placeholder=\"Mobile Number\"/></template></div><div class=\"form__element\"><button type=\"submit\"><span>Submit</span></button></div></form></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -18576,7 +20174,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/header.vue":55,"../components/spinner.vue":56,"vue":29,"vue-hot-reload-api":27}],70:[function(require,module,exports){
+},{"../components/header.vue":79,"../components/spinner.vue":80,"vue":53,"vue-hot-reload-api":27}],94:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -18606,12 +20204,12 @@ module.exports = {
       },
       '/profile': {
         name: 'profile',
-        // needAuth: true,
+        needAuth: true,
         component: require('./pages/profile.vue')
       },
       '/report': {
         name: 'report',
-        // needAuth: true,
+        needAuth: true,
         component: require('./pages/report.vue')
       },
       '*': {
@@ -18636,32 +20234,35 @@ module.exports = {
   }
 };
 
-},{"./pages/404.vue":62,"./pages/auth/login.vue":63,"./pages/auth/logout.vue":64,"./pages/auth/register.vue":65,"./pages/auth/verified.vue":66,"./pages/index.vue":67,"./pages/profile.vue":68,"./pages/report.vue":69}],71:[function(require,module,exports){
+},{"./pages/404.vue":86,"./pages/auth/login.vue":87,"./pages/auth/logout.vue":88,"./pages/auth/register.vue":89,"./pages/auth/verified.vue":90,"./pages/index.vue":91,"./pages/profile.vue":92,"./pages/report.vue":93}],95:[function(require,module,exports){
 'use strict';
 
 var _vuex = require('vuex');
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Vue
-var Vue = require('vue'); // Vuex is an ES6 module
-
-
-Vue.use(_vuex2.default);
+_vue2.default.use(_vuex2.default);
 
 module.exports = new _vuex2.default.Store({
   state: {
-    counter: 0
+    token: null
   },
   mutations: {
-    INCREMENT: function INCREMENT(state) {
-      state.counter++;
+    SET_LOGIN: function SET_LOGIN(state, token) {
+      state.token = token;
+    },
+    SET_LOGOUT: function SET_LOGOUT(state) {
+      state.token = null;
     }
   }
 });
 
-},{"vue":29,"vuex":31}]},{},[54]);
+},{"vue":53,"vuex":55}]},{},[78]);
 
 //# sourceMappingURL=build.js.map

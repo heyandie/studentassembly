@@ -25,12 +25,12 @@ module.exports = {
       },
       '/profile': {
         name: 'profile',
-        // needAuth: true,
+        needAuth: true,
         component: require('./pages/profile.vue')
       },
       '/report': {
         name: 'report',
-        // needAuth: true,
+        needAuth: true,
         component: require('./pages/report.vue')
       },
       '*': {

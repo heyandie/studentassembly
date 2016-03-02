@@ -1,15 +1,12 @@
 <script>
-module.exports = {
+var Store = require('../../store');
 
+module.exports = {
   route: {
     activate: function (transition) {
-      this.$root.authenticated = false;
-      this.$root.user = null;
-      localStorage.removeItem('user');
-      localStorage.removeItem('jwt-token');
+      this.$dispatch('userHasLoggedOut');
       transition.redirect('/');
     }
   }
-
 }
 </script>

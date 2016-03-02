@@ -1,4 +1,5 @@
 window.Vue = require('vue');
+window.VueResource = require('vue-resource');
 window.VueRouter = require('vue-router');
 
 // Configure routes
@@ -28,8 +29,9 @@ window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url })
                     .wrap(errorCode, { code: 400 })
                     .wrap(jwtAuth);
 
+Vue.use(VueResource);
+
 // Bootstrap app
-localStorage.removeItem('jwt-token');
 const App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
 window.router = router;
