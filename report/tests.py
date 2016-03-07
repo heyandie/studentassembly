@@ -51,6 +51,31 @@ class CreateReportTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+    def testSearchExistingReport(self):
+
+        auth = 'JWT {0}'.format(self.token)
+
+        response = self.client.post('/api/report/', {
+            'report': {
+                'user_id': self.user.id,
+                'category': 1, # Discrimination
+                'text': 'I really hate you.',
+                'school': 'Polytechnic University of the Philippines',
+                'allow_publish': 'True'
+            },
+            'contact': {
+                'name': 'Andie Rabino',
+                'contact_number': '09175226502'
+            }
+
+        }, HTTP_AUTHORIZATION=auth, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.get('/api/report?q=hate&category=discrimination&school=polytechnic')
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['text'], 'I really hate you.')
+        print(response.data)
+
     def testUnauthorizedCreateReport(self):
         response = self.client.post('/api/report/', {
             'user_id': self.user.id,

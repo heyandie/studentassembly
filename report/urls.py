@@ -34,7 +34,12 @@ Returns
 # api/report
 Method: GET
 Returns
-List of reports
+List of reports with query parameters
+
+    q = 'text query'
+    category = 'category'
+    school = 'school'
+Ex. /api/report?q=hate&category=discrimination&school=polytechnic
 
 # api/report/<id>
 Method: GET
