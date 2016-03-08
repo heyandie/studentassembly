@@ -1,6 +1,6 @@
 <template lang="jade">
 header.header__wrapper(:class="headerClass")
-  nav.nav__wrapper
+  nav.nav__wrapper(role="navigation")
     .nav.nav--left
       a(v-link="{ name: 'home' }")
         img.nav__logo(src="/static/img/logo.png" height="54")

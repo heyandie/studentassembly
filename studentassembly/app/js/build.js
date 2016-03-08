@@ -1,6 +1,10 @@
-window.Vue = require('vue');
-window.VueResource = require('vue-resource');
-window.VueRouter = require('vue-router');
+var Vue = require('vue');
+var VueResource = require('vue-resource');
+var VueRouter = require('vue-router');
+
+// Middleware
+Vue.use(VueResource);
+Vue.use(VueRouter);
 
 // Configure routes
 import { configRouter } from './routes';
@@ -8,7 +12,6 @@ const router = new VueRouter({
   history: true,
   saveScrollPosition: true
 });
-configRouter(router);
 
 // Configure app
 window.config = require('./config');
@@ -29,9 +32,7 @@ window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url })
                     .wrap(errorCode, { code: 400 })
                     .wrap(jwtAuth);
 
-Vue.use(VueResource);
-
 // Bootstrap app
+configRouter(router);
 const App = Vue.extend(require('./app.vue'));
 router.start(App, '#app');
-window.router = router;

@@ -9,4 +9,9 @@
     background-color: lighten(#D7FFF1, 4);
     border-color: #c6e5d9;
   }
+
+  &.alert--error {
+    background-color: rgba(#eb2649, 0.15);
+    border-color: #eb2649;
+  }
 }

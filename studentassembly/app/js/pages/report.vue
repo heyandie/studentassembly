@@ -27,13 +27,13 @@ section.page__wrapper
             .form__attachments
               .form__attachment
                 input(type="file" id="file1" name="files[]")
-                label(for="file1") Choose
+                label(for="file1")
               .form__attachment
                 input(type="file" id="file2" name="files[]")
-                label(for="file2") Choose
+                label(for="file2")
               .form__attachment
                 input(type="file" id="file3" name="files[]")
-                label(for="file3") Choose
+                label(for="file3")
           .form__element
             .form__label Do you want to publish your report?
             .form__note Agreeing to publish your report does not guarantee its posting. Student Assembly reserves the right to not publish reports that may be damaging / harmful to others.
