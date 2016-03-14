@@ -4,6 +4,11 @@ section.page__wrapper
   .content__wrapper.content--small
     .content__section
       router-view
+      .alert__wrapper.alert--error(v-if="verifyError")
+        h3 Oops!
+        p
+          | {{ verifyError }}&nbsp;
+          a(v-link="{ name: 'login' }") Resend verification.
       h2 Login to Student Assembly
       .form__wrapper
         form
@@ -31,6 +36,7 @@ section.page__wrapper
 
 <script>
 var Header = require('../../components/header.vue');
+var Footer = require('../../components/footer.vue');
 var Spinner = require('../../components/spinner.vue');
 
 module.exports = {
@@ -42,6 +48,7 @@ module.exports = {
       },
       emailError: null,
       passwordError: null,
+      verifyError: null,
       loading: false
     }
   },
@@ -64,7 +71,7 @@ module.exports = {
           that.$route.router.go('/profile');
         },
         function (response) {
-          if (response.status && response.status.code === 400) {
+          if (response.status) {
             for (var key in response.entity) {
               if (key === 'non_field_errors') {
                 try {
@@ -74,8 +81,17 @@ module.exports = {
                   console.log(e);
                 }
               }
+
+              if (key === 'detail') {
+                try {
+                  that.verifyError = response.entity[key];
+                } catch(e) {
+                  console.log(e);
+                }
+              }
             }
           }
+
           that.loading = false;
         }
       );
@@ -87,6 +103,7 @@ module.exports = {
   },
   components: {
     'v-header': Header,
+    'v-footer': Footer,
     'v-spinner': Spinner
   }
 }

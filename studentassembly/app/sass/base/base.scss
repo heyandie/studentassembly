@@ -1,11 +1,12 @@
 @import "variables";
-// @import "fonts";
+@import "fonts";
 
 @import "alerts";
 @import "forms";
 
 html {
   box-sizing: border-box;
+  min-height: 100%;
 }
 *, *:before, *:after {
   box-sizing: inherit;

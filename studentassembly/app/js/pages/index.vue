@@ -5,9 +5,7 @@ section.page__wrapper.page--landing
     .landing__overlay
     .landing__content
       h1
-        | You deserve
-        br
-        | to be heard.
+        | You deserve to be heard.
       p Student Assembly empowers students to increase transparency and accountability on their schools.
       a.button.button--inverted(v-link="{ name: 'report' }") File a Report
   .content__wrapper
@@ -17,6 +15,7 @@ section.page__wrapper.page--landing
 
 <script>
 var Header = require('../components/header.vue');
+var Footer = require('../components/footer.vue');
 
 module.exports = {
   data: function() {
@@ -25,7 +24,8 @@ module.exports = {
     }
   },
   components: {
-    'v-header': Header
+    'v-header': Header,
+    'v-footer': Footer
   }
 }
 </script>

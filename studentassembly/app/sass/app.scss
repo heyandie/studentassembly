@@ -5,6 +5,7 @@
 @import "base/base";
 
 @import "components/header";
+@import "components/footer";
 @import "components/landing";
 
 .page__wrapper {
@@ -26,7 +27,7 @@
 }
 
 .content__section {
-  padding: 24px 12px;
+  padding: 36px 12px;
 }
 
 .pull-right {

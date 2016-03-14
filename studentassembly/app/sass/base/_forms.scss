@@ -14,6 +14,10 @@ input[type="password"] {
     display: inline-block;
   }
 
+  &:hover {
+    border-color: #C5C6B6;
+  }
+
   &:focus {
     outline-style: none;
     border-color: $brand-color;
@@ -27,6 +31,10 @@ textarea {
   border-radius: 4px;
   padding: 12px;
 
+  &:hover {
+    border-color: #C5C6B6;
+  }
+
   &:focus {
     outline-style: none;
     border-color: $brand-color;
@@ -35,19 +43,27 @@ textarea {
 
 button[type="submit"] {
   display: block;
-  width: 100%;
-
-  appearance: none;
-  border: none;
 
   background-color: $brand-color;
   border-radius: 4px;
   padding: 10px 20px;
 
+  appearance: none;
+  border: none;
+
+
   color: white;
 
   &[disabled] {
     background-color: rgba($brand-color, 0.5);
+  }
+
+  &.button--block {
+    width: 100%;
+  }
+
+  &:hover {
+    background-color: darken($brand-color, 6);
   }
 }
 
@@ -115,6 +131,10 @@ button[type="submit"] {
     padding: 9px 14px;
     cursor: inherit;
 
+    &:hover {
+      border-color: #C5C6B6;
+    }
+
     &:focus {
       outline-style: none;
       border-color: $brand-color;
@@ -142,7 +162,7 @@ button[type="submit"] {
     appearance: none;
     cursor: inherit;
 
-    &:checked {
+    &:checked, &:checked:hover {
       border-color: $brand-color;
     }
     &:checked:after {
@@ -154,6 +174,10 @@ button[type="submit"] {
       background: $brand-color;
       border-radius: 50%;
       content: '';
+    }
+
+    &:hover {
+      border-color: #C5C6B6;
     }
   }
 
@@ -173,15 +197,46 @@ button[type="submit"] {
     margin-right: 8px;
     float: left;
     height: 64px;
-    width: 64px;
-    background: #fff;
-    border: 1px #e5e5dc solid;
-    border-radius: 4px;
+    min-width: 64px;
   }
 
   input {
+    position: absolute;
+    z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
     opacity: 0;
-    visibility: hidden;
+    overflow: hidden;
+  }
+
+  input + label {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    border: 1px #e5e5dc solid;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: url('/static/img/icons/content/ic_add_48px.svg') no-repeat center;
+      opacity: 0.05;
+      content: '';
+    }
+
+    &:hover {
+      border-color: #C5C6B6;
+    }
+
+    &:hover:after {
+      opacity: 0.2;
+    }
   }
 }
 
@@ -191,7 +246,7 @@ button[type="submit"] {
 
   span {
     display: block;
-    margin: 6px;
+    margin: -6px 6px 6px;
   }
 }
 
