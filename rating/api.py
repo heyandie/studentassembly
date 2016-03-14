@@ -1,0 +1,76 @@
+from uuid import UUID
+
+from rest_framework import generics
+from rest_framework import mixins
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+from rest_framework import status
+
+from .models import Rating, Staff
+from .serializers import RatingSerializer
+
+
+class ListCreateRatingAPIView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+
+        return [IsAuthenticatedOrReadOnly()]
+
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(data=queryset, many=True)
+        serializer.is_valid(raise_exception=False)
+        return Response(serializer.data)
+
+    def create(self, request, format=None):
+        data = request.data
+        rating_data = data.get('rating')
+        rating_data['user_id'] = request.user.id
+
+        # Check if staff exists
+        try:
+            Staff.objects.get(pk=UUID(rating_data.get('staff_id')))
+        except:
+            return Response({'error': 'Staff member does not exist.'}, status.HTTP_400_BAD_REQUEST)
+
+        if not rating_data['values'].get('overall', False):
+            _sum = 0
+            count = 0
+            values = rating_data.get('values')
+            for key in values:
+                _sum += values[key]
+                count += 1
+            rating_data['values']['overall'] = _sum/count
+
+
+        serializer = self.get_serializer(data=rating_data)
+
+        if serializer.is_valid():
+            report = serializer.save()
+            serializer.is_valid(raise_exception=False)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class RetrieveRatingAPIView(mixins.RetrieveModelMixin,
+                            viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+
+    def retrieve(self, request, pk):
+
+        rating = self.get_object()
+        serializer = self.serializer_class(rating)
+
+        data = serializer.data
+        return Response(data)
