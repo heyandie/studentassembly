@@ -21,6 +21,7 @@ class Staff(models.Model):
                 'fairness': 0,
                 'overall': 0
             })
+    votes = models.IntegerField(default=0)
 
     def update_rating(self):
         ratings = Rating.objects.get(pk=self.id)
@@ -40,6 +41,7 @@ class Staff(models.Model):
 
         self.rating = {key: _sum[key]/count for key in _sum}
         self.save()
+        
 
 class Rating(models.Model):
     staff_id = models.UUIDField(max_length=40, default=uuid.uuid4)

@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from django.db.models import F
+
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import viewsets
@@ -90,8 +92,9 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=rating_data)
 
         if serializer.is_valid():
-            report = serializer.save()
-            serializer.is_valid(raise_exception=False)
+            rating = serializer.save()
+            if serializer.is_valid(raise_exception=False):
+                Staff.objects.filter(id=rating.staff_id).update(votes=F('votes')+1)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
