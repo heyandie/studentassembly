@@ -28,7 +28,7 @@ class CreateReportTest(APITestCase):
                 'user_id': self.user.id,
                 'category': 1,
                 'text': 'I really hate you.',
-                'school': 'Polytechnic University of the Philippines'
+                'school': 1
             },
             'contact': {
                 'name': 'Andie Rabino',
