@@ -23,7 +23,9 @@ Authorization Header {
 }
 Data: {
     'category': integer,
+    'school': integer,
     'text': 'text',
+    'answers': dictionary of answers,
     'files': 'files',
     'allow_publish': boolean
 }

@@ -43,7 +43,7 @@ class RetrieveStaffAPIView(mixins.RetrieveModelMixin,
     def retrieve(self, request, pk):
 
         staff = self.get_object()
-        serializer = self.serializer_class(staff)
+        serializer = self.serializer_class(staff, context={'request': request})
 
         data = serializer.data
         return Response(data)

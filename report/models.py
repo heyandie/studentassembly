@@ -27,4 +27,4 @@ class Report(models.Model):
     deleted_at = models.DateTimeField(null=True)
     allow_publish = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
-    school = models.CharField(max_length=128, blank=False)
+    school = models.IntegerField(blank=False)

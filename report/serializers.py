@@ -8,6 +8,11 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
 
+    def to_representation(self, instance):
+        data = super(ReportSerializer, self).to_representation(instance)
+        data['school'] = School.objects.get(pk=data['school']).name
+        return data
+
 
 class SchoolSerializer(serializers.ModelSerializer):
 
