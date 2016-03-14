@@ -85,6 +85,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'studentassembly.middleware.SSLMiddleware',
 ]
 
 ROOT_URLCONF = 'studentassembly.urls'
