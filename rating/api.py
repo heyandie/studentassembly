@@ -8,7 +8,45 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Rating, Staff
-from .serializers import RatingSerializer
+from .serializers import RatingSerializer, StaffSerializer
+
+class ListStaffAPIView(generics.ListAPIView):
+
+    serializer_class = StaffSerializer
+
+    def get_permissions(self):
+        return [IsAuthenticatedOrReadOnly()]
+
+    def get_queryset(self):
+        return Staff.objects.all()
+
+    def filter_queryset(self, queryset):
+        filters = {'deleted_at': None}
+        if self.request.GET.get('name', None):
+            filters['name__icontains'] = self.request.GET.get('name')
+        return queryset.filter(**filters)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        serializer = self.serializer_class(data=queryset, many=True)
+        serializer.is_valid(raise_exception=False)
+        return Response(serializer.data)
+
+
+class RetrieveStaffAPIView(mixins.RetrieveModelMixin,
+                            viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    queryset = Staff.objects.all()
+    serializer_class = StaffSerializer
+
+    def retrieve(self, request, pk):
+
+        staff = self.get_object()
+        serializer = self.serializer_class(staff)
+
+        data = serializer.data
+        return Response(data)
 
 
 class ListCreateRatingAPIView(generics.ListCreateAPIView):
@@ -21,7 +59,6 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
             return [IsAuthenticated()]
 
         return [IsAuthenticatedOrReadOnly()]
-
 
     def list(self, request):
         queryset = self.get_queryset()

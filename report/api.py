@@ -23,7 +23,7 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
         return [IsAuthenticatedOrReadOnly()]
 
     def filter_queryset(self, queryset):
-        filters = {'deleted_at': False}
+        filters = {'deleted_at': None}
         if self.request.GET.get('q', None):
             filters['text__icontains'] = self.request.GET.get('q')
         if self.request.GET.get('category', None):
@@ -34,11 +34,12 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
             filters['pk__in'] = schools
 
         # TODO: Filter based on permission to publish report
-        
+
         return queryset.filter(**filters)
 
     def list(self, request):
         queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
         serializer = self.serializer_class(data=queryset, many=True)
         serializer.is_valid(raise_exception=False)
         return Response(serializer.data)

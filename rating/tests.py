@@ -42,3 +42,21 @@ class SubmitRatingTest(APITestCase):
         rating = Rating.objects.latest('id')
         response = self.client.get('/api/rating/'+str(rating.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class StaffTest(APITestCase):
+
+    fixtures = ['staff.json']
+
+    def testRetrieve(self):
+        response = self.client.get('/api/staff/19c34cac-e378-43f0-bd78-9f72d7fc49dd')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def testList(self):
+        response = self.client.get('/api/staff')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def testSearch(self):
+        response = self.client.get('/api/staff?name=Juan')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)

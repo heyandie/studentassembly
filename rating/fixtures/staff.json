@@ -1,5 +1,6 @@
 [{
     "model": "rating.staff",
+    "pk": "19c34cac-e378-43f0-bd78-9f72d7fc49dd",
     "fields": {
         "name": "Juan dela Cruz",
         "school": 1,
