@@ -13,17 +13,17 @@ section.page__wrapper
         form
           .form__element(:class="emailError ? 'form--empty' : ''")
             .form__label Email
-            input(type="email" v-model="user.email" placeholder="Use a valid email!")
+            input(type="email" name="email" v-model="user.email" placeholder="Use a valid email!")
             .form__error
               span {{ emailError }}
           .form__element(:class="passwordError ? 'form--empty' : ''")
             .form__label Password
-            input(type="password" v-model="user.password" placeholder="Must be at least 8 characters long.")
+            input(type="password" name="password" v-model="user.password" placeholder="Must be at least 8 characters long.")
             .form__error
               span {{ passwordError }}
           .form__element
             .form__label Repeat password
-            input(type="password" v-model="user.repeatPassword" placeholder="Just to be sure.")
+            input(type="password" name="repeatPassword" v-model="user.repeatPassword" placeholder="Just to be sure.")
             .form__error
               span(v-if="passwordsMismatch") Oops, the passwords did not match.
           .form__element

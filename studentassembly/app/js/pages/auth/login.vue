@@ -11,17 +11,17 @@ section.page__wrapper
           a(v-link="{ name: 'login' }") Resend verification.
       h2 Login to Student Assembly
       .form__wrapper
-        form
+        form(action="/api/token_auth" method="post")
           .form__element(:class="emailError ? 'form--empty' : ''")
             .form__label Email
-            input(type="email" v-model="user.email" placeholder="juan@student.ph")
+            input(type="email" name="email" v-model="user.email" placeholder="juan@student.ph")
             .form__error
               span {{ emailError }}
           .form__element(:class="passwordError ? 'form--empty' : ''")
             .form__label.pull-left Password
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
-            input(type="password" v-model="user.password" placeholder="••••••••")
+            input(type="password" name="password" v-model="user.password" placeholder="••••••••")
             .form__error
               span {{ passwordError }}
           .form__element
@@ -71,11 +71,28 @@ module.exports = {
           that.$route.router.go('/profile');
         },
         function (response) {
+          console.log(response);
           if (response.status) {
             for (var key in response.entity) {
               if (key === 'non_field_errors') {
                 try {
                   that.emailError = response.entity[key];
+                  that.passwordError = response.entity[key];
+                } catch(e) {
+                  console.log(e);
+                }
+              }
+
+              if (key === 'email') {
+                try {
+                  that.emailError = response.entity[key];
+                } catch(e) {
+                  console.log(e);
+                }
+              }
+
+              if (key === 'password') {
+                try {
                   that.passwordError = response.entity[key];
                 } catch(e) {
                   console.log(e);

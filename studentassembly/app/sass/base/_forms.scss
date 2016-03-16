@@ -44,6 +44,7 @@ textarea {
 button[type="submit"] {
   display: block;
 
+  min-width: 90px;
   background-color: $brand-color;
   border-radius: 4px;
   padding: 10px 20px;
@@ -51,10 +52,11 @@ button[type="submit"] {
   appearance: none;
   border: none;
 
-
   color: white;
+  line-height: 1.2;
 
-  &[disabled] {
+  &[disabled],
+  &[disabled]:hover {
     background-color: rgba($brand-color, 0.5);
   }
 
@@ -236,6 +238,19 @@ button[type="submit"] {
 
     &:hover:after {
       opacity: 0.2;
+    }
+  }
+
+  input[disabled] + label {
+    opacity: 0.5;
+    cursor: default;
+
+    &:hover {
+      border-color: #e5e5dc;
+    }
+
+    &:hover:after {
+      opacity: 0.05;
     }
   }
 }
