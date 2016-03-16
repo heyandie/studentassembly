@@ -27,11 +27,11 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
         if self.request.GET.get('q', None):
             filters['text__icontains'] = self.request.GET.get('q')
         if self.request.GET.get('category', None):
-            category = Category.objects.get(name=self.request.GET.get('category'))
+            category = Category.objects.get(name__icontains=self.request.GET.get('category'))
             filters['category'] = category.id
         if self.request.GET.get('school', None):
             schools = School.objects.filter(name__icontains=self.request.GET.get('school')).only('id')
-            filters['pk__in'] = schools
+            filters['school__in'] = schools
 
         # TODO: Filter based on permission to publish report
 
@@ -51,15 +51,23 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
 
         contact = data.get('contact', {})
         user = User.objects.get(pk=request.user.id)
-        user.name = contact.get('name', None)
-        user.contact_number = contact.get('contact_number', None)
-        user.save()
+
+        name = contact.get('name', None)
+        if name:
+            user.name = contact.get('name', None)
+
+        contact_number = contact.get('contact_number', None)
+        if contact_number:
+            user.contact_number = contact_number
+
+        if name or contact_number:
+            user.save()
 
         serializer = ReportSerializer(data=report_data)
 
         if serializer.is_valid():
             report = serializer.save()
-            serializer.is_valid(raise_exception=False)
+            serializer.is_valid(raise_exception=True)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

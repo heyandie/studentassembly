@@ -10,7 +10,7 @@ from account.api import jwt_payload_handler
 
 class CreateReportTest(APITestCase):
 
-    fixtures = ['categories.json', 'user.json']
+    fixtures = ['categories.json', 'user.json', 'schools.json']
 
     def setUp(self):
         self.client = APIClient()
@@ -45,8 +45,6 @@ class CreateReportTest(APITestCase):
         response = self.client.get('/api/report/1', HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
         response = self.client.get('/api/report', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -58,9 +56,9 @@ class CreateReportTest(APITestCase):
         response = self.client.post('/api/report/', {
             'report': {
                 'user_id': self.user.id,
-                'category': 1, # Discrimination
+                'category': 1,
                 'text': 'I really hate you.',
-                'school': 'Polytechnic University of the Philippines',
+                'school': 1,
                 'allow_publish': 'True'
             },
             'contact': {
