@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
@@ -17,9 +19,8 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
     serializer_class = ReportSerializer
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'POST' or self.request.GET.get('user', None):
             return [IsAuthenticated()]
-
         return [IsAuthenticatedOrReadOnly()]
 
     def filter_queryset(self, queryset):
@@ -33,9 +34,23 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
             schools = School.objects.filter(name__icontains=self.request.GET.get('school')).only('id')
             filters['school__in'] = schools
 
+        if self.request.GET.get('user', None):
+            user_id = UUID(self.request.GET.get('user'))
+            filters['user_id'] = user_id
+
+            if not user_id == self.request.user.id:
+                filters['allow_publish'] = True
+
+
         # TODO: Filter based on permission to publish report
 
-        return queryset.filter(**filters)
+        queryset = queryset.filter(**filters).order_by('-created_at')
+
+        if self.request.GET.get('limit', None):
+            limit = int(self.request.GET.get('limit'))
+            return queryset[:limit]
+        else:
+            return queryset
 
     def list(self, request):
         queryset = self.get_queryset()

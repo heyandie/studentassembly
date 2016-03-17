@@ -110,7 +110,7 @@ class UserContactDetailsAPIView(APIView):
             }
         else:
             data = {
-                'id': str(request.user.id),
+                'id': str(request.user.id.hex),
                 'username': request.user.username,
                 'name': request.user.name,
                 'email': request.user.email,

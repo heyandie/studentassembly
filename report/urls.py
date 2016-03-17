@@ -22,12 +22,17 @@ Authorization Header {
     HTTP_AUTHORIZATION: JWT Token
 }
 Data: {
-    'category': integer,
-    'school': integer,
-    'text': 'text',
-    'answers': dictionary of answers,
-    'files': 'files',
-    'allow_publish': boolean
+    'report': {
+        'user_id': self.user.id,
+        'category': 1,
+        'text': 'I really hate you.',
+        'school': 1,
+        'allow_publish': 'True'
+    },
+    'contact': {
+        'name': 'Andie Rabino',
+        'contact_number': '09175226502'
+    }
 }
 Returns
 201 if created  or 400 if bad request
@@ -41,7 +46,12 @@ List of reports with query parameters
     q = 'text query'
     category = 'category'
     school = 'school'
+    limit = no. of reports to fetch
+    user = user id of user, needs Authorization
+
 Ex. /api/report?q=hate&category=discrimination&school=polytechnic
+Ex. /api/report?user=2a0b5cc1530e4e2a9cd3bcd3c29de637 # Note: Needs Authorization
+Ex. /api/report?limit=10
 
 # api/report/<id>
 Method: GET
