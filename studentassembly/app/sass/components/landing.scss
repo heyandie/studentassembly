@@ -9,14 +9,15 @@
               url('/static/img/student.jpg');
   background-position: center center;
   background-size: cover;
-  padding: 88px 0;
   overflow: hidden;
 
   @include media("<=tablet") {
-    height: 450px;
+    height: 400px;
+    padding: 100px 0;
   }
   @include media(">tablet") {
-    height: 600px;
+    height: 540px;
+    padding: 88px 0;
   }
 
   h1 {
@@ -72,16 +73,34 @@
     position: relative;
     margin: 0 auto;
     z-index: 1;
-    flex-basis: 1200px;
-    padding: 0 12px;
+    flex-basis: $content-width;
+    padding: 24px 12px 0 12px;
 
     opacity: 0;
     transform: translateY(100%);
     animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 750ms forwards;
 
     @include media("<=tablet") {
-      padding-top: 28px;
+      padding-top: 36px;
       text-align: center;
+    }
+  }
+}
+
+.landing__features {
+  overflow: hidden;
+
+  .landing__feature {
+    @include media(">tablet") {
+      float: left;
+      margin-right: 5%;
+      width: 30%;
+    }
+
+    &:last-child {
+      @include media(">tablet") {
+        margin-right: 0;
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 <template lang="jade">
 footer.footer__wrapper
   nav.nav__wrapper(role="navigation")
-    h1 yay
+    a(href="#0") Footer links
 </template>
 
 <script>

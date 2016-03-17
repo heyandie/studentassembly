@@ -9,16 +9,16 @@
 @import "components/landing";
 
 .page__wrapper {
-  padding-top: 78px;
-
-  &.page--landing {
-    padding-top: 0;
-  }
+  // padding-top: 78px;
+  //
+  // &.page--landing {
+  //   padding-top: 0;
+  // }
 }
 
 .content__wrapper {
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: $content-width;
   // background-color: #e5e5dc;
 
   &.content--small {
@@ -27,7 +27,19 @@
 }
 
 .content__section {
+  overflow: hidden;
   padding: 36px 12px;
+}
+
+.content__main {
+  float: left;
+  margin-right: 3%;
+  width: 70%;
+}
+
+.content__secondary {
+  float: left;
+  width: 27%;
 }
 
 .pull-right {

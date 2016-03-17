@@ -44,16 +44,20 @@ textarea {
 button[type="submit"] {
   display: block;
 
-  min-width: 90px;
+  min-width: 108px;
   background-color: $brand-color;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 12px 24px;
 
   appearance: none;
   border: none;
 
   color: white;
   line-height: 1.2;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
 
   &[disabled],
   &[disabled]:hover {
@@ -71,10 +75,10 @@ button[type="submit"] {
 
 .form__wrapper {
   margin-bottom: 14px;
-  background-color: #fafafa;
+  background-color: #fbfbfb;
   border: 1px #eee solid;
   border-radius: 4px;
-  padding: 20px;
+  padding: 28px;
 }
 
 .form__element {
@@ -175,6 +179,54 @@ button[type="submit"] {
       height: 8px;
       background: $brand-color;
       border-radius: 50%;
+      content: '';
+    }
+
+    &:hover {
+      border-color: #C5C6B6;
+    }
+  }
+
+  label {
+    margin-left: 8px;
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 14px;
+    cursor: inherit;
+  }
+}
+
+.form__checkbox {
+  margin-bottom: 8px;
+  cursor: pointer;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  input {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 1px #e0e0e0 solid;
+
+    vertical-align: middle;
+    appearance: none;
+    cursor: inherit;
+
+    &:checked, &:checked:hover {
+      border-color: $brand-color;
+    }
+    &:checked:after {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      height: 18px;
+      width: 18px;
+
+      background: url('/static/img/icons/navigation/ic_check_18px.svg') no-repeat;
       content: '';
     }
 

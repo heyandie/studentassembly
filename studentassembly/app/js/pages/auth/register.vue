@@ -27,6 +27,12 @@ section.page__wrapper
             .form__error
               span(v-if="passwordsMismatch") Oops, the passwords did not match.
           .form__element
+            .form__checkbox
+              input(type="checkbox" name="agree_terms" id="agree_terms")
+              label(for="agree_terms")
+                | I agree with the&nbsp;
+                a(href="#0") Terms of Service.
+          .form__element
             button(type="submit" @click.prevent="register" v-bind:disabled="loading")
               span(v-show="!loading") Register
               .button__spinner(v-show="loading")

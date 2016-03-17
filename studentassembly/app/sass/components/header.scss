@@ -1,12 +1,12 @@
 .header__wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
   background-color: $brand-color;
 
   &.header--landing {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
     background-color: transparent;
   }
 }
@@ -14,13 +14,15 @@
 .nav__wrapper {
   @include clearfix();
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: $content-width;
   padding: 10px 12px;
 }
 
 .nav {
   &.nav--left {
     float: left;
+    // width: 100%;
+    // max-width: 500px;
   }
 
   &.nav--right {
@@ -35,7 +37,8 @@
 .nav__link {
   display: inline-block;
   position: relative;
-  margin-left: 28px;
+  vertical-align: middle;
+  margin-right: 28px;
   line-height: 54px;
 
   color: white;
@@ -51,5 +54,28 @@
     width: 100%;
     background-color: rgba(255, 255, 255, 0.75);
     content: '';
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &.nav--home {
+    line-height: 1;
+
+    &:after {
+      display: none;
+    }
+  }
+}
+
+.nav__search {
+  display: inline-block;
+  vertical-align: middle;
+  // width: 80%;
+
+  input {
+    margin-bottom: 0;
+    // width: 100%;
   }
 }

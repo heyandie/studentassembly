@@ -1,7 +1,13 @@
 .footer__wrapper {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  // position: absolute;
+  // right: 0;
+  // bottom: 0;
+  // left: 0;
   background-color: #383A3F;
+
+  a {
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+  }
 }
