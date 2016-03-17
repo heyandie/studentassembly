@@ -78,7 +78,14 @@ button[type="submit"] {
   background-color: #fbfbfb;
   border: 1px #eee solid;
   border-radius: 4px;
-  padding: 28px;
+
+  @include media("<=tablet") {
+    padding: 16px;
+  }
+
+  @include media(">tablet") {
+    padding: 28px;
+  }
 }
 
 .form__element {
@@ -245,13 +252,19 @@ button[type="submit"] {
 }
 
 .form__attachments {
+  $attachment_size: 64px;
+
   overflow: hidden;
 
   .form__attachment {
-    margin-right: 8px;
+    margin: 0 8px 8px 0;
     float: left;
-    height: 64px;
-    min-width: 64px;
+    height: $attachment_size;
+    min-width: $attachment_size;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   input {
@@ -273,14 +286,18 @@ button[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
 
-    &:after {
+    line-height: $attachment_size;
+    padding: 0 16px;
+    font-size: 14px;
+
+    &:empty:after {
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
       left: 0;
       background: url('/static/img/icons/content/ic_add_48px.svg') no-repeat center;
-      opacity: 0.05;
+      opacity: 0.09;
       content: '';
     }
 
@@ -294,7 +311,7 @@ button[type="submit"] {
   }
 
   input[disabled] + label {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: default;
 
     &:hover {

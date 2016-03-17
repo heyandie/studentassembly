@@ -29,12 +29,25 @@
 .content__section {
   overflow: hidden;
   padding: 36px 12px;
+
+  .content--additional-info {
+    color: #a7a7a2;
+
+    @include media("<=tablet") {
+      display: none;
+    }
+  }
 }
 
 .content__main {
   float: left;
   margin-right: 3%;
   width: 70%;
+
+  @include media("<=tablet") {
+    margin-right: 0;
+    width: 100%;
+  }
 }
 
 .content__secondary {

@@ -3,8 +3,8 @@ v-header
 section.page__wrapper
   .content__wrapper
     .content__section
+      h1 File a report
       article.content__main
-        h1 File a report
         .form__wrapper
           form(action="/api/report" method="post" enctype="multipart/form-data")
             .form__element
@@ -23,18 +23,18 @@ section.page__wrapper
               .form__label Report Details
               textarea(rows="6" name="text" placeholder="State the corruption case in detail." v-model="request.report.text")
             .form__element
-              .form__label Evidences
+              .form__label Attachments
               .form__note It can either be an image or a document. Each file has a 3MB limit.
               .form__attachments
                 .form__attachment
-                  input(type="file" id="file1" accept="image/*" name="files[]" v-model="request.report.files[0]")
-                  label(for="file1") {{ request.report.files[0] }}
+                  input(type="file" id="file1" accept="image/*" name="files[]" v-on:change="checkFile($event, 0)")
+                  label(for="file1") {{ request.report.files[0] | fileName }}
                 .form__attachment
-                  input(type="file" id="file2" accept="image/*" name="files[]" v-model="request.report.files[1]")
-                  label(for="file2") {{ request.report.files[1] }}
+                  input(type="file" id="file2" accept="image/*" name="files[]" v-on:change="checkFile($event, 1)" v-bind:disabled="request.report.files[0] === null")
+                  label(for="file2") {{ request.report.files[1] | fileName }}
                 .form__attachment
-                  input(type="file" id="file3" accept="image/*" name="files[]" v-model="request.report.files[2]")
-                  label(for="file3") {{ request.report.files[2] }}
+                  input(type="file" id="file3" accept="image/*" name="files[]" v-on:change="checkFile($event, 2)" v-bind:disabled="request.report.files[1] === null")
+                  label(for="file3") {{ request.report.files[2] | fileName }}
             .form__element
               .form__label Do you want to publish your report?
               .form__note
@@ -64,11 +64,21 @@ section.page__wrapper
                 .button__spinner(v-show="loading")
                   v-spinner(color="#fff" height="6px" width="3px" radius="8px")
 
-      aside.content__secondary
-        h3 Sample Report
-        .form__wrapper
-          h4 School
-          p UP Diliman
+      aside.content__secondary.content--additional-info
+        h4
+          img(src="/static/img/icons/action/ic_lightbulb_outline_24px.svg" height="18")
+          span Some Tips
+        ul
+          li
+            p.small Put the appropriate category so we can place your report properly.
+          li
+            p.small By entering more relevant details in your report, you are increasing the chances of action being taken:
+            ul
+              li
+                p.small Name and designation of the people responsible
+              li
+                 p.small Date, time, and location of the incident
+
 
 v-footer
 </template>
@@ -95,22 +105,29 @@ module.exports = {
           school: null,
           text: null,
           answers: null,
-          files: [],
+          files: [null, null, null],
           allow_publish: false
         }
       }
 
     }
   },
+  filters: {
+    fileName: function(file) {
+      if (file !== null)
+        return file.name;
+    }
+  },
   methods: {
-    // watchFileInput: function() {
-    //   var file = event.target.files[0] || event.dataTransfer.files[0];
-    //   this.files[ind] = file;
-    //   this.fileNames[ind] = event.target.value.split('\\').pop();
-    // },
-    // notifyFileInput: function(event) {
-    //
-    // }
+    checkFile: function(event, ind) {
+      var file = event.target.files[0] || event.dataTransfer.files[0];
+
+      this.$set('request.report.files[' + ind + ']', file);
+      // this.request.report.files[ind] = file;
+      console.log(this.request.report.files);
+      // this.files[ind] = file;
+      // this.fileNames[ind] = event.target.value.split('\\').pop();
+    },
     submitReport: function() {
       var that = this;
       that.loading = true;
@@ -144,8 +161,6 @@ module.exports = {
         console.log('Error trying to fetch categories. Contact the server again.');
       }
     );
-
-    // this.watchFileInput();
   },
   components: {
     'v-header': Header,
