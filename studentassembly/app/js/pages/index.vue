@@ -18,7 +18,7 @@ section.page__wrapper.page--landing
         .landing__feature
           img(src="/static/img/icons/action/ic_timeline_48px.svg")
           h2 Analyze
-          p School administrators can tag reports as resolved, dismissed, and in-progress.
+          p School administrators can manage reports by tagging them as resolved, dismissed, and in-progress.
         .landing__feature
           img(src="/static/img/icons/action/ic_grade_48px.svg")
           h2 Rate
