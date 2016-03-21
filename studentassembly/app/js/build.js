@@ -1,38 +1,16 @@
-var Vue = require('vue');
-var VueResource = require('vue-resource');
-var VueRouter = require('vue-router');
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+import { sync } from 'vuex-router-sync'
 
-// Middleware
-Vue.use(VueResource);
-Vue.use(VueRouter);
+import App from './app.vue'
+import store from './vuex/store'
+import router from './router'
+import { initResource } from './resource'
 
-// Configure routes
-import { configRouter } from './routes';
-const router = new VueRouter({
-  history: true,
-  saveScrollPosition: true
-});
+Vue.config.debug = location.host !== 'studentassembly.herokuapp.com' ? true : false
+sync(store, router)
 
-// Configure app
-window.config = require('./config');
-Vue.config.debug = config.env === 'development' ? true : false;
+Vue.use(VueResource)
+initResource(Vue)
 
-// Configure HTTP client
-var rest = require('rest')
-var pathPrefix = require('rest/interceptor/pathPrefix')
-var mime = require('rest/interceptor/mime')
-var defaultRequest = require('rest/interceptor/defaultRequest')
-var errorCode = require('rest/interceptor/errorCode')
-var interceptor = require('rest/interceptor')
-var jwtAuth = require('./interceptors/jwtAuth')
-
-window.client = rest.wrap(pathPrefix, { prefix: config.api.base_url })
-                    .wrap(mime)
-                    .wrap(defaultRequest, config.api.defaultRequest)
-                    .wrap(errorCode, { code: 400 })
-                    .wrap(jwtAuth);
-
-// Bootstrap app
-configRouter(router);
-const App = Vue.extend(require('./app.vue'));
-router.start(App, '#app');
+router.start(App, '#app')

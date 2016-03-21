@@ -26,15 +26,10 @@ section.page__wrapper.page--landing
 </template>
 
 <script>
-var Header = require('../components/header.vue');
-var Footer = require('../components/footer.vue');
+import Header from '../components/header.vue'
+import Footer from '../components/footer.vue'
 
-module.exports = {
-  data: function() {
-    return {
-      msg: 'Student Assembly'
-    }
-  },
+export default {
   components: {
     'v-header': Header,
     'v-footer': Footer

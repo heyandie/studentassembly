@@ -51,7 +51,7 @@ section.page__wrapper
               .form__note If this is a sexual harassment or discrimination report and you would like to pursue legal action, kindly give your contact information.
               .form__radio
                 input(type="radio" name="allow_contact" id="allow_contact_1" value="1" v-model="request.contact.allow_contact" number)
-                label(for="allow_contact_1") Yes, I would to give my contact.
+                label(for="allow_contact_1") Yes, I want to give my contact.
               .form__radio
                 input(type="radio" name="allow_contact" id="allow_contact_2" value="0" checked v-model="request.contact.allow_contact" number)
                 label(for="allow_contact_2") No, I don't want to give my contact.
@@ -79,17 +79,16 @@ section.page__wrapper
               li
                  p.small Date, time, and location of the incident
 
-
 v-footer
 </template>
 
 <script>
-var Header = require('../components/header.vue');
-var Footer = require('../components/footer.vue');
-var Spinner = require('../components/spinner.vue');
+import Header from '../components/header.vue'
+import Footer from '../components/footer.vue'
+import Spinner from '../components/spinner.vue'
 
-module.exports = {
-  data: function() {
+export default {
+  data () {
     return {
       schools: null,
       categories: null,
@@ -113,54 +112,51 @@ module.exports = {
     }
   },
   filters: {
-    fileName: function(file) {
+    fileName (file) {
       if (file !== null)
-        return file.name;
+        return file.name
     }
   },
   methods: {
-    checkFile: function(event, ind) {
-      var file = event.target.files[0] || event.dataTransfer.files[0];
-
-      this.$set('request.report.files[' + ind + ']', file);
-      // this.request.report.files[ind] = file;
-      console.log(this.request.report.files);
-      // this.files[ind] = file;
-      // this.fileNames[ind] = event.target.value.split('\\').pop();
+    checkFile (event, ind) {
+      var file = event.target.files[0] || event.dataTransfer.files[0]
+      this.$set('request.report.files[' + ind + ']', file)
+      // this.request.report.files[ind] = file
+      console.log(this.request.report.files)
+      // this.files[ind] = file
+      // this.fileNames[ind] = event.target.value.split('\\').pop()
     },
-    submitReport: function() {
-      var that = this;
-      that.loading = true;
-      client({ path: 'report', entity: this.request }).then(
+    submitReport () {
+      this.loading = true
+      this.$http.post('report', this.request).then(
         function (response) {
-          console.log('accepted', response);
-          that.loading = false;
+          console.log('accepted', response)
+          this.loading = false
         },
         function (response) {
-          console.log('rejected', response);
-          that.loading = false;
+          console.log('rejected', response)
+          this.loading = false
         }
-      );
+      )
     }
   },
-  ready: function() {
-    var that = this;
-    client({ path: 'schools' }).then(
+  ready () {
+    this.$http.get('schools' ).then(
       function (response) {
-        that.schools = response.entity;
+        this.schools = response.data
       },
       function (response) {
-        console.log('Error trying to fetch schools. Contact the server again.');
+        console.log('Error trying to fetch schools. Contact the server again.')
       }
-    );
-    client({ path: 'categories' }).then(
+    )
+    this.$http.get('categories').then(
       function (response) {
-        that.categories = response.entity;
+        this.categories = response.data
       },
       function (response) {
-        console.log('Error trying to fetch categories. Contact the server again.');
+        console.log('Error trying to fetch categories. Contact the server again.')
       }
-    );
+    )
   },
   components: {
     'v-header': Header,

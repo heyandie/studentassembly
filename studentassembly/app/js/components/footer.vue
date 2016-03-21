@@ -5,8 +5,8 @@ footer.footer__wrapper
 </template>
 
 <script>
-module.exports = {
-  data: function() {
+export default {
+  data () {
     return {
       msg: 'Hello'
     }

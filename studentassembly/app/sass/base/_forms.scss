@@ -42,7 +42,7 @@ textarea {
 }
 
 button[type="submit"] {
-  display: block;
+  display: inline-block;
 
   min-width: 108px;
   background-color: $brand-color;
@@ -335,8 +335,7 @@ button[type="submit"] {
 }
 
 .button__spinner {
-  margin-top: 3px;
   display: flex;
   justify-content: center;
-  height: 16px;
+  height: 14px;
 }

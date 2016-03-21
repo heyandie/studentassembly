@@ -139,41 +139,31 @@ export default {
 </script>
 
 <style>
-
-.v-spinner .v-fade
-{
-    -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
-            animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
-    -webkit-animation-fill-mode: both;
-	          animation-fill-mode: both;
-    position: absolute;
+.v-spinner .v-fade {
+  -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
+  -webkit-animation-fill-mode: both;
+  animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
+  animation-fill-mode: both;
+  position: absolute;
 }
-
-@-webkit-keyframes v-fadeStretchDelay
-{
-    50%
-    {
-        -webkit-opacity: 0.3;
-                opacity: 0.3;
-    }
-    100%
-    {
-        -webkit-opacity: 1;
-                opacity: 1;
-    }
+@-webkit-keyframes v-fadeStretchDelay {
+  50% {
+    -webkit-opacity: 0.3;
+    opacity: 0.3;
+  }
+  100% {
+    -webkit-opacity: 1;
+    opacity: 1;
+  }
 }
-
-@keyframes v-fadeStretchDelay
-{
-    50%
-    {
-        -webkit-opacity: 0.3;
-                opacity: 0.3;
-    }
-    100%
-    {
-        -webkit-opacity: 1;
-                opacity: 1;
-    }
+@keyframes v-fadeStretchDelay {
+  50% {
+    -webkit-opacity: 0.3;
+    opacity: 0.3;
+  }
+  100% {
+    -webkit-opacity: 1;
+    opacity: 1;
+  }
 }
 </style>

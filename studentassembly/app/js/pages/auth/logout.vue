@@ -1,11 +1,16 @@
 <script>
-var Store = require('../../store');
+import { logout } from '../../vuex/actions/auth'
 
-module.exports = {
+export default {
+  vuex: {
+    actions: {
+      logout
+    }
+  },
   route: {
-    activate: function (transition) {
-      this.$dispatch('userHasLoggedOut');
-      transition.redirect('/');
+    activate (transition) {
+      this.logout()
+      transition.redirect('/login')
     }
   }
 }

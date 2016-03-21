@@ -19,18 +19,13 @@ header.header__wrapper(:class="headerClass")
 </template>
 
 <script>
-module.exports = {
+export default {
   props: {
     headerClass: ''
   },
   computed: {
-    loggedIn: function() {
-      return this.$root.token !== null;
-    }
-  },
-  data: function() {
-    return {
-      msg: 'Hello'
+    loggedIn () {
+      return localStorage.getItem('sa-token') !== null
     }
   }
 }

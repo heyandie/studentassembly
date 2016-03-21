@@ -4,28 +4,28 @@ section.page__wrapper
   .content__wrapper.content--small
     .content__section
       router-view
-      .alert__wrapper.alert--error(v-if="verifyError")
+      .alert__wrapper.alert--error(v-if="error.verify")
         h3 Oops!
         p
-          | {{ verifyError }}&nbsp;
+          | {{ error.verify }}&nbsp;
           a(v-link="{ name: 'login' }") Resend verification.
       h2 Login to Student Assembly
       .form__wrapper
         form(action="/api/token_auth" method="post")
-          .form__element(:class="emailError ? 'form--empty' : ''")
+          .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
-            input(type="email" name="email" v-model="user.email" placeholder="juan@student.ph")
+            input(type="email" name="email" placeholder="juan@student.ph" v-bind:value="user.email" @input="updateEmail")
             .form__error
-              span {{ emailError }}
-          .form__element(:class="passwordError ? 'form--empty' : ''")
+              span {{ error.email }}
+          .form__element(:class="error.password ? 'form--empty' : ''")
             .form__label.pull-left Password
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
-            input(type="password" name="password" v-model="user.password" placeholder="••••••••")
+            input(type="password" name="password" placeholder="••••••••" v-bind:value="user.password" @input="updatePassword")
             .form__error
-              span {{ passwordError }}
+              span {{ error.password }}
           .form__element
-            button(type="submit" @click.prevent="login" v-bind:disabled="loading")
+            button(type="submit" @click.prevent="login(this)" v-bind:disabled="loading")
               span(v-show="!loading") Login
               .button__spinner(v-show="loading")
                 v-spinner(color="#fff" height="6px" width="3px" radius="8px")
@@ -35,88 +35,35 @@ section.page__wrapper
 </template>
 
 <script>
-var Header = require('../../components/header.vue');
-var Footer = require('../../components/footer.vue');
-var Spinner = require('../../components/spinner.vue');
+import Header from '../../components/header.vue'
+import Footer from '../../components/footer.vue'
+import Spinner from '../../components/spinner.vue'
 
-module.exports = {
-  data: function() {
-    return {
-      user: {
-        email: null,
-        password: null
+import { login } from '../../vuex/actions/auth'
+
+export default {
+  vuex: {
+    getters: {
+      user: ({ auth }) => auth.user,
+      error: ({ auth }) => auth.error,
+      loading: ({ auth }) => auth.buttonLoading
+    },
+    actions: {
+      login,
+      updateEmail: ({ dispatch }, e) => {
+        dispatch('AUTH_UPDATE_FIELD', 'email', e.target.value)
       },
-      emailError: null,
-      passwordError: null,
-      verifyError: null,
-      loading: false
+      updatePassword: ({ dispatch }, e) => {
+        dispatch('AUTH_UPDATE_FIELD', 'password', e.target.value)
+      },
+      clearForm: ({ dispatch }) => {
+        dispatch('AUTH_CLEAR_ERRORS')
+        dispatch('AUTH_CLEAR_FIELDS')
+      }
     }
   },
-  methods: {
-    clearErrors: function() {
-      this.emailError = null;
-      this.passwordError = null;
-    },
-    validateInput: function() {
-      this.clearErrors();
-      return true;
-    },
-    sendRequest: function() {
-      var that = this;
-      that.loading = true;
-      client({ path: 'token_auth', entity: this.user }).then(
-        function (response) {
-          that.$dispatch('userHasLoggedIn');
-          that.loading = false;
-          that.$route.router.go('/profile');
-        },
-        function (response) {
-          console.log(response);
-          if (response.status) {
-            for (var key in response.entity) {
-              if (key === 'non_field_errors') {
-                try {
-                  that.emailError = response.entity[key];
-                  that.passwordError = response.entity[key];
-                } catch(e) {
-                  console.log(e);
-                }
-              }
-
-              if (key === 'email') {
-                try {
-                  that.emailError = response.entity[key];
-                } catch(e) {
-                  console.log(e);
-                }
-              }
-
-              if (key === 'password') {
-                try {
-                  that.passwordError = response.entity[key];
-                } catch(e) {
-                  console.log(e);
-                }
-              }
-
-              if (key === 'detail') {
-                try {
-                  that.verifyError = response.entity[key];
-                } catch(e) {
-                  console.log(e);
-                }
-              }
-            }
-          }
-
-          that.loading = false;
-        }
-      );
-    },
-    login: function() {
-      if (this.validateInput())
-        this.sendRequest();
-    }
+  ready () {
+    this.clearForm()
   },
   components: {
     'v-header': Header,
