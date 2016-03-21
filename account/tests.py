@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import Client
 
 from rest_framework import status
 from rest_framework_jwt import utils
@@ -14,14 +14,8 @@ class UserAPITest(APITestCase):
     fixtures = ['user.json']
 
     def setUp(self):
-        self.client = APIClient()
+        self.client = Client()
         self.user = User.objects.get(email='rabinoandie@gmail.com')
-        payload = jwt_payload_handler(self.user)
-        self.token = utils.jwt_encode_handler(payload)
 
-    def testCreate(self):
-
-        auth = 'JWT {0}'.format(self.token)
-        response = self.client.get('/api/user', HTTP_AUTHORIZATION=auth)
-        self.assertEqual(response.data['id'], str(self.user.id.hex))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def testGetTokenAuth(self):
+        pass
