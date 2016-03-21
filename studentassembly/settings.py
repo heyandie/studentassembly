@@ -73,6 +73,7 @@ from datetime import timedelta
 
 JWT_AUTH = {
     'JWT_PAYLOAD_HANDLER':'account.api.jwt_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER':'account.api.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': timedelta(hours=3),
     'JWT_ALLOW_REFRESH': True,
 }
