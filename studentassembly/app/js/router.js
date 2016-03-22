@@ -34,7 +34,7 @@ router.map({
   '/profile': {
     name: 'profile',
     needAuth: true,
-    component: require('./pages/profile.vue')
+    component: require('./pages/user/profile.vue')
   },
   '/report': {
     name: 'report',

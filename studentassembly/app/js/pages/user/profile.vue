@@ -16,11 +16,11 @@ section.page__wrapper
 </template>
 
 <script>
-import Header from '../components/header.vue'
-import Footer from '../components/footer.vue'
-import Spinner from '../components/spinner.vue'
+import Header from '../../components/header.vue'
+import Footer from '../../components/footer.vue'
+import Spinner from '../../components/spinner.vue'
 
-import { getReports } from '../vuex/actions/user'
+import { getProfile, getReports } from '../../vuex/actions/user'
 
 export default {
   vuex: {
@@ -29,10 +29,12 @@ export default {
       reports: ({ user }) => user.reports
     },
     actions: {
+      getProfile,
       getReports
     }
   },
   created () {
+    this.getProfile()
     this.getReports(this)
   },
   components: {

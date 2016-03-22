@@ -1,6 +1,7 @@
 import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT_SUCCESS,
+  USER_RECEIVE_PROFILE,
   USER_RECEIVE_REPORTS
 } from '../mutation-types'
 
@@ -26,6 +27,14 @@ const mutations = {
     state.id = null
     state.username = null
     state.email = null
+  },
+
+  [USER_RECEIVE_PROFILE] (state, profile) {
+    state.id = profile.id
+    state.username = profile.username
+    state.email = profile.email
+    state.contact = profile.contact
+    state.reports = profile.reports
   },
 
   [USER_RECEIVE_REPORTS] (state, reports) {

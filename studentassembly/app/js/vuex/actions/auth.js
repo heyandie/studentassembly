@@ -69,5 +69,6 @@ export const login = ({ dispatch, state }, context) => {
 
 export const logout = ({ dispatch }) => {
   localStorage.removeItem('sa-token')
+  localStorage.removeItem('sa-profile')
   dispatch(types.AUTH_LOGOUT_SUCCESS)
 }

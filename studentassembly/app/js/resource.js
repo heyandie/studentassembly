@@ -17,9 +17,6 @@ export const initResource = (Vue) => {
       if (response.status === 401) {
         localStorage.removeItem('sa-token')
       }
-      if (response.headers && response.headers.Authorization) {
-        localStorage.setItem('sa-token', response.headers.Authorization)
-      }
       if (response.data && response.data.token && response.data.token.length > 10) {
         localStorage.setItem('sa-token', response.data.token)
       }

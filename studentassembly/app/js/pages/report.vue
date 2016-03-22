@@ -87,11 +87,21 @@ import Header from '../components/header.vue'
 import Footer from '../components/footer.vue'
 import Spinner from '../components/spinner.vue'
 
+import { getSchools, getCategories } from '../vuex/actions/report'
+
 export default {
+  vuex: {
+    getters: {
+      schools: ({ report }) => report.schools,
+      categories: ({ report }) => report.categories
+    },
+    actions: {
+      getSchools,
+      getCategories
+    }
+  },
   data () {
     return {
-      schools: null,
-      categories: null,
       loading: false,
       request: {
         contact: {
@@ -108,7 +118,6 @@ export default {
           allow_publish: false
         }
       }
-
     }
   },
   filters: {
@@ -140,23 +149,9 @@ export default {
       )
     }
   },
-  ready () {
-    this.$http.get('schools' ).then(
-      function (response) {
-        this.schools = response.data
-      },
-      function (response) {
-        console.log('Error trying to fetch schools. Contact the server again.')
-      }
-    )
-    this.$http.get('categories').then(
-      function (response) {
-        this.categories = response.data
-      },
-      function (response) {
-        console.log('Error trying to fetch categories. Contact the server again.')
-      }
-    )
+  created () {
+    this.getSchools(this)
+    this.getCategories(this)
   },
   components: {
     'v-header': Header,
@@ -164,4 +159,17 @@ export default {
     'v-spinner': Spinner
   }
 }
+
+// <input v-model="message">
+// computed: {
+//   message: {
+//     get: function () {
+//       return store.state.message
+//     },
+//     set: function (newValue) {
+//       store.dispatch("CHANGE_MESSAGE", newValue)
+//     }
+//   }
+// }
+
 </script>
