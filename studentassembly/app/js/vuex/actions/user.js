@@ -6,7 +6,7 @@ export const getProfile = ({ dispatch }) => {
 }
 
 export const getReports = ({ dispatch, state }, context) => {
-  context.$http.get('report/' + state.user.id).then(
+  context.$http.get('report?user=' + state.user.id).then(
     function(response) {
       dispatch(types.USER_RECEIVE_REPORTS, response.data)
     },

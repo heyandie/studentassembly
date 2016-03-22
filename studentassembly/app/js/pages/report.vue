@@ -51,10 +51,10 @@ section.page__wrapper
               .form__note If this is a sexual harassment or discrimination report and you would like to pursue legal action, kindly give your contact information.
               .form__radio
                 input(type="radio" name="allow_contact" id="allow_contact_1" value="1" v-model="request.contact.allow_contact" number)
-                label(for="allow_contact_1") Yes, I want to give my contact.
+                label(for="allow_contact_1") Yes, I want to give my contact details.
               .form__radio
                 input(type="radio" name="allow_contact" id="allow_contact_2" value="0" checked v-model="request.contact.allow_contact" number)
-                label(for="allow_contact_2") No, I don't want to give my contact.
+                label(for="allow_contact_2") No, I don't want to give my contact details.
               template(v-if="request.contact.allow_contact === 1")
                 input(type="text" name="name" placeholder="Name" v-model="request.contact.name")
                 input(type="text" name="mobile_number" placeholder="Mobile Number" v-model="request.contact.mobile_number")
