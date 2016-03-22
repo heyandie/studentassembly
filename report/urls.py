@@ -9,9 +9,9 @@ from .api import (
 
 urlpatterns = [
     url(r'^api/report/(?P<pk>[0-9]+)', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),
-    url(r'^api/report', ListCreateReportAPIView.as_view(), name="create-report"),
-    url(r'^api/categories',ListCategoryAPIView.as_view({'get': 'list'}), name="list-categories"),
-    url(r'^api/schools',ListSchoolsAPIView.as_view({'get': 'list'}), name="list-schools"),
+    url(r'^api/report$', ListCreateReportAPIView.as_view(), name="create-report"),
+    url(r'^api/categories$',ListCategoryAPIView.as_view({'get': 'list'}), name="list-categories"),
+    url(r'^api/schools$',ListSchoolsAPIView.as_view({'get': 'list'}), name="list-schools"),
 ]
 
 
