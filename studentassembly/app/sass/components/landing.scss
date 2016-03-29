@@ -23,6 +23,7 @@
   h1 {
     margin: 0 0 10px 0;
     color: white;
+    font-weight: 700;
 
     @include media("<=tablet") {
       font-size: 44px;

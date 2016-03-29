@@ -6,9 +6,12 @@ export const getProfile = ({ dispatch }) => {
 }
 
 export const getReports = ({ dispatch, state }, context) => {
+  dispatch(types.BUTTON_SUBMIT_LOADING, true)
+
   context.$http.get('report?user=' + state.user.id).then(
     function(response) {
       dispatch(types.USER_RECEIVE_REPORTS, response.data)
+      dispatch(types.BUTTON_SUBMIT_LOADING, false)
     },
     function(response) {
       console.log('Retrieving user profile failed.')

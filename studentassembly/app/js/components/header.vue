@@ -3,7 +3,7 @@ header.header__wrapper(:class="headerClass")
   nav.nav__wrapper(role="navigation")
     .nav.nav--left
       a.nav__link.nav--home(v-link="{ name: 'home' }")
-        img.nav__logo(src="/static/img/logo.png" height="54")
+        img.nav__logo(src="/static/img/logo.png" height="42")
       //- template(v-if="loggedIn")
       //-   form.nav__search
       //-     input(type="text" placeholder="Search for reports")

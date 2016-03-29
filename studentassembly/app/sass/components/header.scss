@@ -1,5 +1,6 @@
 .header__wrapper {
   background-color: $brand-color;
+  // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
   &.header--landing {
     position: fixed;
@@ -15,7 +16,7 @@
   @include clearfix();
   margin: 0 auto;
   max-width: $content-width;
-  padding: 10px 12px;
+  padding: 11px 12px;
 }
 
 .nav {
@@ -39,16 +40,19 @@
   position: relative;
   vertical-align: middle;
   margin-right: 28px;
-  line-height: 54px;
+  line-height: 42px;
 
-  color: white;
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
 
+  &:link, &:visited {
+    color: white;
+  }
+
   &:after {
     position: absolute;
-    bottom: 12px;
+    bottom: 8px;
     left: 0;
     height: 1px;
     width: 100%;
@@ -62,6 +66,7 @@
 
   &.nav--home {
     line-height: 1;
+    font-size: 0;
 
     &:after {
       display: none;

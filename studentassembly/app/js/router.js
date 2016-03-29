@@ -28,7 +28,6 @@ router.map({
   },
   '/logout': {
     name: 'logout',
-    needAuth: true,
     component: require('./pages/auth/logout.vue')
   },
   '/profile': {

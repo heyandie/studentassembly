@@ -3,16 +3,21 @@ v-header
 section.page__wrapper
   .content__wrapper
     .content__section
-      h1 Hello, {{ username }}!
-      h3 Your Reports
+      h2 Hello, {{ username }}!
       article.content__main
-        .cards__wrapper
-          a.card(v-for="report in reports" v-link="{ name: 'report-view', params: { id: report.id } }")
-            strong {{ report.category }}
-            br
-            small at {{ report.school }}
-            br
-            | {{ report.text | truncate }}
+        h3 Your Reports
+        .list__group
+          .spinner__wrapper(v-if="loading")
+            v-spinner
+          template(v-if="!loading")
+            a.list__item(v-for="report in reports" v-link="{ name: 'report-view', params: { id: report.id } }")
+              h4
+                .pull-right
+                  small.list__item-remark(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'") {{ report.is_approved ? 'Approved' : 'Not Approved' }}
+                span {{ report.category }}
+                br
+                small {{ report.school }}
+              p {{ report.text | truncate }}
       aside.content__secondary
 </template>
 
@@ -27,7 +32,8 @@ export default {
   vuex: {
     getters: {
       username: ({ user }) => user.username,
-      reports: ({ user }) => user.reports
+      reports: ({ user }) => user.reports,
+      loading: ({ report }) => report.buttonLoading
     },
     actions: {
       getProfile,
@@ -49,8 +55,8 @@ export default {
   },
   filters: {
     truncate (string) {
-      if (string.length > 90)
-        return string.substring(0, 90) + '...'
+      if (string.length > 140)
+        return string.substring(0, 140) + '...'
       else
         return string
     }

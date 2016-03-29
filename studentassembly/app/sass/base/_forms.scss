@@ -76,9 +76,10 @@ button[type="submit"] {
 
 .form__wrapper {
   margin-bottom: 14px;
-  background-color: #fbfbfb;
-  border: 1px #eee solid;
+  background-color: #fff;
+  // border: 1px #eee solid;
   border-radius: 4px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
   @include media("<=tablet") {
     padding: 16px;
@@ -101,8 +102,8 @@ button[type="submit"] {
     input,
     textarea,
     .form__select select {
-      background-color: rgba(#eb2649, 0.15);
-      border-color: #eb2649;
+      background-color: rgba(#eb2649, 0.05);
+      border-color: rgba(#eb2649, 0.5);
     }
   }
 }
@@ -303,7 +304,7 @@ button[type="submit"] {
       bottom: 0;
       left: 0;
       background: url('/static/img/icons/content/ic_add_48px.svg') no-repeat center;
-      opacity: 0.09;
+      opacity: 0.15;
       content: '';
     }
 
@@ -317,7 +318,7 @@ button[type="submit"] {
   }
 
   input[disabled] + label {
-    opacity: 0.4;
+    opacity: 0.2;
     cursor: default;
 
     &:hover {
@@ -325,7 +326,7 @@ button[type="submit"] {
     }
 
     &:hover:after {
-      opacity: 0.05;
+      opacity: 0.15;
     }
   }
 

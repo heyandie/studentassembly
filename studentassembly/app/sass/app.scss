@@ -31,7 +31,7 @@
   padding: 36px 12px;
 
   .content--additional-info {
-    color: #a7a7a2;
+    color: #8b8687;
 
     @include media("<=tablet") {
       display: none;
@@ -48,11 +48,25 @@
     margin-right: 0;
     width: 100%;
   }
+
+  &:last-child {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .content__secondary {
   float: left;
   width: 27%;
+}
+
+.spinner__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  margin-bottom: 20px;
 }
 
 .pull-right {

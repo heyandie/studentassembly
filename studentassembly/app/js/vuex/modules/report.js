@@ -69,7 +69,7 @@ const mutations = {
   },
 
   [REPORT_UPDATE_QUESTIONS] (state) {
-    state.questions = JSON.parse(state.categories[state.request.report.category].questions)
+    state.questions = JSON.parse(state.categories[state.request.report.category - 1].questions)
 
     for (let i = 0; i < state.questions.length; i++) {
       state.request.report.answers.$set(i, {
@@ -108,8 +108,8 @@ const mutations = {
     state.view.category = null
     state.view.school = null
     state.view.text = null
-    state.view.answers = null
-    state.view.files = null
+    state.view.answers = []
+    state.view.files = []
     state.view.is_approved = false
   },
 
