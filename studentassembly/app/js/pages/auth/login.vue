@@ -15,14 +15,14 @@ section.page__wrapper
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
             input(type="email" name="email" placeholder="juan@student.ph" v-bind:value="user.email" @input="updateEmail")
-            .form__error
+            .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password ? 'form--empty' : ''")
             .form__label.pull-left Password
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
             input(type="password" name="password" placeholder="••••••••" v-bind:value="user.password" @input="updatePassword")
-            .form__error
+            .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element
             button(type="submit" @click.prevent="login(this)" v-bind:disabled="loading")

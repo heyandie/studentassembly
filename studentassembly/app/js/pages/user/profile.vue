@@ -3,16 +3,17 @@ v-header
 section.page__wrapper
   .content__wrapper
     .content__section
-      h1 Profile
-      h3 Hello, {{ username }}!
-      ul
-        li(v-for="report in reports")
-          p
+      h1 Hello, {{ username }}!
+      h3 Your Reports
+      article.content__main
+        .cards__wrapper
+          a.card(v-for="report in reports" v-link="{ name: 'report-view', params: { id: report.id } }")
             strong {{ report.category }}
             br
             small at {{ report.school }}
             br
-            | {{ report.text }}
+            | {{ report.text | truncate }}
+      aside.content__secondary
 </template>
 
 <script>
@@ -36,6 +37,23 @@ export default {
   created () {
     this.getProfile()
     this.getReports(this)
+
+    // this.$http.get('report/' + this.reports[0].id).then(
+    //   function(response) {
+    //     console.log(response.data)
+    //   },
+    //   function(response) {
+    //
+    //   }
+    // )
+  },
+  filters: {
+    truncate (string) {
+      if (string.length > 90)
+        return string.substring(0, 90) + '...'
+      else
+        return string
+    }
   },
   components: {
     'v-header': Header,

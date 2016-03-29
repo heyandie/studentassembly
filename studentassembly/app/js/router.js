@@ -38,8 +38,18 @@ router.map({
   },
   '/report': {
     name: 'report',
-    needAuth: true,
-    component: require('./pages/report.vue')
+    component: require('./pages/report/index.vue'),
+    subRoutes: {
+      '/file': {
+        name: 'report-file',
+        needAuth: true,
+        component: require('./pages/report/file.vue')
+      },
+      '/view/:id': {
+        name: 'report-view',
+        component: require('./pages/report/view.vue')
+      }
+    }
   },
   '*': {
     component: require('./pages/404.vue')
@@ -47,14 +57,23 @@ router.map({
 })
 
 router.alias({
-  '': '/index'
+  '': '/index',
+  '/report': '/report/file'
 })
 
 router.beforeEach(function (transition) {
   if (transition.to.needAuth) {
-    var token = localStorage.getItem('sa-token')
+    let token = localStorage.getItem('sa-token')
     if (!token || token === null) {
       transition.redirect('/login')
+    }
+    else {
+      let tokenObject = JSON.parse(atob(token.split('.')[1])),
+          timeRemaining = tokenObject.exp - Math.floor(Date.now() / 1000)
+      if (timeRemaining < 10) {
+        // 10 seconds
+        transition.redirect('/logout')
+      }
     }
   }
 

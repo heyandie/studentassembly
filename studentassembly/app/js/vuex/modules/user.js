@@ -27,6 +27,9 @@ const mutations = {
     state.id = null
     state.username = null
     state.email = null
+    state.contact.name = null
+    state.contact.mobile = null
+    state.reports = []
   },
 
   [USER_RECEIVE_PROFILE] (state, profile) {

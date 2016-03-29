@@ -1,9 +1,9 @@
 import {
+  BUTTON_SUBMIT_LOADING,
   AUTH_CLEAR_ERRORS,
   AUTH_CLEAR_FIELDS,
   AUTH_SHOW_ERROR,
   AUTH_UPDATE_FIELD,
-  AUTH_SUBMIT_LOADING,
   AUTH_CHECK_TERMS,
   AUTH_REGISTER_SUCCESS
 } from '../mutation-types'
@@ -36,6 +36,7 @@ const mutations = {
   },
 
   [AUTH_CLEAR_FIELDS] (state) {
+    state.buttonLoading = false
     state.registerSuccess = false
     state.termsAgree = false
     state.user.email = null
@@ -51,7 +52,7 @@ const mutations = {
     state.user[field] = value
   },
 
-  [AUTH_SUBMIT_LOADING] (state, buttonLoading) {
+  [BUTTON_SUBMIT_LOADING] (state, buttonLoading) {
     state.buttonLoading = buttonLoading
   },
 
