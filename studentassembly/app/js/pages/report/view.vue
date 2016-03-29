@@ -24,6 +24,7 @@ export default {
     actions: {
       getReport,
       getID: ({ dispatch, state }) => {
+        dispatch('REPORT_CLEAR_VIEW')
         dispatch('REPORT_RECEIVE_ID', state.route.params.id)
       }
     }

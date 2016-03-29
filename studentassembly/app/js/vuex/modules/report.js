@@ -9,6 +9,7 @@ import {
   REPORT_UPDATE_CONTACT_FIELD,
   REPORT_UPDATE_ATTACHMENT,
   REPORT_SHOW_ERROR,
+  REPORT_CLEAR_VIEW,
   REPORT_RECEIVE_ID,
   REPORT_RECEIVE_REPORT
 } from '../mutation-types'
@@ -100,6 +101,16 @@ const mutations = {
 
   [BUTTON_SUBMIT_LOADING] (state, buttonLoading) {
     state.buttonLoading = buttonLoading
+  },
+
+  [REPORT_CLEAR_VIEW] (state) {
+    state.view.id = null
+    state.view.category = null
+    state.view.school = null
+    state.view.text = null
+    state.view.answers = null
+    state.view.files = null
+    state.view.is_approved = false
   },
 
   [REPORT_RECEIVE_ID] (state, id) {
