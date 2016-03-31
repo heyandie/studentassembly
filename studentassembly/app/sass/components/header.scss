@@ -3,12 +3,12 @@
   // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
   &.header--landing {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    background-color: transparent;
+    background-color: transparent; // #fdedc7; // doordash
   }
 }
 
@@ -39,12 +39,22 @@
   display: inline-block;
   position: relative;
   vertical-align: middle;
-  margin-right: 28px;
   line-height: 42px;
 
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+
+  @include media("<=tablet") {
+    margin-right: 20px;
+  }
+  @include media(">tablet") {
+    margin-right: 28px;
+  }
 
   &:link, &:visited {
     color: white;

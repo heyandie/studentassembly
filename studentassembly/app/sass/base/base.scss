@@ -14,10 +14,13 @@ html {
 }
 
 body {
-  font-family: 'Avenir Next', 'Helvetica Neue', Helvetica, sans-serif;
+  background-color: #fbfbfb;
+  // background-image: url('/static/img/cubes.png');
+  // background-repeat: repeat;
+
+  font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 16px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .004);
-  background-color: #fbfbfb; // #f4f7f7;
   color: #1e2022;
 }
 
@@ -91,13 +94,20 @@ hr {
   display: inline-block;
   background-color: $brand-color;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 11px 20px;
   color: white;
-  font-size: 15px;
-  font-weight: 400;
+
+  font-size: 14px;
+  font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;
+  letter-spacing: 0.5px;
+
   cursor: pointer;
+
+  &:visited {
+    color: white;
+  }
 
   &:hover {
     background: linear-gradient(to top, rgba(17, 17, 17, 0.1), rgba(17, 17, 17, 0.1)),

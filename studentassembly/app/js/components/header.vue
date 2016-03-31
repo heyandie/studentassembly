@@ -13,7 +13,7 @@ header.header__wrapper(:class="headerClass")
         a.nav__link(v-link="{ name: 'profile' }") Profile
         a.nav__link(v-link="{ name: 'logout' }") Logout
       template(v-else)
-        a.nav__link(href="/#how-it-works") How It Works
+        a.nav__link(href="/#how-it-works") About
         a.nav__link(v-link="{ name: 'login' }") Login
         a.nav__link(v-link="{ name: 'register' }") Register
 </template>

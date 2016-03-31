@@ -4,25 +4,35 @@ section.page__wrapper.page--landing
   .landing__wrapper
     .landing__overlay
     .landing__content
-      h1
-        | You deserve to be heard.
-      p Student Assembly empowers students to increase transparency and accountability on their schools.
+      h1 Fight corruption at your university.
+      //- p Student Assembly empowers students to increase transparency and accountability on their schools.
+      p Student Assembly is an anonymous reporting platform that aims to reduce corruption in universities.
       a.button.button--inverted(v-link="{ name: 'report' }") File a Report
   .content__wrapper
     .content__section
+      p Corruption the abuse of entrusted power for private gain. It occurs in universities because students aren’t empowered to report while schools want to keep their reputation. Student Assembly is designed to tackle this double barrier.
       .landing__features#how-it-works
         .landing__feature
           img(src="/static/img/icons/action/ic_assignment_late_48px.svg")
           h2 Report
-          p Report administrators, teachers, and schools for corrupt policies and practices anonymously.
-        .landing__feature
-          img(src="/static/img/icons/action/ic_timeline_48px.svg")
-          h2 Analyze
-          p School administrators can manage reports by tagging them as resolved, dismissed, and in-progress.
+          p You deserve to be heard. Report quiet and hard corruption cases in your school and attach evidence via photos and documents.
+        //- .landing__feature
+        //-   img(src="/static/img/icons/action/ic_search_48px.svg")
+        //-   h2 Search
+        //-   p You can’t protect yourself from what you don’t know. Browse existing reports and ratings using various filters.
         .landing__feature
           img(src="/static/img/icons/action/ic_grade_48px.svg")
           h2 Rate
-          p Upvote reports to improve credibility, and rate your teachers and school administrators.
+          p Inform others about underperformers and celebrate those who perform well! Rate the performance of your professors, school admins and staff.
+        .landing__feature
+          img(src="/static/img/icons/action/ic_record_voice_over_48px.svg")
+          h2 Amplify
+          p Every problem is a community problem! Vote and share reports you like to get it more noticed. Subscribe to reports to get updates about its status.
+        .landing__feature
+          img(src="/static/img/icons/action/ic_timeline_48px.svg")
+          h2 Manage
+          p School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!
+
 </template>
 
 <script>
