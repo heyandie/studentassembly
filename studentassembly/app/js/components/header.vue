@@ -4,9 +4,10 @@ header.header__wrapper(:class="headerClass")
     .nav.nav--left
       a.nav__link.nav--home(v-link="{ name: 'home' }")
         img.nav__logo(src="/static/img/logo.png" height="42")
-      //- template(v-if="loggedIn")
+      //- template(v-if="headerClass !== 'header--landing'")
       //-   form.nav__search
       //-     input(type="text" placeholder="Search for reports")
+
     .nav.nav--right
       template(v-if="loggedIn")
         a.nav__link(v-link="{ name: 'report' }") Report

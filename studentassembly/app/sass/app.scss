@@ -59,6 +59,12 @@
 .content__secondary {
   float: left;
   width: 27%;
+
+  & + .content__main {
+    float: left;
+    margin-right: 0;
+    margin-left: 3%;
+  }
 }
 
 .spinner__wrapper {
@@ -66,7 +72,7 @@
   align-items: center;
   justify-content: center;
   height: 100px;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .pull-right {

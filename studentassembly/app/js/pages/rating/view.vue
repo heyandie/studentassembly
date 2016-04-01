@@ -4,7 +4,7 @@ section.page__wrapper
     .content__section
       article.content__main
         .form__wrapper
-          .spinner__wrapper(v-if="loading")
+          .spinner__wrapper(v-if="!loading")
             v-spinner
           template(v-if="!loading")
             h3

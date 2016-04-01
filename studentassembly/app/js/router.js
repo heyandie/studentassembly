@@ -15,10 +15,12 @@ router.map({
   },
   '/register': {
     name: 'register',
+    guest: true,
     component: require('./pages/auth/register.vue')
   },
   '/login': {
     name: 'login',
+    guest: true,
     component: require('./pages/auth/login.vue'),
     subRoutes: {
       '/verified': {
@@ -61,8 +63,9 @@ router.alias({
 })
 
 router.beforeEach(function (transition) {
+  let token = localStorage.getItem('sa-token')
+
   if (transition.to.needAuth) {
-    let token = localStorage.getItem('sa-token')
     if (!token || token === null) {
       transition.redirect('/login')
     }
@@ -73,6 +76,11 @@ router.beforeEach(function (transition) {
         // 10 seconds
         transition.redirect('/logout')
       }
+    }
+  }
+  if (transition.to.guest) {
+    if (token) {
+      transition.redirect('/profile')
     }
   }
 

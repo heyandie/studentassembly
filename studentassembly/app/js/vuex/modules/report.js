@@ -57,7 +57,20 @@ const mutations = {
     state.schools = []
     state.categories = []
     state.questions = []
-    // state.request = null
+
+    state.request.contact = {
+      allow_contact: 0,
+      name: null,
+      contact_number: null
+    }
+    state.request.report = {
+      category: null,
+      school: null,
+      text: null,
+      answers: [],
+      files: [],
+      allow_publish: 0
+    }
   },
 
   [REPORT_RECEIVE_SCHOOLS] (state, schools) {
