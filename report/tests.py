@@ -17,7 +17,6 @@ class CreateReportTest(APITestCase):
         self.client = APIClient()
         self.user = User.objects.get(email='rabinoandie@gmail.com')
         payload = jwt_payload_handler(self.user)
-        print(payload)
         self.token = utils.jwt_encode_handler(payload)
 
     def testCreateRetrieveReport(self):
@@ -25,7 +24,7 @@ class CreateReportTest(APITestCase):
 
         auth = 'JWT {0}'.format(self.token)
 
-        response = self.client.post('/api/report', {
+        response = self.client.post('/api/report/', {
             'report': {
                 'user_id': self.user.id,
                 'category': 1,
@@ -39,6 +38,7 @@ class CreateReportTest(APITestCase):
             }
 
         }, HTTP_AUTHORIZATION=auth, format='json')
+        print (response)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         report = Report.objects.get(pk=1)

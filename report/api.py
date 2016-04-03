@@ -8,18 +8,19 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.views import APIView
 
 from account.models import User
 from .models import Category, Report, School
 from .serializers import CategorySerializer, ReportSerializer, SchoolSerializer
 
-class ListCreateReportAPIView(generics.ListCreateAPIView):
-    permission_classes = (IsAuthenticated,)
+class ListReportAPIView(APIView):
+
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
     def get_permissions(self):
-        if self.request.method == 'POST' or self.request.GET.get('user', None):
+        if self.request.method == 'POST':
             return [IsAuthenticated()]
         return [IsAuthenticatedOrReadOnly()]
 
@@ -52,14 +53,19 @@ class ListCreateReportAPIView(generics.ListCreateAPIView):
         else:
             return queryset
 
-    def list(self, request):
-        queryset = self.get_queryset()
+    def get(self, request):
+        queryset = self.queryset
         queryset = self.filter_queryset(queryset)
         serializer = self.serializer_class(data=queryset, many=True)
         serializer.is_valid(raise_exception=False)
         return Response(serializer.data)
 
-    def create(self, request, format=None):
+class CreateReportAPIView(APIView):
+
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+    def post(self, request, format=None):
         data = request.data
         report_data = data.get('report')
         report_data['user_id'] = request.user.id
