@@ -24,7 +24,7 @@ export const getCategories = ({ dispatch }, context) => {
 
 export const getReport = ({ dispatch, state }, context) => {
   dispatch(types.BUTTON_SUBMIT_LOADING, true)
-  
+
   context.$http.get('report/' + state.report.view.id).then(
     function(response) {
       dispatch(types.REPORT_RECEIVE_REPORT, response.data)
@@ -40,12 +40,13 @@ export const getReport = ({ dispatch, state }, context) => {
 export const submitReport = ({ dispatch, state }, context) => {
   dispatch(types.BUTTON_SUBMIT_LOADING, true)
 
-  context.$http.post('report', state.report.request).then(
+  context.$http.post('report/', state.report.request).then(
     function (response) {
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
       state.route.path = '/profile'
     },
     function (response) {
+      console.log(response)
       for (var key in response.data) {
         if (key === 'school') {
           dispatch(types.REPORT_SHOW_ERROR, 'school', response.data[key])

@@ -1,0 +1,40 @@
+.about__main-logo {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.about__container {
+  margin-bottom: 14px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+
+  @include media("<=tablet") {
+    padding: 16px;
+  }
+
+  @include media(">tablet") {
+    padding: 28px;
+  }
+}
+
+.about__section {
+  margin-bottom: 28px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.about__partner {
+  margin-bottom: 20px;
+
+  .about__partner-logo {
+    margin-bottom: 8px;
+    // text-align: center;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -86,15 +86,6 @@ export default {
   created () {
     this.getProfile()
     this.getReports(this)
-
-    // this.$http.get('report/null').then(
-    //   function(response) {
-    //     console.log(response)
-    //   },
-    //   function(response) {
-    //     console.log('fail')
-    //   }
-    // )
   },
   filters: {
     truncate (string) {

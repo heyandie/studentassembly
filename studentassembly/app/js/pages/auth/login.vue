@@ -17,7 +17,7 @@ section.page__wrapper
         p
           | You have been logged out due to inactivity. For security measures, please log in again.
 
-      h2 Login to Student Assembly
+      h2 Log in
       .form__wrapper
         form(action="/api/token_auth" method="post")
           .form__element(:class="error.email ? 'form--empty' : ''")
@@ -26,9 +26,9 @@ section.page__wrapper
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password ? 'form--empty' : ''")
-            .form__label.pull-left Password
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
+            .form__label Password
             input(type="password" name="password" placeholder="••••••••" v-bind:value="user.password" @input="updatePassword")
             .form__error(v-if="error.password")
               span {{ error.password }}

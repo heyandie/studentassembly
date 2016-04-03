@@ -3,6 +3,19 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+function capitalizeFirstLetter(string) {
+  let smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/
+
+  if (!smallWords.test(string))
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  else
+    return string
+}
+
+function toTitleCase(string) {
+  return string.split('-').map((text) => { return capitalizeFirstLetter(text) }).join(' ')
+}
+
 const router = new VueRouter({
   history: true,
   saveScrollPosition: true
@@ -12,6 +25,10 @@ router.map({
   '/index': {
     name: 'home',
     component: require('./pages/index.vue')
+  },
+  '/about': {
+    name: 'about',
+    component: require('./pages/about.vue')
   },
   '/register': {
     name: 'register',
@@ -35,10 +52,10 @@ router.map({
   '/report': {
     name: 'report',
     component: require('./pages/report/index.vue'),
-    needAuth: true,
     subRoutes: {
       '/file': {
-        name: 'report-file',
+        name: 'file-a-report',
+        needAuth: true,
         component: require('./pages/report/file.vue')
       },
       '/view/:id': {
@@ -68,7 +85,7 @@ router.alias({
   '/report': '/report/file'
 })
 
-router.beforeEach(function (transition) {
+router.beforeEach((transition) => {
   let token = localStorage.getItem('sa-token')
 
   if (transition.to.needAuth) {
@@ -91,6 +108,10 @@ router.beforeEach(function (transition) {
   }
 
   transition.next()
+})
+
+router.afterEach((transition) => {
+  document.title = 'Student Assembly - ' + toTitleCase(transition.to.name)
 })
 
 export default router
