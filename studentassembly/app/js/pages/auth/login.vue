@@ -3,12 +3,20 @@ v-header
 section.page__wrapper
   .content__wrapper.content--small
     .content__section
-      router-view
       .alert__wrapper.alert--error(v-if="error.verify")
         h3 Oops!
         p
           | {{ error.verify }}&nbsp;
           a(v-link="{ name: 'login' }") Resend verification.
+      .alert__wrapper.alert--success(v-if="$route.query.s === 'verified'")
+        h3 Your account has been verified!
+        p
+          | Log in using your email and password to start using Student Assembly.
+      .alert__wrapper.alert--error(v-if="$route.query.s === 'expired'")
+        //- h3 Your account has been verified!
+        p
+          | You have been logged out due to inactivity. For security measures, please log in again.
+
       h2 Login to Student Assembly
       .form__wrapper
         form(action="/api/token_auth" method="post")
@@ -62,7 +70,7 @@ export default {
       }
     }
   },
-  ready () {
+  created () {
     this.clearForm()
   },
   components: {

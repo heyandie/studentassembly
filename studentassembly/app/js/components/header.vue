@@ -4,13 +4,14 @@ header.header__wrapper(:class="headerClass")
     .nav.nav--left
       a.nav__link.nav--home(v-link="{ name: 'home' }")
         img.nav__logo(src="/static/img/logo.png" height="42")
-      //- template(v-if="headerClass !== 'header--landing'")
+      //- template(v-if="loggedIn")
       //-   form.nav__search
-      //-     input(type="text" placeholder="Search for reports")
+      //-     input(type="text" placeholder="Search for reports or people")
 
     .nav.nav--right
       template(v-if="loggedIn")
         a.nav__link(v-link="{ name: 'report' }") Report
+        a.nav__link(v-link="{ name: 'rate' }") Rate
         a.nav__link(v-link="{ name: 'profile' }") Profile
         a.nav__link(v-link="{ name: 'logout' }") Logout
       template(v-else)

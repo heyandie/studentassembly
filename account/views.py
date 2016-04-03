@@ -15,7 +15,7 @@ def ActivateAccountView(request, token):
             user.is_verified = True
             user.save()
             token.delete()
-            return HttpResponseRedirect('/login/verified')
+            return HttpResponseRedirect('/login?s=verified')
         else:
             return render(request, 'index.html', {'message':'Account has been already verified.'})
     except ObjectDoesNotExist:

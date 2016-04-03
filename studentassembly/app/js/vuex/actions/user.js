@@ -14,7 +14,8 @@ export const getReports = ({ dispatch, state }, context) => {
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
     },
     function(response) {
-      console.log('Retrieving user profile failed.')
+      console.log(response)
+      console.log('Retrieving user reports failed.')
     }
   )
 }
