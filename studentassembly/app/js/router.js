@@ -21,12 +21,7 @@ router.map({
   '/login': {
     name: 'login',
     guest: true,
-    component: require('./pages/auth/login.vue'),
-    subRoutes: {
-      '/verified': {
-        component: require('./pages/auth/verified.vue')
-      }
-    }
+    component: require('./pages/auth/login.vue')
   },
   '/logout': {
     name: 'logout',
@@ -40,15 +35,26 @@ router.map({
   '/report': {
     name: 'report',
     component: require('./pages/report/index.vue'),
+    needAuth: true,
     subRoutes: {
       '/file': {
         name: 'report-file',
-        needAuth: true,
         component: require('./pages/report/file.vue')
       },
       '/view/:id': {
         name: 'report-view',
         component: require('./pages/report/view.vue')
+      }
+    }
+  },
+  '/rate': {
+    name: 'rate',
+    component: require('./pages/rating/index.vue'),
+    needAuth: true,
+    subRoutes: {
+      '/view/:id': {
+        name: 'rate-view',
+        component: require('./pages/rating/view.vue')
       }
     }
   },
@@ -74,7 +80,7 @@ router.beforeEach(function (transition) {
           timeRemaining = tokenObject.exp - Math.floor(Date.now() / 1000)
       if (timeRemaining < 10) {
         // 10 seconds
-        transition.redirect('/logout')
+        transition.redirect('/logout?r=expired')
       }
     }
   }

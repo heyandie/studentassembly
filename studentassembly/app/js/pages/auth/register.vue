@@ -81,7 +81,7 @@ export default {
       }
     }
   },
-  ready () {
+  created () {
     this.clearForm()
   },
   components: {

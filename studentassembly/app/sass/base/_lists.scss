@@ -53,9 +53,24 @@
   }
 
   .list__options {
-    width: 100%;
-    max-width: 180px;
+    // width: 100%;
+    // max-width: 180px;
+    display: inline-block;
   }
+}
+
+.list__empty {
+  padding: 28px;
+  text-align: center;
+
+  .list__empty-icon {
+    opacity: 0.25;
+  }
+}
+
+.list__results {
+  border-bottom: 1px #eee solid;
+  padding: 10px 28px;
 }
 
 .list__item {

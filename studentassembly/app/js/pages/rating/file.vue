@@ -2,7 +2,7 @@
 section.page__wrapper
   .content__wrapper
     .content__section
-      h1 File a report
+      h1 File a rating
       article.content__main
         .form__wrapper
           form(action="/api/report" method="post" enctype="multipart/form-data")
