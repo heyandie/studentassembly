@@ -46,6 +46,7 @@ const state = {
     category: null,
     school: null,
     text: null,
+    questions: [],
     answers: [],
     files: []
   }
@@ -134,6 +135,7 @@ const mutations = {
     state.view.category = report.category
     state.view.school = report.school
     state.view.text = report.text
+    state.view.questions = JSON.parse(report.questions)
     state.view.answers = report.answers
     state.view.files = report.files
     state.view.is_approved = report.is_approved
