@@ -5,7 +5,7 @@ header.header__wrapper(:class="headerClass")
       a.nav__link.nav--home(v-link="{ name: 'home' }")
         img.nav__logo(src="/static/img/logo-glyph.png" height="32")
       form.nav__search
-        input(type="text" placeholder="Search for reports or people")
+        input(type="text" tabindex="-1" placeholder="Search for reports or people")
 
     .nav.nav--right
       template(v-if="loggedIn")
