@@ -4,4 +4,33 @@
     "fields": {
         "name": "Polytechnic University of the Philippines - Sta. Mesa"
     }
-}]
+},
+{
+    "pk": 2,
+    "model": "report.school",
+    "fields": {
+        "name": "Polytechnic University of the Philippines - Sto. Tomas"
+    }
+}
+{
+    "pk": 3,
+    "model": "report.school",
+    "fields": {
+        "name": "University of the Philippines - Diliman"
+    }
+}
+{
+    "pk": 4,
+    "model": "report.school",
+    "fields": {
+        "name": "University of the Philippines - Los Baños"
+    }
+},
+{
+    "pk": 5,
+    "model": "report.school",
+    "fields": {
+        "name": "University of the Philippines - Manila"
+    }
+}
+]
