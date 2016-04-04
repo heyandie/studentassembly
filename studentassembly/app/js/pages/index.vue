@@ -29,6 +29,15 @@ section.page__wrapper
             p {{ report.text | truncate }}
       aside.content__secondary
         h3 Top staff ratings
+        .list__group
+          a.list__item(
+            v-for="person in staff"
+          )
+            h4
+              span {{ person.name }}
+              br
+              small {{ person.school }}
+            p {{ person.rating }} / 5
 
 section.page__wrapper.page--light
   .content__wrapper
@@ -61,7 +70,7 @@ section.page__wrapper.page--light
             img(src="/static/img/icons/action/ic_timeline_48px.svg" height="40")
           h3 Manage
           p School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!
-
+v-footer
 </template>
 
 <script>
@@ -73,7 +82,19 @@ import Footer from '../components/footer.vue'
 export default {
   data () {
     return {
-      reports: []
+      reports: [],
+      staff: [
+        {
+          name: 'Juan dela Cruz',
+          school: 'PUP Manila',
+          rating: 3
+        },
+        {
+          name: 'Juana dela Cruz',
+          school: 'UP Diliman',
+          rating: 3
+        }
+      ]
     }
   },
   created () {

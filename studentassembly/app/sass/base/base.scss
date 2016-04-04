@@ -4,6 +4,8 @@
 @import "alerts";
 @import "forms";
 @import "lists";
+@import "stats";
+@import "tabs";
 
 html {
   box-sizing: border-box;
@@ -46,12 +48,20 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: 4px;
     vertical-align: middle;
   }
+
+  .header--light {
+    margin-left: 3px;
+    color: #9aa0a5;
+    font-size: 0.85em;
+  }
 }
 
 p {
   margin: 0 0 14px 0;
-  line-height: 1.6;
   word-wrap: break-word;
+  line-height: 1.8;
+  font-size: 15px;
+  color: lighten(#1e2022, 20%);
 
   &:last-child {
     margin-bottom: 0;

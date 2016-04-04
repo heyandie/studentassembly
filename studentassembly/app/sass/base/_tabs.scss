@@ -1,0 +1,33 @@
+.tabs__nav {
+  @include clearfix();
+  position: relative;
+  z-index: 0;
+}
+
+.tab__nav {
+  float: left;
+  padding: 11px 28px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+
+  &.active {
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  }
+  &.active:hover {
+    background-color: white;
+  }
+
+  &:hover {
+    background-color: #f7f7f7;
+  }
+}
+
+.tabs__content {
+  position: relative;
+  z-index: 1;
+
+  .list__group {
+    border-radius: 0 4px 4px 4px;
+  }
+}
