@@ -28,20 +28,17 @@ class ListReportAPIView(APIView):
         filters = {'deleted_at': None}
         if self.request.GET.get('q', None):
             filters['text__icontains'] = self.request.GET.get('q')
-        if self.request.GET.get('category', None):
-            category = Category.objects.get(name__icontains=self.request.GET.get('category'))
+            category = Category.objects.get(name__icontains=self.request.GET.get('q'))
             filters['category'] = category.id
-        if self.request.GET.get('school', None):
-            schools = School.objects.filter(name__icontains=self.request.GET.get('school')).only('id')
+            schools = School.objects.filter(name__icontains=self.request.GET.get('q')).only('id')
             filters['school__in'] = schools
 
         if self.request.GET.get('user', None):
             user_id = UUID(self.request.GET.get('user'))
             filters['user_id'] = user_id
 
-            if not user_id == self.request.user.id:
-                filters['allow_publish'] = True
-
+        else:
+            filters['allow_publish'] = True
 
         # TODO: Filter based on permission to publish report
 
