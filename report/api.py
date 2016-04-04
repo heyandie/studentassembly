@@ -14,6 +14,7 @@ from account.models import User
 from .models import Category, Report, School
 from .serializers import CategorySerializer, ReportSerializer, SchoolSerializer
 
+
 class ListReportAPIView(APIView):
 
     queryset = Report.objects.all()
@@ -56,6 +57,7 @@ class ListReportAPIView(APIView):
         serializer = self.serializer_class(data=queryset, many=True)
         serializer.is_valid(raise_exception=False)
         return Response(serializer.data)
+
 
 class CreateReportAPIView(APIView):
 

@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import UserManager
 
+from report.models import Report
+
 def generate_username():
     while 1:
         from django.conf import settings
@@ -41,6 +43,10 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
+
+    @property
+    def report_count(self):
+        return Report.objects.filter(user_id=self.id).count()
 
 class VerificationToken(models.Model):
     user_id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
