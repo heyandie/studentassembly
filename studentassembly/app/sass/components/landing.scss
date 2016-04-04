@@ -16,7 +16,7 @@
     padding: 100px 0;
   }
   @include media(">tablet") {
-    height: 600px;
+    height: 540px;
     padding: 88px 0;
   }
 
@@ -30,15 +30,17 @@
       line-height: 44px;
     }
     @include media(">tablet") {
+      margin-left: auto;
+      margin-right: auto;
       max-width: 600px;
       font-size: 58px;
-      line-height: 62px;
+      line-height: 60px;
     }
   }
 
   p {
     margin: 0 0 24px 0;
-    font-weight: 400;
+    font-weight: 500;
     letter-spacing: -0.3px;
     color: white;
 
@@ -51,6 +53,8 @@
       font-size: 16px;
     }
     @include media(">tablet") {
+      margin-left: auto;
+      margin-right: auto;
       max-width: 500px;
       line-height: 24px;
       font-size: 18px;
@@ -89,11 +93,13 @@
     position: relative;
     margin: 0 auto;
     flex-basis: $content-width;
-    padding: 24px 12px 0 12px;
 
+    padding: 0 12px;
     opacity: 0;
+    text-align: center;
+
     transform: translateY(100%);
-    animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 600ms forwards;
+    animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 250ms forwards; //600ms delay
 
     @include media("<=tablet") {
       padding-top: 36px;
@@ -103,14 +109,29 @@
 }
 
 .landing__features {
+  $landing-feature-border-color: #fafafa;
+
   overflow: hidden;
 
   .landing__feature {
     @include media(">tablet") {
       float: left;
-      margin-bottom: 4%;
-      margin-right: 4%;
-      width: 48%;
+      width: 50%;
+
+      border-bottom: 1px $landing-feature-border-color solid;
+      padding: 36px;
+    }
+
+    &:nth-child(-n+2) {
+      @include media(">tablet") {
+        border-top: 1px $landing-feature-border-color solid;
+      }
+    }
+
+    &:nth-child(2n+1) {
+      @include media(">tablet") {
+        border-right: 1px $landing-feature-border-color solid;
+      }
     }
 
     &:nth-child(2n) {
@@ -118,6 +139,35 @@
         margin-right: 0;
       }
     }
+  }
+
+  .landing__feature-icon {
+    margin-bottom: 12px;
+    height: 64px;
+    width: 64px;
+
+    background-color: lighten(#ff5f2e, 15%);
+    border-radius: 32px;
+    border: 1px $brand-color solid;
+
+    text-align: center;
+    line-height: 68px;
+    font-size: 0;
+
+    img {
+      filter: invert(100%);
+      vertical-align: middle;
+    }
+  }
+}
+
+.landing__hiw {
+  margin-bottom: 28px;
+  text-align: center;
+
+  p {
+    margin: 0 auto;
+    max-width: 760px;
   }
 }
 

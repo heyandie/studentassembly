@@ -19,7 +19,7 @@ const state = {
 const mutations = {
   [AUTH_LOGIN_SUCCESS] (state, user) {
     state.id = user.user_id
-    state.username = user.username
+    state.username = user.alias
     state.email = user.email
   },
 
