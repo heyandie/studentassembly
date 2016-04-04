@@ -63,6 +63,7 @@ section.page__wrapper.page--light
         h2 FAQs
       aside.content__secondary
 
+v-footer
 </template>
 
 <script>

@@ -13,6 +13,7 @@ const state = {
     name: null,
     mobile: null
   },
+  report_count: 0,
   reports: []
 }
 
@@ -21,6 +22,7 @@ const mutations = {
     state.id = user.user_id
     state.username = user.alias
     state.email = user.email
+    state.report_count = user.report_count
   },
 
   [AUTH_LOGOUT_SUCCESS] (state) {
@@ -38,6 +40,7 @@ const mutations = {
     state.email = profile.email
     state.contact = profile.contact
     state.reports = profile.reports
+    state.report_count = profile.report_count
   },
 
   [USER_RECEIVE_REPORTS] (state, reports) {

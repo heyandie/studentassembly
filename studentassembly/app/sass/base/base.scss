@@ -4,6 +4,8 @@
 @import "alerts";
 @import "forms";
 @import "lists";
+@import "stats";
+@import "tabs";
 
 html {
   box-sizing: border-box;
@@ -45,6 +47,12 @@ h1, h2, h3, h4, h5, h6 {
   img + span {
     margin-left: 4px;
     vertical-align: middle;
+  }
+
+  .header--light {
+    margin-left: 3px;
+    color: #9aa0a5;
+    font-size: 0.85em;
   }
 }
 
