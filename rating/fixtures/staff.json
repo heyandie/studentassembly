@@ -1,9 +1,344 @@
-[{
+[
+{
+    "model": "rating.staff",
+    "pk": "0ea9b5ba-6aa4-4d0b-9af3-50971e5b6336",
+    "fields": {
+        "name": "Juana dela Cruz",
+        "school": 1,
+        "created_at": "2016-04-04T10:24:19.695Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
     "model": "rating.staff",
     "pk": "19c34cac-e378-43f0-bd78-9f72d7fc49dd",
     "fields": {
         "name": "Juan dela Cruz",
         "school": 1,
-        "created_at": "2016-02-22T07:45:06.091Z"
+        "created_at": "2016-02-22T07:45:06.091Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
     }
-}]
+},
+{
+    "model": "rating.staff",
+    "pk": "32347f1f-ff6f-45cf-9c38-2a101f5fd34c",
+    "fields": {
+        "name": "Jacoba Supsup",
+        "school": 1,
+        "created_at": "2016-04-04T10:26:33.752Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "58015d31-69b9-4df8-ab46-92c8b0e4e6ce",
+    "fields": {
+        "name": "Kris Aquino",
+        "school": 1,
+        "created_at": "2016-04-04T10:27:51.006Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "6d1477cc-d389-477e-aa9b-ae1b1e537394",
+    "fields": {
+        "name": "Si Jin Yoo",
+        "school": 1,
+        "created_at": "2016-04-04T10:24:57.091Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "71835377-02fc-4f5a-89c1-238674a7cedb",
+    "fields": {
+        "name": "Diana Meneses",
+        "school": 1,
+        "created_at": "2016-04-04T10:26:58.603Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "89310156-ad3d-4899-81d8-126a0d4671eb",
+    "fields": {
+        "name": "Heart Ocampo",
+        "school": 1,
+        "created_at": "2016-04-04T10:27:29.260Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "99f3ebb9-8eed-4a01-be8a-da80fa0fbcd8",
+    "fields": {
+        "name": "Kim Chee",
+        "school": 1,
+        "created_at": "2016-04-04T10:25:36.849Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "9c90722e-feb2-4344-9167-18d042a8885f",
+    "fields": {
+        "name": "Zhou Fei Xi",
+        "school": 1,
+        "created_at": "2016-04-04T10:27:14.207Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "a6a25fb2-c735-43af-86fb-cacd006adedf",
+    "fields": {
+        "name": "Mo Yeon Kang",
+        "school": 1,
+        "created_at": "2016-04-04T10:25:03.661Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "afff8f97-dd5c-4b85-8368-5dfb9afa7e92",
+    "fields": {
+        "name": "Kim Chi",
+        "school": 1,
+        "created_at": "2016-04-04T10:25:25.767Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "b47ab1b9-a31f-4d41-8ba3-bab472735491",
+    "fields": {
+        "name": "Anna Stella Ramos",
+        "school": 1,
+        "created_at": "2016-04-04T10:25:52.914Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "bac5773a-a485-4d91-b239-46a565015a8a",
+    "fields": {
+        "name": "James Policarpio",
+        "school": 1,
+        "created_at": "2016-04-04T10:25:17.678Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "cde77a93-c4e3-4f8b-ad3f-9009479d787c",
+    "fields": {
+        "name": "Darling I",
+        "school": 1,
+        "created_at": "2016-04-04T10:26:42.887Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "d51624f7-332e-46c6-ad7a-28485accf14d",
+    "fields": {
+        "name": "Rogelio Policarpio",
+        "school": 1,
+        "created_at": "2016-04-04T10:26:03.871Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "d89f4159-a053-49ba-98bc-abf4fb7974ba",
+    "fields": {
+        "name": "Juancho dela Cruz",
+        "school": 1,
+        "created_at": "2016-04-04T10:24:35.524Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "e2588934-2c61-4dcf-976a-0540de121afd",
+    "fields": {
+        "name": "James dela Cruz",
+        "school": 1,
+        "created_at": "2016-04-04T10:24:42.162Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+},
+{
+    "model": "rating.staff",
+    "pk": "f3ae2776-f7b1-42f1-928c-5e4e7414c799",
+    "fields": {
+        "name": "Eric Ocampo",
+        "school": 1,
+        "created_at": "2016-04-04T10:27:41.050Z",
+        "deleted_at": null,
+        "rating": {
+            "communication_skills": 0,
+            "overall": 0,
+            "attendance": 0,
+            "efficiency": 0,
+            "fairness": 0,
+            "accessibility": 0
+        },
+        "votes": 0
+    }
+}
+]
