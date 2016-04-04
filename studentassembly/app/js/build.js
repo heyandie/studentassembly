@@ -7,7 +7,7 @@ import store from './vuex/store'
 import router from './router'
 import { initResource } from './resource'
 
-Vue.config.debug = location.host !== 'studentassembly.herokuapp.com' ? true : false
+Vue.config.debug = location.hostname === 'localhost' ? true : false
 sync(store, router)
 
 Vue.use(VueResource)
