@@ -58,8 +58,10 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
   margin: 0 0 14px 0;
-  line-height: 1.6;
   word-wrap: break-word;
+  line-height: 1.8;
+  font-size: 15px;
+  color: lighten(#1e2022, 20%);
 
   &:last-child {
     margin-bottom: 0;
