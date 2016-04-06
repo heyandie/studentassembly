@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from rest_framework import viewsets
 from rest_framework import mixins
@@ -9,6 +10,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.views import APIView
+import boto3
 
 from account.models import User
 from .models import Category, Report, School
@@ -68,6 +70,8 @@ class CreateReportAPIView(APIView):
         data = request.data
         report_data = data.get('report')
         report_data['user_id'] = request.user.id
+        uploads = report_data['files']
+        del report_data['files']
 
         contact = data.get('contact', {})
         user = User.objects.get(pk=request.user.id)
@@ -87,6 +91,37 @@ class CreateReportAPIView(APIView):
 
         if serializer.is_valid():
             report = serializer.save()
+            if uploads:
+                from os.path import splitext
+                from datetime import datetime
+                report.files = {}
+
+                botoclient = boto3.client('s3',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+
+                for i, f in enumerate(uploads):
+                    ext = splitext(f['name'])[1][1:].strip().lower()
+                    upload_timestamp = int(datetime.now().strftime("%s")) * 1000
+                    filename = 'uploads/report_{}_{}_{}.{}'.format(
+                        report.id,
+                        i,
+                        upload_timestamp,
+                        ext
+                    )
+                    r = botoclient.put_object(
+                        ACL='public-read',
+                        Body=f['blob'],
+                        ContentType=f['type'],
+                        Key=filename,
+                        Bucket='studentassemblyph'
+                    )
+                    if r['ResponseMetadata']['HTTPStatusCode'] == 200:
+                        url = 'http://{}/{}'.format(settings.AWS_S3_CUSTOM_DOMAIN, filename)
+                        report.files[i] = url
+
+                    report.save()
+
             serializer.is_valid(raise_exception=True)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
