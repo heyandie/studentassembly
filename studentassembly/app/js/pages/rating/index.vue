@@ -40,10 +40,9 @@ export default {
     this.$http.get('staff').then(
       function(response) {
         this.staff = response.data
-        console.log(response.data)
       },
       function(response) {
-        console.log(response)
+        console.log('Failed to retrieve staff list.')
       }
     )
   }

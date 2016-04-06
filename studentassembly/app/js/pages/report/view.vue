@@ -11,7 +11,14 @@ section.page__wrapper
               .pull-right
                 small.list__item-remark(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'") {{ report.is_approved ? 'Approved' : 'Not Approved' }}
               span {{ report.category }}
-            h4 {{ report.school }}
+              br
+              span.header--light {{ report.school }}
+            hr
+            template(v-for="(index, question) in report.questions")
+              h4 {{ question.text }}
+              p {{ report.answers[index].text }}
+            hr
+            h4 Details
             p {{ report.text }}
             template(v-if="report.files.length")
               hr

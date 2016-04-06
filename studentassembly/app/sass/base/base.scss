@@ -50,7 +50,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .header--light {
-    margin-left: 3px;
     color: #9aa0a5;
     font-size: 0.85em;
   }
@@ -69,6 +68,7 @@ p {
 
   &.small {
     font-size: 14px;
+    line-height: 1.6;
   }
 }
 

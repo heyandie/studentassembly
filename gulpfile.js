@@ -1,5 +1,9 @@
 var elixir = require('laravel-elixir');
 
+if (elixir.config.production == true) {
+  process.env.NODE_ENV = 'production'
+}
+
 elixir.config.js.browserify.transformers.push({
   name: 'vueify'
 });

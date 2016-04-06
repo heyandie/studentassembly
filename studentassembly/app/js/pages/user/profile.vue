@@ -4,6 +4,7 @@ section.page__wrapper
   .content__wrapper
     .content__section
       aside.content__secondary
+        v-avatar(:username="username")
         h3.u-ta-c Hello, {{ username }}!
         //- a.button.button--small.button--inverted(href="#0") Edit profile
         hr
@@ -81,6 +82,7 @@ import RelativeDate from 'relative-date'
 import Header from '../../components/header.vue'
 import Footer from '../../components/footer.vue'
 import Spinner from '../../components/spinner.vue'
+import Avatar from '../../components/avatar.vue'
 
 import { getProfile, getReports } from '../../vuex/actions/user'
 
@@ -134,7 +136,8 @@ export default {
   components: {
     'v-header': Header,
     'v-footer': Footer,
-    'v-spinner': Spinner
+    'v-spinner': Spinner,
+    'v-avatar': Avatar
   }
 }
 </script>
