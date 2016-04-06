@@ -1,14 +1,14 @@
 <template lang="jade">
-.profile__avatar(v-bind:style="containerStyle") {{ username.charAt(0) }}
+.profile__avatar(v-bind:style="containerStyle") {{ alias.charAt(0) }}
 </template>
 
 <script>
 
 export default {
   props: {
-    username: {
+    alias: {
       type: String,
-      default: 'username'
+      default: 'alias'
     },
     height: {
       type: String,
@@ -40,7 +40,7 @@ export default {
       return (parseInt(this.height.replace('px', '')) / 1.6875) + 'px'
     },
     avatarColor () {
-      return this.stringToColour(this.username)
+      return this.stringToColour(this.alias)
     }
   },
   methods: {

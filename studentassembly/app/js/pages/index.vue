@@ -13,20 +13,7 @@ section.page__wrapper
     .content__section
       article.content__main
         h3 Latest reports
-        .list__group
-          a.list__item(
-            v-for="report in reports"
-            v-link="{ name: 'report-view', params: { id: report.id } }"
-          )
-            h4
-              .pull-right
-                small.list__item-remark(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'")
-                  | {{ report.is_approved ? 'Resolved' : 'Unresolved' }}
-              span {{ report.category }}
-              br
-              small {{ report.school }}
-            p.small {{ report.updated_at | relativeDate }}
-            p {{ report.text | truncate }}
+        v-report-list(v-bind:reports="reports" v-bind:loading="loading" v-bind:filters="false")
       aside.content__secondary
         h3 Top staff ratings
         .list__group
@@ -51,10 +38,6 @@ section.page__wrapper.page--light
             img(src="/static/img/icons/action/ic_assignment_late_48px.svg" height="40")
           h3 Report
           p You deserve to be heard. Report quiet and hard corruption cases in your school and attach evidence via photos and documents.
-        //- .landing__feature
-        //-   img(src="/static/img/icons/action/ic_search_48px.svg" height="40")
-        //-   h2 Search
-        //-   p You can’t protect yourself from what you don’t know. Browse existing reports and ratings using various filters.
         .landing__feature
           .landing__feature-icon
             img(src="/static/img/icons/action/ic_grade_48px.svg" height="40")
@@ -74,15 +57,15 @@ v-footer
 </template>
 
 <script>
-import RelativeDate from 'relative-date'
-
 import Header from '../components/header.vue'
 import Footer from '../components/footer.vue'
+import ReportList from '../components/report-list.vue'
 
 export default {
   data () {
     return {
       reports: [],
+      loading: true,
       staff: [
         {
           name: 'Juan dela Cruz',
@@ -101,30 +84,17 @@ export default {
     this.$http.get('report?limit=5').then(
       function(response) {
         this.reports = response.data
+        this.loading = false
       },
       function(response) {
         console.log('Failed to retrieve published reports.')
       }
     )
   },
-  filters: {
-    truncate (string) {
-      if (string.length > 140)
-        return string.substring(0, 140) + '...'
-      else
-        return string
-    },
-    count (arr) {
-      this.$set('filteredLength', arr.length)
-      return arr
-    },
-    relativeDate (date) {
-      return RelativeDate(Date.parse(date))
-    }
-  },
   components: {
     'v-header': Header,
-    'v-footer': Footer
+    'v-footer': Footer,
+    'v-report-list': ReportList
   }
 }
 </script>

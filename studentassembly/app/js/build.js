@@ -7,7 +7,9 @@ import store from './vuex/store'
 import router from './router'
 import { initResource } from './resource'
 
-Vue.config.debug = location.hostname === 'localhost' ? true : false
+Vue.config.debug = process.env.NODE_ENV !== 'production'
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
+
 sync(store, router)
 
 Vue.use(VueResource)

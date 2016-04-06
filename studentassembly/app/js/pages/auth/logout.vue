@@ -10,12 +10,7 @@ export default {
   route: {
     activate (transition) {
       this.logout()
-
-      let query = ''
-      if (transition.to.query.r === 'expired')
-        query = '?s=expired'
-
-      transition.redirect('/login' + query)
+      transition.redirect('/login')
     }
   }
 }

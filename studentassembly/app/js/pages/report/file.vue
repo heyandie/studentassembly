@@ -49,7 +49,7 @@ section.page__wrapper
                 span Agreeing to publish your report does not guarantee its posting. Student Assembly reserves the right to not publish reports that may be damaging / harmful to others.
                 span
                   | &nbsp;Your post will be anonymously posted as
-                  strong &nbsp;{{ username }}
+                  strong &nbsp;{{ alias }}
                   | .
               .form__radio
                 input(type="radio" name="allow_publish" id="allow_publish_1" value="1" v-on:change="updateAllowPublish")
@@ -107,7 +107,7 @@ export default {
     getters: {
       loading: ({ report }) => report.buttonLoading,
       error: ({ report }) => report.error,
-      username: ({ user }) => user.username,
+      alias: ({ user }) => user.alias,
       schools: ({ report }) => report.schools,
       categories: ({ report }) => report.categories,
       questions: ({ report }) => report.questions,

@@ -1,6 +1,6 @@
 var elixir = require('laravel-elixir');
 
-if (elixir.config.production == true) {
+if (elixir.config.production === true) {
   process.env.NODE_ENV = 'production'
 }
 

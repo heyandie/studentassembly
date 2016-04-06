@@ -97,7 +97,7 @@ router.beforeEach((transition) => {
           timeRemaining = tokenObject.exp - Math.floor(Date.now() / 1000)
       if (timeRemaining < 10) {
         // 10 seconds
-        transition.redirect('/logout?r=expired')
+        transition.redirect('/logout?s=expired')
       }
     }
   }
