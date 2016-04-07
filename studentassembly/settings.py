@@ -55,6 +55,18 @@ DEFAULT_FROM_EMAIL = 'studentassemblyph@gmail.com'
 
 AUTH_USER_MODEL = 'account.User'
 
+from datetime import timedelta
+
+JWT_AUTH = {
+    'JWT_PAYLOAD_GET_USERNAME_HANDLER': 'studentassembly.jwt_custom_handlers.jwt_get_username_from_payload',
+    'JWT_PAYLOAD_HANDLER':'account.api.jwt_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER':'account.api.jwt_response_payload_handler',
+
+    'JWT_EXPIRATION_DELTA': timedelta(hours=3),
+    'JWT_ALLOW_REFRESH': True
+}
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -69,14 +81,6 @@ REST_FRAMEWORK = {
     )
 }
 
-from datetime import timedelta
-
-JWT_AUTH = {
-    'JWT_PAYLOAD_HANDLER':'account.api.jwt_payload_handler',
-    'JWT_RESPONSE_PAYLOAD_HANDLER':'account.api.jwt_response_payload_handler',
-    'JWT_EXPIRATION_DELTA': timedelta(hours=3),
-    'JWT_ALLOW_REFRESH': True,
-}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

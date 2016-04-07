@@ -52,12 +52,10 @@ def jwt_payload_handler(user):
 
     payload = {
         'user_id': str(user.id.hex),
-        'email': user.email,
-        'username': username,
+        'alias': user.username,
+        'report_count': user.report_count,
         'exp': datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
     }
-
-    payload[username_field] = username
 
     # Include original issued at time for a brand new token,
     # to allow token refresh

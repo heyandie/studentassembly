@@ -16,6 +16,15 @@ from account.models import User
 from .models import Category, Report, School
 from .serializers import CategorySerializer, ReportSerializer, SchoolSerializer
 
+def _randomstr():
+    while 1:
+        from django.conf import settings
+        import random, string
+
+        string = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for x in range(20))
+
+        return string
+
 
 class ListReportAPIView(APIView):
 
@@ -87,40 +96,45 @@ class CreateReportAPIView(APIView):
         if name or contact_number:
             user.save()
 
+        if uploads:
+            from os.path import splitext
+            from datetime import datetime
+            report_data['files'] = {}
+            random_string = _randomstr()
+
+            botoclient = boto3.client('s3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+
+            for i, f in enumerate(uploads):
+                ext = splitext(f['name'])[1][1:].strip().lower()
+                upload_timestamp = int(datetime.now().strftime("%s")) * 1000
+
+                if not ('image' in f['type'] or 'pdf' in f['type']):
+                    return Response({'error':'Invalid file type'}, status.HTTP_400_BAD_REQUEST)
+
+                filename = 'uploads/{}_{}_{}.{}'.format(
+                    random_string,
+                    i,
+                    upload_timestamp,
+                    ext
+                )
+                return
+                r = botoclient.put_object(
+                    ACL='public-read',
+                    Body=f['blob'],
+                    ContentType=f['type'],
+                    Key=filename,
+                    Bucket='studentassemblyph'
+                )
+                if r['ResponseMetadata']['HTTPStatusCode'] == 200:
+                    url = 'http://{}/{}'.format(settings.AWS_S3_CUSTOM_DOMAIN, filename)
+                    report_data['files'][i] = url
+
         serializer = ReportSerializer(data=report_data)
 
         if serializer.is_valid():
             report = serializer.save()
-            if uploads:
-                from os.path import splitext
-                from datetime import datetime
-                report.files = {}
-
-                botoclient = boto3.client('s3',
-                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-
-                for i, f in enumerate(uploads):
-                    ext = splitext(f['name'])[1][1:].strip().lower()
-                    upload_timestamp = int(datetime.now().strftime("%s")) * 1000
-                    filename = 'uploads/report_{}_{}_{}.{}'.format(
-                        report.id,
-                        i,
-                        upload_timestamp,
-                        ext
-                    )
-                    r = botoclient.put_object(
-                        ACL='public-read',
-                        Body=f['blob'],
-                        ContentType=f['type'],
-                        Key=filename,
-                        Bucket='studentassemblyph'
-                    )
-                    if r['ResponseMetadata']['HTTPStatusCode'] == 200:
-                        url = 'http://{}/{}'.format(settings.AWS_S3_CUSTOM_DOMAIN, filename)
-                        report.files[i] = url
-
-                    report.save()
 
             serializer.is_valid(raise_exception=True)
 
