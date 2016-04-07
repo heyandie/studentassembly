@@ -7,8 +7,9 @@ import store from './vuex/store'
 import router from './router'
 import { initResource } from './resource'
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devtools = process.env.NODE_ENV !== 'production'
+let env = process.env.NODE_ENV
+Vue.config.debug = env !== 'undefined' && env !== 'production'
+Vue.config.devtools = env !== 'undefined' && env !== 'production'
 
 console.log(Vue.config.debug)
 
