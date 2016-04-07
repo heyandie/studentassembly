@@ -7,11 +7,9 @@ import store from './vuex/store'
 import router from './router'
 import { initResource } from './resource'
 
-let env = process.env.NODE_ENV
-Vue.config.debug = env !== 'undefined' && env !== 'production'
-Vue.config.devtools = env !== 'undefined' && env !== 'production'
+Vue.config.debug = location.hostname === 'localhost'
 
-console.log(Vue.config.debug)
+console.log(Vue.config)
 
 sync(store, router)
 
