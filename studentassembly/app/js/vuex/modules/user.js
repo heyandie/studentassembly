@@ -21,8 +21,6 @@ const mutations = {
     state.id = user.user_id
     state.alias = user.alias
     state.report_count = user.report_count
-
-    console.log(user)
   },
 
   [AUTH_LOGOUT_SUCCESS] (state) {

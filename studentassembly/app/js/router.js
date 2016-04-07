@@ -1,20 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { toTitleCase } from './util'
 
 Vue.use(VueRouter)
-
-function capitalizeFirstLetter(string) {
-  let smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/
-
-  if (!smallWords.test(string))
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  else
-    return string
-}
-
-function toTitleCase(string) {
-  return string.split('-').map((text) => { return capitalizeFirstLetter(text) }).join(' ')
-}
 
 const router = new VueRouter({
   history: true,
@@ -69,6 +57,10 @@ router.map({
     component: require('./pages/rating/index.vue'),
     needAuth: true,
     subRoutes: {
+      '/staff': {
+        name: 'rate-staff',
+        component: require('./pages/rating/staff.vue')
+      },
       '/view/:id': {
         name: 'rate-view',
         component: require('./pages/rating/view.vue')
@@ -82,7 +74,8 @@ router.map({
 
 router.alias({
   '': '/index',
-  '/report': '/report/file'
+  '/report': '/report/file',
+  '/rate': '/rate/staff'
 })
 
 router.beforeEach((transition) => {
@@ -111,7 +104,8 @@ router.beforeEach((transition) => {
 })
 
 router.afterEach((transition) => {
-  document.title = 'Student Assembly - ' + toTitleCase(transition.to.name)
+  let title = transition.to.name || 'page-not-found'
+  document.title = 'Student Assembly - ' + toTitleCase(title)
 })
 
 export default router

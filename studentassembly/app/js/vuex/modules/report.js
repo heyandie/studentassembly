@@ -9,7 +9,6 @@ import {
   REPORT_UPDATE_CONTACT_FIELD,
   REPORT_UPDATE_ATTACHMENT,
   REPORT_SHOW_ERROR,
-  REPORT_CLEAR_VIEW,
   REPORT_RECEIVE_ID,
   REPORT_RECEIVE_REPORT
 } from '../mutation-types'
@@ -40,16 +39,7 @@ const state = {
       allow_publish: 0
     }
   },
-  view: {
-    id: null,
-    is_approved: false,
-    category: null,
-    school: null,
-    text: null,
-    questions: [],
-    answers: [],
-    files: []
-  }
+  view: null
 }
 
 const mutations = {
@@ -117,28 +107,15 @@ const mutations = {
     state.buttonLoading = buttonLoading
   },
 
-  [REPORT_CLEAR_VIEW] (state) {
-    state.view.id = null
-    state.view.category = null
-    state.view.school = null
-    state.view.text = null
-    state.view.answers = []
-    state.view.files = []
-    state.view.is_approved = false
-  },
-
-  [REPORT_RECEIVE_ID] (state, id) {
-    state.view.id = id
+  [REPORT_RECEIVE_ID] (state, reportId) {
+    state.view = {
+      id: reportId
+    }
   },
 
   [REPORT_RECEIVE_REPORT] (state, report) {
-    state.view.category = report.category
-    state.view.school = report.school
-    state.view.text = report.text
+    state.view = report
     state.view.questions = JSON.parse(report.questions)
-    state.view.answers = report.answers
-    state.view.files = report.files
-    state.view.is_approved = report.is_approved
   }
 }
 

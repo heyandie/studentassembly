@@ -93,12 +93,11 @@ section.page__wrapper
               li
                 p.small Name and designation of the people responsible
               li
-                 p.small Date, time, and location of the incident
+                p.small Date, time, and location of the incident
 </template>
 
 <script>
 import Spinner from '../../components/spinner.vue'
-
 import { getProfile } from '../../vuex/actions/user'
 import { getSchools, getCategories, submitReport } from '../../vuex/actions/report'
 
@@ -153,8 +152,6 @@ export default {
         // )
 
         let file = e.target.files[0] || e.dataTransfer.files[0]
-
-        // Don't let >3mb files in
         if (file.size < 3145728) {
           let reader = new FileReader()
           reader.onload = () => {

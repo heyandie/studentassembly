@@ -16,10 +16,8 @@ section.page__wrapper
         v-report-list(v-bind:reports="reports" v-bind:loading="loading" v-bind:filters="false")
       aside.content__secondary
         h3 Top staff ratings
-        .list__group
-          a.list__item(
-            v-for="person in staff"
-          )
+        ul
+          li(v-for="person in staff")
             h4
               span {{ person.name }}
               br

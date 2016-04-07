@@ -13,6 +13,7 @@ section.page__wrapper
               span {{ report.category }}
               br
               span.header--light {{ report.school }}
+            p.small {{ report.updated_at | humanizeDate }}
             hr
             template(v-for="(index, question) in report.questions")
               h4 {{ question.text }}
@@ -22,11 +23,18 @@ section.page__wrapper
             p {{ report.text }}
             template(v-if="report.files.length")
               hr
-              h5 Attachments
+              h4 Attachments
               .list__item-attachment(v-for="file in report.files")
                 a(target="_blank" v-bind:href="file.blob" v-bind:download="file.name")
                   .list__item-attachment-preview(v-bind:style="{ backgroundImage: 'url(' + file.blob + ')' }")
                   span {{ file.name }}
+            hr
+            .button__group
+              .pull-left
+                a.button.button--small(href="#0") Follow
+              .pull-right
+                a.button.button--small.button--facebook(href="#0") Share
+                a.button.button--small.button--twitter(href="#0") Tweet
 </template>
 
 <script>
@@ -42,9 +50,13 @@ export default {
     actions: {
       getReport,
       getID: ({ dispatch, state }) => {
-        dispatch('REPORT_CLEAR_VIEW')
         dispatch('REPORT_RECEIVE_ID', state.route.params.id)
       }
+    }
+  },
+  filters: {
+    humanizeDate (date) {
+      return new Date(date).toString()
     }
   },
   created () {
