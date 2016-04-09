@@ -119,7 +119,6 @@ class CreateReportAPIView(APIView):
                     upload_timestamp,
                     ext
                 )
-                return
                 r = botoclient.put_object(
                     ACL='public-read',
                     Body=f['blob'],
