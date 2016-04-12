@@ -79,15 +79,7 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
         except:
             return Response({'error': 'Staff member does not exist.'}, status.HTTP_400_BAD_REQUEST)
 
-        if not rating_data['values'].get('overall', False):
-            _sum = 0
-            count = 0
-            values = rating_data.get('values')
-            for key in values:
-                _sum += values[key]
-                count += 1
-            rating_data['values']['overall'] = _sum/count
-
+        rating_data['values']['overall'] = rating_data.get('overall_rating', 0)
 
         serializer = self.get_serializer(data=rating_data)
 
@@ -95,6 +87,7 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
             rating = serializer.save()
             if serializer.is_valid(raise_exception=False):
                 Staff.objects.filter(id=rating.staff_id).update(votes=F('votes')+1)
+                Staff.objects.get(pk=rating.staff_id).update_rating()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

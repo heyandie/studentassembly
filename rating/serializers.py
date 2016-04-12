@@ -20,4 +20,6 @@ class StaffSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(StaffSerializer, self).to_representation(instance)
         data['school'] = School.objects.get(pk=data['school']).name
+        data['overall_rating'] = data['rating'].get('overall', 0)
+        del data['rating']['overall']
         return data

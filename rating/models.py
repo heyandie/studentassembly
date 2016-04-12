@@ -4,7 +4,7 @@ import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import JSONField
-
+from django.db import transaction
 
 # Create your models here.
 class Staff(models.Model):
@@ -23,8 +23,9 @@ class Staff(models.Model):
             })
     votes = models.IntegerField(default=0)
 
+    @transaction.atomic
     def update_rating(self):
-        ratings = Rating.objects.get(pk=self.id)
+        ratings = Rating.objects.filter(staff_id=self.id).values('values')
         count = 0
         _sum = {
             'attendance': 0,
@@ -34,14 +35,15 @@ class Staff(models.Model):
             'fairness': 0,
             'overall': 0
         }
+
         for item in ratings:
-            for key in item:
-                _sum[key] += item[key]
-                count += 1
+            for key in item['values']:
+                _sum[key] += item['values'].get(key, 0)
+            count += 1
 
         self.rating = {key: _sum[key]/count for key in _sum}
         self.save()
-        
+
 
 class Rating(models.Model):
     staff_id = models.UUIDField(max_length=40, default=uuid.uuid4)

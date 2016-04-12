@@ -33,7 +33,8 @@ class SubmitRatingTest(APITestCase):
                     'accessibility': 4,
                     'efficiency': 5,
                     'fairness': 3
-                }
+                },
+                'overall_rating': 4
             }
 
         }, HTTP_AUTHORIZATION=auth, format='json')
@@ -47,6 +48,7 @@ class SubmitRatingTest(APITestCase):
         self.assertEqual(staff.votes, 1)
 
 
+
 class StaffTest(APITestCase):
 
     fixtures = ['staff.json', 'schools.json']
@@ -54,6 +56,7 @@ class StaffTest(APITestCase):
     def testRetrieve(self):
         response = self.client.get('/api/staff/19c34cac-e378-43f0-bd78-9f72d7fc49dd')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.data)
 
     def testList(self):
         response = self.client.get('/api/staff')
@@ -62,4 +65,4 @@ class StaffTest(APITestCase):
     def testSearch(self):
         response = self.client.get('/api/staff?name=Juan')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 3)
