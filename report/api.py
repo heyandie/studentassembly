@@ -79,8 +79,10 @@ class CreateReportAPIView(APIView):
         data = request.data
         report_data = data.get('report')
         report_data['user_id'] = request.user.id
-        uploads = report_data['files']
-        del report_data['files']
+        uploads = report_data.get('files', None)
+
+        if 'files' in report_data:
+            del report_data['files']
 
         contact = data.get('contact', {})
         user = User.objects.get(pk=request.user.id)
@@ -134,8 +136,6 @@ class CreateReportAPIView(APIView):
 
         if serializer.is_valid():
             report = serializer.save()
-
-            serializer.is_valid(raise_exception=True)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

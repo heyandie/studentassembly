@@ -56,7 +56,6 @@ class StaffTest(APITestCase):
     def testRetrieve(self):
         response = self.client.get('/api/staff/19c34cac-e378-43f0-bd78-9f72d7fc49dd')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
 
     def testList(self):
         response = self.client.get('/api/staff')

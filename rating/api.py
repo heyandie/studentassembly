@@ -88,7 +88,6 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
             if serializer.is_valid(raise_exception=False):
                 Staff.objects.filter(id=rating.staff_id).update(votes=F('votes')+1)
                 Staff.objects.get(pk=rating.staff_id).update_rating()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
