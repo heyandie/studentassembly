@@ -144,7 +144,7 @@ class CreateReportAPIView(APIView):
 
 class RetrieveReportAPIView(mixins.RetrieveModelMixin,
                             viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (AllowAny,)
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
@@ -152,6 +152,9 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
 
         report = self.get_object()
         serializer = self.serializer_class(report)
+
+        if self.request.user.is_anonymous and not report.allow_publish:
+            return Response({}, status.HTTP_403_FORBIDDEN)
 
         if self.request.user.id == report.user_id or report.allow_publish:
             data = serializer.data
