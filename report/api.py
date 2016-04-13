@@ -34,7 +34,7 @@ class ListReportAPIView(APIView):
     def get_permissions(self):
         if self.request.method == 'POST':
             return [IsAuthenticated()]
-        return [IsAuthenticatedOrReadOnly()]
+        return [AllowAny()]
 
     def filter_queryset(self, queryset):
         filters = {'deleted_at': None}
