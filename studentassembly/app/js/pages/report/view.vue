@@ -1,4 +1,5 @@
 <template lang="jade">
+v-header
 section.page__wrapper
   .content__wrapper
     .content__section
@@ -33,11 +34,16 @@ section.page__wrapper
               .pull-left
                 a.button.button--small(href="#0") Follow
               .pull-right
-                a.button.button--small.button--facebook(href="#0") Share
-                a.button.button--small.button--twitter(href="#0") Tweet
+                a.button.button--small.button--facebook(href="#0")
+                  img.button__icon(src="/static/img/fb-logo-white.png" height="14")
+                  span Share
+                a.button.button--small.button--twitter(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
+                  img.button__icon(src="/static/img/twitter-logo-white.png" height="14")
+                  span Tweet
 </template>
 
 <script>
+import Header from '../../components/header.vue'
 import Spinner from '../../components/spinner.vue'
 import { getReport } from '../../vuex/actions/report'
 
@@ -56,7 +62,7 @@ export default {
   },
   filters: {
     humanizeDate (date) {
-      return new Date(date).toString()
+      return new Date(date).toDateString()
     }
   },
   created () {
@@ -64,6 +70,7 @@ export default {
     this.getReport(this)
   },
   components: {
+    'v-header': Header,
     'v-spinner': Spinner
   }
 }

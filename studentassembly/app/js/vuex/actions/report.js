@@ -46,7 +46,6 @@ export const submitReport = ({ dispatch, state }, context) => {
       state.route.path = '/profile'
     },
     function (response) {
-      console.log(response)
       for (var key in response.data) {
         if (key === 'school') {
           dispatch(types.REPORT_SHOW_ERROR, 'school', response.data[key])

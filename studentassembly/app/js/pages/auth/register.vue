@@ -10,7 +10,7 @@ section.page__wrapper
           a(v-link="{ name: 'login' }") logging in.
       h2 Create an account
       .form__wrapper
-        form
+        form(@submit.prevent="register(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
             input(type="email" name="email" placeholder="University email is highly discouraged." v-bind:value="user.email" @input="updateEmail")
@@ -35,7 +35,7 @@ section.page__wrapper
             .form__error(v-if="error.termsAgree")
               span {{ error.termsAgree }}
           .form__element
-            button(type="submit" @click.prevent="register(this)" v-bind:disabled="loading")
+            button(type="submit" v-bind:disabled="loading")
               span(v-show="!loading") Register
               .button__spinner(v-show="loading")
                 v-spinner(color="#fff" height="6px" width="3px" radius="8px")

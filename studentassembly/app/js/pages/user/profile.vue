@@ -8,9 +8,6 @@ section.page__wrapper
         h3.u-ta-c Hello, {{ alias }}!
         //- a.button.button--small.button--inverted(href="#0") Edit profile
         hr
-        //- h4
-        //-   img(src="/static/img/icons/editor/ic_show_chart_24px.svg" height="18")
-        //-   span Quick stats
         ul.stats
           li.stat
             p.stat__header Resolved

@@ -1,0 +1,24 @@
+.httperror__404 {
+  padding-top: 24px;
+  text-align: center;
+
+  .httperror__message {
+    margin-top: 24px;
+  }
+
+  .eyes, .mouth {
+    opacity: 0.5;
+  }
+
+  .eyes {
+    transform: scale(1.2);
+
+    &:first-child {
+      margin-right: 48px;
+    }
+  }
+
+  .mouth {
+    transform: scaleX(2) scaleY(1.5);
+  }
+}

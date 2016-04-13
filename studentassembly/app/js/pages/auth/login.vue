@@ -19,7 +19,7 @@ section.page__wrapper
 
       h2 Log in
       .form__wrapper
-        form(action="/api/token_auth" method="post")
+        form(@submit.prevent="login(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
             input(type="email" name="email" placeholder="juan@student.ph" v-bind:value="user.email" @input="updateEmail")
@@ -33,7 +33,7 @@ section.page__wrapper
             .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element
-            button(type="submit" @click.prevent="login(this)" v-bind:disabled="loading")
+            button(type="submit" v-bind:disabled="loading")
               span(v-show="!loading") Login
               .button__spinner(v-show="loading")
                 v-spinner(color="#fff" height="6px" width="3px" radius="8px")

@@ -13,7 +13,12 @@ const persistUserState = {
   onMutation ({ type, payload }, state) {
     if (type === types.AUTH_LOGIN_SUCCESS ||
         type === types.USER_RECEIVE_REPORTS) {
-      localStorage.setItem('sa-profile', JSON.stringify(state.user))
+      let user = {
+        id: state.user.id,
+        alias: state.user.alias,
+        report_count: state.user.report_count
+      }
+      localStorage.setItem('sa-profile', JSON.stringify(user))
     }
   }
 }

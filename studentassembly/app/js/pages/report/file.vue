@@ -1,17 +1,16 @@
 <template lang="jade">
+v-header
 section.page__wrapper
   .content__wrapper
     .content__section
       h1 File a report
       article.content__main
         .form__wrapper
-          form(action="/api/report" method="post" enctype="multipart/form-data")
+          form(@submit.prevent="showConfirmModal = true" enctype="multipart/form-data")
             .form__element(:class="error.school ? 'form--empty' : ''")
               .form__label School
               .form__select
-                select(name="school" v-on:change="updateSchool")
-                  option(disabled selected hidden value="0") Choose a school...
-                  option(v-for="school in schools" value="{{ school.id }}") {{ school.name }}
+                v-autocomplete(name="school" placeholder="Find your school..." v-bind:datalist="schools" v-on:value="updateSchool")
               .form__error(v-if="error.school")
                 span {{ error.school }}
             .form__element(:class="error.category ? 'form--empty' : ''")
@@ -24,7 +23,7 @@ section.page__wrapper
                 span {{ error.category }}
             .form__element(v-for="(index, question) in questions")
               .form__label {{ question.text }}
-              input(type="text" name="question-{{ question.id }}" v-bind:value="report.answers[index].text" @input="updateAnswer($event, index)")
+              input(@keydown.enter.prevent="true" type="text" name="question-{{ question.id }}" v-bind:value="report.answers[index].text" @input="updateAnswer($event, index)")
             .form__element(:class="error.text ? 'form--empty' : ''")
               .form__label Report Details
               textarea(rows="6" name="text" placeholder="State the corruption case in detail." v-bind:value="report.text" @input="updateText")
@@ -75,7 +74,7 @@ section.page__wrapper
                 input(type="text" name="name" placeholder="Name" v-bind:value="contact.name" @input="updateName")
                 input(type="text" name="mobile_number" placeholder="Mobile Number" v-bind:value="contact.contact_number" @input="updateContact")
             .form__element
-              button(type="submit" @click.prevent="submitReport(this)" v-bind:disabled="loading")
+              button(type="submit" v-bind:disabled="loading")
                 span(v-show="!loading") Submit
                 .button__spinner(v-show="loading")
                   v-spinner(color="#fff" height="6px" width="3px" radius="8px")
@@ -94,9 +93,19 @@ section.page__wrapper
                 p.small Name and designation of the people responsible
               li
                 p.small Date, time, and location of the incident
+
+v-modal(:show.sync="showConfirmModal")
+  div(slot="content" style="width:300px;")
+    i.modal-close.icon.ion-android-close(@click="showConfirmModal = false")
+    h4 Do you want to submit the report?
+    p.small You will not be able to edit the report, but you can add updates.
+    button(type="submit" @click.prevent="submitThenClose()") Submit report
 </template>
 
 <script>
+import Header from '../../components/header.vue'
+import Modal from '../../components/modal.vue'
+import AutoComplete from '../../components/autocomplete.vue'
 import Spinner from '../../components/spinner.vue'
 import { getProfile } from '../../vuex/actions/user'
 import { getSchools, getCategories, submitReport } from '../../vuex/actions/report'
@@ -118,8 +127,8 @@ export default {
       getSchools,
       getCategories,
       submitReport,
-      updateSchool: ({ dispatch }, e) => {
-        dispatch('REPORT_UPDATE_REPORT_FIELD', 'school', parseInt(e.target.value))
+      updateSchool: ({ dispatch }, value) => {
+        dispatch('REPORT_UPDATE_REPORT_FIELD', 'school', value)
       },
       updateCategory: ({ dispatch }, e) => {
         dispatch('REPORT_UPDATE_REPORT_FIELD', 'category', parseInt(e.target.value))
@@ -132,25 +141,6 @@ export default {
         dispatch('REPORT_UPDATE_REPORT_FIELD', 'text', e.target.value)
       },
       updateAttachment: ({ dispatch, state }, e, index) => {
-        // function imgLoad(file) {
-        //   return new Promise((resolve, reject) => {
-        //     let reader = new FileReader()
-        //     reader.onload = () => {
-        //       file.blob = reader.result
-        //       resolve(file)
-        //     }
-        //     reader.readAsDataURL(file)
-        //   })
-        // }
-        // imgLoad(file).then(
-        //   (response) => {
-        //     dispatch('REPORT_UPDATE_ATTACHMENT', parseInt(index), response)
-        //   },
-        //   (error) => {
-        //     console.log(error)
-        //   }
-        // )
-
         let file = e.target.files[0] || e.dataTransfer.files[0]
         if (file.size < 3145728) {
           let reader = new FileReader()
@@ -187,7 +177,16 @@ export default {
       }
     }
   },
+  data () {
+    return {
+      showConfirmModal: false
+    }
+  },
   methods: {
+    submitThenClose () {
+      this.showConfirmModal = false
+      this.submitReport(this)
+    },
     filesLengthLessThan (index) {
       return this.report.files.length < index
     },
@@ -202,6 +201,9 @@ export default {
     this.getCategories(this)
   },
   components: {
+    'v-header': Header,
+    'v-modal': Modal,
+    'v-autocomplete': AutoComplete,
     'v-spinner': Spinner
   }
 }

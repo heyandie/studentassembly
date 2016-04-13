@@ -41,9 +41,18 @@
   }
 
   &.button--facebook {
-    background-color: #3e5b98;
+    background-color: #3b5998;
   }
   &.button--twitter {
-    background-color: #4da7de;
+    background-color: #1b95e0;
+  }
+
+  .button__icon {
+    margin-right: 6px;
+    vertical-align: middle;
+
+    & + span {
+      vertical-align: middle;
+    }
   }
 }

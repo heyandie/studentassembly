@@ -39,7 +39,9 @@ router.map({
   },
   '/report': {
     name: 'report',
-    component: require('./pages/report/index.vue'),
+    component: {
+      template: "<router-view></router-view>"
+    },
     subRoutes: {
       '/file': {
         name: 'file-a-report',
@@ -54,8 +56,10 @@ router.map({
   },
   '/rate': {
     name: 'rate',
-    component: require('./pages/rating/index.vue'),
     needAuth: true,
+    component: {
+      template: "<router-view></router-view>"
+    },
     subRoutes: {
       '/staff': {
         name: 'rate-staff',
@@ -88,10 +92,14 @@ router.beforeEach((transition) => {
     else {
       let tokenObject = JSON.parse(atob(token.split('.')[1])),
           timeRemaining = tokenObject.exp - Math.floor(Date.now() / 1000)
+
       if (timeRemaining < 10) {
-        // 10 seconds
         transition.redirect('/logout?s=expired')
       }
+
+      // if (timeRemaining > 10 && timeRemaining < 300) {
+      //   transition.redirect('/refresh_token')
+      // }
     }
   }
   if (transition.to.guest) {

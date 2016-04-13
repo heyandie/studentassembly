@@ -8,10 +8,6 @@ import {
 const state = {
   id: null,
   alias: null,
-  contact: {
-    name: null,
-    mobile: null
-  },
   report_count: 0,
   reports: []
 }
@@ -26,21 +22,20 @@ const mutations = {
   [AUTH_LOGOUT_SUCCESS] (state) {
     state.id = null
     state.alias = null
-    state.contact.name = null
-    state.contact.mobile = null
+    state.report_count = 0
     state.reports = []
   },
 
   [USER_RECEIVE_PROFILE] (state, profile) {
     state.id = profile.id
     state.alias = profile.alias
-    state.contact = profile.contact
     state.reports = profile.reports
     state.report_count = profile.report_count
   },
 
   [USER_RECEIVE_REPORTS] (state, reports) {
     state.reports = reports
+    state.report_count = reports.length
   }
 }
 

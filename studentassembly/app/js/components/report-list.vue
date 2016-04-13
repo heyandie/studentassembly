@@ -2,10 +2,11 @@
 .list__group
   .spinner__wrapper(v-if="loading")
     v-spinner
+  h4.u-ta-c.u-pd-b-24(v-if="loading") Loading your reports...
   template(v-if="!loading")
     .list__filters(v-if="filters")
       .list__search.pull-left
-        input(type="text" placeholder="Search by school or category" v-model="searchKey")
+        input(type="text" placeholder="Search by school or category" v-model="searchKey" @input="resetPagination")
       .list__options.pull-right
         .form__select
           select(name="sort-by")
@@ -22,7 +23,7 @@
       .list__results
         h5 {{ filteredLength }} {{ filteredLength | pluralize 'result' }}
     a.list__item(
-      v-for="report in reports | filterBy searchKey in 'category' 'school' | count"
+      v-for="report in reports | filterBy searchKey in 'category' 'school' | count | limitBy limit offset"
       v-link="{ name: 'report-view', params: { id: report.id } }"
     )
       h4
@@ -34,6 +35,14 @@
         small {{ report.school }}
       p.small {{ report.updated_at | relativeDate | capitalize }}
       p {{ report.text | truncate }}
+
+    .list__pagination(v-if="moreThanLimit")
+      .list__page(
+        v-for="i in reports.length / limit"
+        v-bind:class="i === currentPage ? 'list__page--current' : ''"
+        @click="goToPage(i)"
+      )
+        | {{ i + 1 }}
 </template>
 
 <script>
@@ -44,13 +53,33 @@ export default {
   props: ['loading', 'reports', 'filters'],
   data () {
     return {
+      limit: 10,
+      lastPage: 0,
+      currentPage: 0,
       searchKey: '',
       filteredLength: null
     }
   },
+  methods: {
+    resetPagination (e) {
+      if (e.target.value.length === 1)
+        this.lastPage = this.currentPage
+      this.currentPage = e.target.value.length > 0 ? 0 : this.lastPage
+    },
+    goToPage (page) {
+      this.currentPage = page
+      window.scrollTo(0, 0)
+    }
+  },
   computed: {
+    offset () {
+      return this.limit * this.currentPage
+    },
     filteredAndNonEmpty () {
       return this.filteredLength && this.searchKey !== ''
+    },
+    moreThanLimit () {
+      return this.reports.length > this.limit && this.searchKey === ''
     }
   },
   filters: {

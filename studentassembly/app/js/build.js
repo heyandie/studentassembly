@@ -8,9 +8,6 @@ import router from './router'
 import { initResource } from './resource'
 
 Vue.config.debug = location.hostname === 'localhost'
-
-console.log(Vue.config)
-
 sync(store, router)
 
 Vue.use(VueResource)
