@@ -153,7 +153,7 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
         report = self.get_object()
         serializer = self.serializer_class(report)
 
-        if self.request.user.is_anonymous and not report.allow_publish:
+        if self.request.user.is_anonymous() and not report.allow_publish:
             return Response({}, status.HTTP_403_FORBIDDEN)
 
         if self.request.user.id == report.user_id or report.allow_publish:
