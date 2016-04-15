@@ -48,6 +48,15 @@ class RetrieveStaffAPIView(mixins.RetrieveModelMixin,
         serializer = self.serializer_class(staff, context={'request': request})
 
         data = serializer.data
+
+        ratings = Rating.objects.filter(staff_id=staff.id)
+        if request.user.is_authenticated():
+            user_rating = ratings.filter(user_id=request.user.id).all()[0]
+            data['user_rating'] = RatingSerializer(user_rating).data
+            ratings = ratings.exclude(user_id=request.user.id)
+
+        ratings = RatingSerializer(ratings, many=True).data
+        data['ratings'] = ratings
         return Response(data)
 
 
