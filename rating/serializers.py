@@ -10,6 +10,10 @@ class RatingSerializer(serializers.ModelSerializer):
         read_only_fields = ('created_at', 'deleted_at')
         exclude = ('is_approved',)
 
+    def to_representation(self, instance):
+        data = super(RatingSerializer, self).to_representation(instance)
+        data['staff_name'] = Staff.objects.get(pk=data['staff_id']).name
+        return data
 
 class StaffSerializer(serializers.ModelSerializer):
 

@@ -45,9 +45,11 @@ class SubmitRatingTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/staff/'+str(staff.id), HTTP_AUTHORIZATION=auth)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response = self.client.get('/api/rating?user='+str(rating.user_id), HTTP_AUTHORIZATION=auth)
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class StaffTest(APITestCase):
@@ -56,7 +58,6 @@ class StaffTest(APITestCase):
 
     def testRetrieve(self):
         response = self.client.get('/api/staff/19c34cac-e378-43f0-bd78-9f72d7fc49dd')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def testList(self):

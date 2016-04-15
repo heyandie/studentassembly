@@ -66,13 +66,24 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
     serializer_class = RatingSerializer
 
     def get_permissions(self):
-        if self.request.method == 'POST':
+        if self.request.method == 'POST' or self.request.GET.get('user', None):
             return [IsAuthenticated()]
 
         return [IsAuthenticatedOrReadOnly()]
 
+    def filter_queryset(self, queryset):
+        filters = {'deleted_at': None}
+        if self.request.GET.get('user', None):
+            filters['user_id'] = self.request.GET.get('user')
+        return queryset.filter(**filters)
+
     def list(self, request):
-        queryset = self.get_queryset()
+
+        if not self.request.GET.get('user', None) == str(request.user.id):
+            return Response({}, status.HTTP_403_FORBIDDEN)
+
+        queryset = self.queryset
+        queryset = self.filter_queryset(queryset)
         serializer = self.serializer_class(data=queryset, many=True)
         serializer.is_valid(raise_exception=False)
         return Response(serializer.data)
