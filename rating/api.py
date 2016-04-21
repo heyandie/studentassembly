@@ -116,8 +116,7 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class RetrieveRatingAPIView(mixins.RetrieveModelMixin,
-                            viewsets.GenericViewSet):
+class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
@@ -129,3 +128,20 @@ class RetrieveRatingAPIView(mixins.RetrieveModelMixin,
 
         data = serializer.data
         return Response(data)
+
+    def update(self, request, *args, **kwargs):
+
+        rating = self.get_object()
+        if not rating.user_id == self.request.user.id:
+            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        else:
+            data = request.data
+            serializer = self.get_serializer(rating, data=data, partial=True)
+            if serializer.is_valid():
+                self.perform_update(serializer)
+            rating = self.get_object()
+            serializer = self.get_serializer(rating)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def destroy():
+        pass

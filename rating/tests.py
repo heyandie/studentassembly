@@ -24,7 +24,7 @@ class SubmitRatingTest(APITestCase):
 
         auth = 'JWT {0}'.format(self.token)
         staff = Staff.objects.latest('id')
-        response = self.client.post('/api/rating/', {
+        response = self.client.post('/api/rating', {
             'rating': {
                 'staff_id': staff.id,
                 'values': {
@@ -48,9 +48,17 @@ class SubmitRatingTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/rating?user='+str(rating.user_id), HTTP_AUTHORIZATION=auth)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response = self.client.patch('/api/rating/'+str(rating.id), {
+            'values' : {
+                'attendance': 6,
+                'communication_skills': 4,
+                'accessibility': 4,
+                'efficiency': 5,
+                'fairness': 3
+            }
+        }, format='json', HTTP_AUTHORIZATION=auth)
 
 class StaffTest(APITestCase):
 
