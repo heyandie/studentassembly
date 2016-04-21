@@ -29,6 +29,7 @@
 
     height: 100vh;
     overflow-y: auto;
+    padding-bottom: 150px;
 
     cursor: pointer;
     cursor: -webkit-zoom-out;
@@ -37,7 +38,6 @@
 
   .modal-container {
     position: relative;
-    margin-bottom: 250px;
 
     border-radius: 4px;
     background-color: #fff;

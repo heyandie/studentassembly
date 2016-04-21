@@ -2,8 +2,8 @@
 @import "fonts";
 
 @import "alerts";
-@import "autocomplete";
 @import "buttons";
+@import "dropdown";
 @import "errors";
 @import "forms";
 @import "lists";
@@ -31,10 +31,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 14px 0;
   word-wrap: break-word;
   color: #1e2022;
+
   font-weight: 600;
+  line-height: 1.2;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -55,8 +56,15 @@ h1, h2, h3, h4, h5, h6 {
 
   .header--light {
     color: #9aa0a5;
-    font-size: 0.85em;
+    font-size: 0.75em;
   }
+}
+
+h1, h2, h3 {
+  margin: 0 0 14px 0;
+}
+h4, h5, h6 {
+  margin: 0 0 6px 0;
 }
 
 p {
@@ -71,6 +79,7 @@ p {
   }
 
   &.small {
+    margin-bottom: 10px;
     font-size: 14px;
     line-height: 1.6;
   }
@@ -81,6 +90,12 @@ a {
 
   &:visited {
     color: #6a60a9;
+  }
+}
+
+small {
+  &.light {
+    color: #9aa0a5;
   }
 }
 
@@ -110,9 +125,6 @@ hr {
 
 table {
   width: 100%;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
   tr {
     border-bottom: 1px #eee solid;

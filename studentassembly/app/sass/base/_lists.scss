@@ -150,10 +150,22 @@
 }
 
 .list__item-attachment {
-  margin-bottom: 10px;
+  float: left;
+  margin: 5px 0;
+
+  @include media("<=tablet") {
+    width: 49%;
+    margin-right: 2%;
+  }
+
+  @include media(">tablet") {
+    width: 32%;
+    margin-right: 2%;
+  }
 
   a {
     display: block;
+    text-align: center;
     text-decoration: none;
     color: #1e2022;
 
@@ -167,22 +179,42 @@
     font-size: 14px;
   }
 
-  &:last-child {
-    margin-bottom: 0;
+  &:nth-child(2n) {
+    @include media("<=tablet") {
+      margin-right: 0%;
+    }
+  }
+  &:nth-child(3n) {
+    @include media(">tablet") {
+      margin-right: 0%;
+    }
+  }
+
+  &:nth-last-child(-n+2) {
+    @include media("<=tablet") {
+      margin-bottom: 0;
+    }
+  }
+  &:nth-last-child(-n+3) {
+    @include media(">tablet") {
+      margin-bottom: 0;
+    }
   }
 
   .list__item-attachment-preview {
-    display: inline-block;
-    margin-right: 12px;
-    vertical-align: middle;
-    height: 48px;
-    width: 96px;
+    margin-bottom: 12px;
+    height: 108px;
+    width: 100%;
 
     border: 1px #eee solid;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
   }
+}
+
+.list__item-date {
+  color: #aaa;
 }
 
 .list__item-remark {

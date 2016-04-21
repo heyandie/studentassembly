@@ -9,6 +9,8 @@
 @import "components/landing";
 @import "components/about";
 
+@import "utilities";
+
 .page__wrapper {
   // padding-top: 78px;
   //
@@ -19,6 +21,10 @@
   &.page--light {
     background-color: #fff;
     border-top: 1px #eee solid;
+  }
+
+  &.page--min-height {
+    min-height: 100vh;
   }
 }
 
@@ -33,7 +39,7 @@
 }
 
 .content__section {
-  overflow: hidden;
+  @include clearfix();
   padding: 36px 12px;
 
   .content--additional-info {
@@ -89,20 +95,4 @@
 .pull-left {
   @include clearfix();
   float: left;
-}
-
-.u-mg-t-0 {
-  margin-top: 0;
-}
-
-.u-pd-b-24 {
-  padding-bottom: 24px;
-}
-
-.u-ta-c {
-  text-align: center;
-}
-
-.u-cur-p {
-  cursor: pointer;
 }

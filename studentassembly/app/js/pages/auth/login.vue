@@ -1,6 +1,5 @@
 <template lang="jade">
-v-header
-section.page__wrapper
+section.page__wrapper.page--min-height
   .content__wrapper.content--small
     .content__section
       .alert__wrapper.alert--error(v-if="error.verify")
@@ -43,8 +42,6 @@ section.page__wrapper
 </template>
 
 <script>
-import Header from '../../components/header.vue'
-import Footer from '../../components/footer.vue'
 import Spinner from '../../components/spinner.vue'
 
 import { login } from '../../vuex/actions/auth'
@@ -74,8 +71,6 @@ export default {
     this.clearForm()
   },
   components: {
-    'v-header': Header,
-    'v-footer': Footer,
     'v-spinner': Spinner
   }
 }

@@ -1,0 +1,67 @@
+.u-cf {
+  @include clearfix();
+}
+
+.u-pos-rel {
+  position: relative;
+}
+
+.u-div-180 {
+  @include media("<=tablet") {
+    height: 120px;
+  }
+  @include media(">tablet") {
+    height: 180px;
+  }
+}
+
+.u-bg-img {
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+}
+.u-bg-c-brand {
+  background-color: $brand-color;
+}
+.u-bg-c-ikb {
+  background-color: $ikb;
+}
+
+.u-br-4 {
+  border-radius: 4px;
+}
+
+.u-c-white {
+  color: white;
+}
+
+.u-mg-t-0 {
+  margin-top: 0;
+}
+.u-mg-b-0 {
+  margin-bottom: 0;
+}
+.u-mg-b-4 {
+  margin-bottom: 4px;
+}
+.u-mg-b-24 {
+  margin-bottom: 24px;
+}
+
+.u-pd-b-24 {
+  padding-bottom: 24px;
+}
+
+.u-ta-c {
+  text-align: center;
+}
+
+.u-cur-p {
+  cursor: pointer;
+}
+
+@each $mg in 100, 120, 140 {
+  .u-mg-t-#{$mg}-n {
+    margin-top: -#{$mg}px;
+  }
+}

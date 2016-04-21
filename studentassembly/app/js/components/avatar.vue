@@ -17,12 +17,20 @@ export default {
     width: {
       type: String,
       default: '54px'
+    },
+    inline: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     containerStyle () {
+      let margin = this.inline ? '0 4px 0 0' : '0 auto 12px auto',
+          display = this.inline ? 'inline-block' : ''
+
       return {
-        margin: '0 auto 12px auto',
+        display: display,
+        margin: margin,
         height: this.height,
         width: this.width,
         backgroundColor: this.avatarColor,
@@ -37,7 +45,7 @@ export default {
       }
     },
     fontSize () {
-      return (parseInt(this.height.replace('px', '')) / 1.6875) + 'px'
+      return Math.floor(parseInt(this.height.replace('px', '')) / 1.6875) + 'px'
     },
     avatarColor () {
       return this.stringToColour(this.alias)

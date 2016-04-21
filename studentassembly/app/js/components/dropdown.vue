@@ -1,5 +1,11 @@
 <template lang="jade">
-input(@keydown.enter.prevent="true" type="text" v-bind:name="name" v-bind:placeholder="placeholder")
+input(
+  type="text"
+  v-bind:name="name"
+  v-bind:placeholder="placeholder"
+  @keydown.enter.prevent="true"
+  @input="dispatchIfEmpty"
+)
 </template>
 
 <script>
@@ -37,10 +43,8 @@ export default {
         source: (term, suggest) => {
           term = term.toLowerCase()
           let matches = []
-          for (let i = 0; i < list.length; i++) {
-            if (~list[i].name.toLowerCase().indexOf(term))
-              matches.push(list[i])
-          }
+          for (let i = 0; i < list.length; i++)
+            if (~list[i].name.toLowerCase().indexOf(term)) matches.push(list[i])
           suggest(matches)
         },
         renderItem: (item, search) => {
@@ -52,6 +56,12 @@ export default {
           that.$dispatch('value', parseInt(item.getAttribute('data-id')))
         }
       })
+    }
+  },
+  methods: {
+    dispatchIfEmpty (e) {
+      if (e.target.value.length < 1)
+        this.$dispatch('value', null)
     }
   },
   beforeDestroy () {

@@ -1,11 +1,9 @@
 <template lang="jade">
-v-header(header-class="header--landing")
 section.page__wrapper
   .landing__wrapper
     //- .landing__overlay
     .landing__content
       h1 Fight corruption in your university.
-      //- p Student Assembly empowers students to increase transparency and accountability on their schools.
       p Student Assembly is an anonymous reporting platform that aims to reduce corruption in universities.
       a.button(v-link="{ name: 'report' }") File a Report
       a.button.button--inverted(href="#how-it-works") Learn more
@@ -51,12 +49,9 @@ section.page__wrapper.page--light
             img(src="/static/img/icons/action/ic_timeline_48px.svg" height="40")
           h3 Manage
           p School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!
-v-footer
 </template>
 
 <script>
-import Header from '../components/header.vue'
-import Footer from '../components/footer.vue'
 import ReportList from '../components/report-list.vue'
 
 export default {
@@ -90,8 +85,6 @@ export default {
     )
   },
   components: {
-    'v-header': Header,
-    'v-footer': Footer,
     'v-report-list': ReportList
   }
 }

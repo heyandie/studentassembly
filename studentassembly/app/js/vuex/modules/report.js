@@ -9,22 +9,22 @@ import {
   REPORT_UPDATE_CONTACT_FIELD,
   REPORT_UPDATE_ATTACHMENT,
   REPORT_SHOW_ERROR,
+  REPORT_CLEAR_ERRORS,
   REPORT_RECEIVE_ID,
   REPORT_RECEIVE_REPORT
 } from '../mutation-types'
 
-const state = {
-  buttonLoading: false,
-  schools: [],
-  categories: [],
-  questions: [],
-  error: {
+function defaultReportErrors () {
+  return {
     school: null,
     category: null,
     text: null,
     attachment: null
-  },
-  request: {
+  }
+}
+
+function defaultReportRequest () {
+  return {
     contact: {
       allow_contact: 0,
       name: null,
@@ -38,7 +38,16 @@ const state = {
       files: [],
       allow_publish: 0
     }
-  },
+  }
+}
+
+const state = {
+  buttonLoading: false,
+  schools: [],
+  categories: [],
+  questions: [],
+  error: defaultReportErrors(),
+  request: defaultReportRequest(),
   view: null
 }
 
@@ -48,20 +57,7 @@ const mutations = {
     state.schools = []
     state.categories = []
     state.questions = []
-
-    state.request.contact = {
-      allow_contact: 0,
-      name: null,
-      contact_number: null
-    }
-    state.request.report = {
-      category: null,
-      school: null,
-      text: null,
-      answers: [],
-      files: [],
-      allow_publish: 0
-    }
+    state.request.contact = defaultReportRequest()
   },
 
   [REPORT_RECEIVE_SCHOOLS] (state, schools) {
@@ -73,8 +69,8 @@ const mutations = {
   },
 
   [REPORT_UPDATE_QUESTIONS] (state) {
-    state.questions = JSON.parse(state.categories[state.request.report.category - 1].questions)
-
+    let qid = state.request.report.category
+    state.questions = qid ? JSON.parse(state.categories[qid - 1].questions) : []
     for (let i = 0; i < state.questions.length; i++) {
       state.request.report.answers.$set(i, {
         id: state.questions[i].id,
@@ -101,6 +97,10 @@ const mutations = {
 
   [REPORT_SHOW_ERROR] (state, type, message) {
     state.error[type] = message
+  },
+
+  [REPORT_CLEAR_ERRORS] (state) {
+    state.error = defaultReportErrors()
   },
 
   [BUTTON_SUBMIT_LOADING] (state, buttonLoading) {

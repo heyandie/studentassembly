@@ -7,11 +7,11 @@ export const register = ({ dispatch, state }, context) => {
   if (state.auth.user.password === state.auth.user.passwordRepeat) {
     if (state.auth.termsAgree) {
       context.$http.post('register', state.auth.user).then(
-        function(response) {
+        (response) => {
           dispatch(types.BUTTON_SUBMIT_LOADING, false)
           dispatch(types.AUTH_REGISTER_SUCCESS)
         },
-        function(response) {
+        (response) => {
           for (var key in response.data) {
             if (key === 'email') {
               dispatch(types.AUTH_SHOW_ERROR, 'email', response.data[key])
@@ -40,13 +40,13 @@ export const login = ({ dispatch, state }, context) => {
   dispatch(types.BUTTON_SUBMIT_LOADING, true)
 
   context.$http.post('token_auth', state.auth.user).then(
-    function(response) {
+    (response) => {
       var user = JSON.parse(atob(response.data.token.split('.')[1]))
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
       dispatch(types.AUTH_LOGIN_SUCCESS, user)
       state.route.path = '/profile'
     },
-    function(response) {
+    (response) => {
       for (var key in response.data) {
         if (key === 'non_field_errors') {
           dispatch(types.AUTH_SHOW_ERROR, 'email', response.data[key])

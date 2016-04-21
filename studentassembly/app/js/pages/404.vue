@@ -1,6 +1,5 @@
 <template lang="jade">
-v-header
-section.page__wrapper
+section.page__wrapper.page--min-height
   .content__wrapper
     .content__section
       .httperror__404
@@ -9,19 +8,10 @@ section.page__wrapper
         br
         img.mouth(src="/static/img/icons/content/ic_remove_48px.svg")
         h2.httperror__message Oops, this page doesn't exist!
-        p
-          | Go to&nbsp;
-          a(v-link="{ name: 'profile' }") my profile
+        a.button.button--small(v-link="{ name: 'home' }") Go home
 </template>
 
 <script>
-import Header from '../components/header.vue'
-import Footer from '../components/footer.vue'
-
 export default {
-  components: {
-    'v-header': Header,
-    'v-footer': Footer
-  }
 }
 </script>

@@ -1,6 +1,5 @@
 <template lang="jade">
-v-header
-section.page__wrapper
+section.page__wrapper.page--min-height
   .content__wrapper
     .content__section
       aside.content__secondary
@@ -37,16 +36,12 @@ section.page__wrapper
           .tabs__content
             .tab__content(v-if="activeTab === 'reports'")
               v-report-list(v-bind:reports="reports" v-bind:loading="loading" v-bind:filters="true")
-//- v-footer
 </template>
 
 <script>
-import Header from '../../components/header.vue'
-import Footer from '../../components/footer.vue'
 import ReportList from '../../components/report-list.vue'
 import Avatar from '../../components/avatar.vue'
-
-import { getProfile, getReports } from '../../vuex/actions/user'
+import { getReports } from '../../vuex/actions/user'
 
 export default {
   vuex: {
@@ -57,7 +52,6 @@ export default {
       loading: ({ report }) => report.buttonLoading
     },
     actions: {
-      getProfile,
       getReports
     }
   },
@@ -67,7 +61,6 @@ export default {
     }
   },
   created () {
-    this.getProfile()
     this.getReports(this)
   },
   computed: {
@@ -79,8 +72,6 @@ export default {
     }
   },
   components: {
-    'v-header': Header,
-    'v-footer': Footer,
     'v-report-list': ReportList,
     'v-avatar': Avatar
   }

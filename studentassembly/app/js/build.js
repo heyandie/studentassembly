@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import { sync } from 'vuex-router-sync'
 
 import App from './app.vue'
@@ -9,8 +8,6 @@ import { initResource } from './resource'
 
 Vue.config.debug = location.hostname === 'localhost'
 sync(store, router)
-
-Vue.use(VueResource)
-initResource(Vue)
+initResource()
 
 router.start(App, '#app')

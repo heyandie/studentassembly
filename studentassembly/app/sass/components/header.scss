@@ -1,15 +1,6 @@
 .header__wrapper {
   background-color: #fff; //$brand-color;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.15);
-
-  &.header--landing {
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // right: 0;
-    // z-index: 100;
-    // background-color: #fff; // transparent; // #fdedc7; // doordash
-  }
 }
 
 .nav__wrapper {
@@ -47,6 +38,8 @@
   font-weight: 500;
   text-decoration: none;
 
+  cursor: pointer;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-smoothing: antialiased;
@@ -57,13 +50,10 @@
 
   &:hover {
     background-color: #f4f7f7;
-    // position: absolute;
-    // bottom: 8px;
-    // left: 0;
-    // height: 1px;
-    // width: 100%;
-    // background-color: rgba(#1e2022, 0.75);
-    // content: '';
+
+    .nav__link-menu {
+      display: block;
+    }
   }
 
   &.nav--home {
@@ -71,6 +61,43 @@
 
     &:hover {
       background-color: transparent;
+    }
+  }
+
+  img {
+    vertical-align: middle;
+  }
+}
+
+.nav__link-menu {
+  display: none;
+  position: absolute;
+  top: 90%;
+  right: -8px;
+  z-index: 10;
+
+  min-width: 150px;
+
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.09);
+
+  .nav__link-menu-item {
+    display: block;
+    padding: 14px 18px;
+    border-bottom: 1px #eee solid;
+
+    font-size: 14px;
+    text-decoration: none;
+    color: #6E7783;
+    line-height: 1;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: #f4f7f7;
     }
   }
 }

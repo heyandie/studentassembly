@@ -24,6 +24,30 @@ input[type="password"] {
   }
 }
 
+input[data-tooltip] {
+  position: relative;
+
+  &:hover::before {
+    display: block;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: -50%;
+
+    content: attr(data-tooltip);
+
+    background-color: rgba(#1e2022, 0.85);
+    padding: 8px;
+    border-radius: 3px;
+
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    line-height: 12px;
+    white-space: nowrap;
+  }
+}
+
 textarea {
   display: block;
   width: 100%;
@@ -82,7 +106,7 @@ button[type="submit"] {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
   @include media("<=tablet") {
-    padding: 16px;
+    padding: 20px;
   }
 
   @include media(">tablet") {
@@ -172,6 +196,7 @@ button[type="submit"] {
 
   input {
     position: relative;
+    margin-right: 8px;
     width: 20px;
     height: 20px;
     background: white;
@@ -202,7 +227,6 @@ button[type="submit"] {
   }
 
   label {
-    margin-left: 8px;
     vertical-align: middle;
     line-height: 20px;
     font-size: 14px;

@@ -1,4 +1,9 @@
-export const initResource = (Vue) => {
+import Vue from 'vue'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource)
+
+export const initResource = () => {
   Vue.http.options.root = Vue.config.debug ? 'http://localhost:8000/api' : 'https://studentassembly.herokuapp.com/api'
   Vue.http.interceptors.push({
     request: function(request) {

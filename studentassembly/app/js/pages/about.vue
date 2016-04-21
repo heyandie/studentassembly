@@ -1,5 +1,4 @@
 <template lang="jade">
-v-header(header-class="header--landing")
 section.page__wrapper
   .content__wrapper
     .content__section
@@ -63,17 +62,9 @@ section.page__wrapper.page--light
         h2 FAQs
       aside.content__secondary
 
-v-footer
 </template>
 
 <script>
-import Header from '../components/header.vue'
-import Footer from '../components/footer.vue'
-
 export default {
-  components: {
-    'v-header': Header,
-    'v-footer': Footer
-  }
 }
 </script>

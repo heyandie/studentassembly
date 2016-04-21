@@ -8,16 +8,8 @@ import {
   AUTH_REGISTER_SUCCESS
 } from '../mutation-types'
 
-const state = {
-  buttonLoading: false,
-  registerSuccess: false,
-  termsAgree: false,
-  user: {
-    email: null,
-    password: null,
-    passwordRepeat: null
-  },
-  error: {
+function defaultAuthErrors () {
+  return {
     email: null,
     password: null,
     passwordRepeat: null,
@@ -26,22 +18,32 @@ const state = {
   }
 }
 
+function defaultUserRequest () {
+  return {
+    email: null,
+    password: null,
+    passwordRepeat: null
+  }
+}
+
+const state = {
+  buttonLoading: false,
+  registerSuccess: false,
+  termsAgree: false,
+  user: defaultUserRequest(),
+  error: defaultAuthErrors()
+}
+
 const mutations = {
   [AUTH_CLEAR_ERRORS] (state) {
-    state.error.email = null
-    state.error.password = null
-    state.error.passwordRepeat = null
-    state.error.verify = null
-    state.error.termsAgree = null
+    state.error = defaultAuthErrors()
   },
 
   [AUTH_CLEAR_FIELDS] (state) {
     state.buttonLoading = false
     state.registerSuccess = false
     state.termsAgree = false
-    state.user.email = null
-    state.user.password = null
-    state.user.passwordRepeat = null
+    state.user = defaultUserRequest()
   },
 
   [AUTH_SHOW_ERROR] (state, type, message) {

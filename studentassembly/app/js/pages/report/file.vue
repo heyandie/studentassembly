@@ -1,5 +1,4 @@
 <template lang="jade">
-v-header
 section.page__wrapper
   .content__wrapper
     .content__section
@@ -10,15 +9,16 @@ section.page__wrapper
             .form__element(:class="error.school ? 'form--empty' : ''")
               .form__label School
               .form__select
-                v-autocomplete(name="school" placeholder="Find your school..." v-bind:datalist="schools" v-on:value="updateSchool")
+                v-dropdown(name="school" placeholder="Find your school..." v-bind:datalist="schools" v-on:value="updateSchool")
               .form__error(v-if="error.school")
                 span {{ error.school }}
             .form__element(:class="error.category ? 'form--empty' : ''")
               .form__label Type of Report
               .form__select
-                select(name="category" v-on:change="updateCategory")
-                  option(disabled selected hidden value="0") Choose a category..
-                  option(v-for="category in categories" value="{{ category.id }}") {{ category.name }}
+                v-dropdown(name="category" placeholder="Choose a category.." v-bind:datalist="categories" v-on:value="updateCategory")
+                //- select(name="category" v-on:change="updateCategory")
+                //-   option(disabled selected hidden value="0") Choose a category..
+                //-   option(v-for="category in categories" value="{{ category.id }}") {{ category.name }}
               .form__error(v-if="error.category")
                 span {{ error.category }}
             .form__element(v-for="(index, question) in questions")
@@ -103,9 +103,8 @@ v-modal(:show.sync="showConfirmModal")
 </template>
 
 <script>
-import Header from '../../components/header.vue'
 import Modal from '../../components/modal.vue'
-import AutoComplete from '../../components/autocomplete.vue'
+import Dropdown from '../../components/dropdown.vue'
 import Spinner from '../../components/spinner.vue'
 import { getProfile } from '../../vuex/actions/user'
 import { getSchools, getCategories, submitReport } from '../../vuex/actions/report'
@@ -130,8 +129,8 @@ export default {
       updateSchool: ({ dispatch }, value) => {
         dispatch('REPORT_UPDATE_REPORT_FIELD', 'school', value)
       },
-      updateCategory: ({ dispatch }, e) => {
-        dispatch('REPORT_UPDATE_REPORT_FIELD', 'category', parseInt(e.target.value))
+      updateCategory: ({ dispatch }, value) => {
+        dispatch('REPORT_UPDATE_REPORT_FIELD', 'category', value)
         dispatch('REPORT_UPDATE_QUESTIONS')
       },
       updateAnswer: ({ dispatch }, e, index) => {
@@ -173,6 +172,7 @@ export default {
         dispatch('REPORT_UPDATE_CONTACT_FIELD', 'contact_number', e.target.value)
       },
       clearForm: ({ dispatch }) => {
+        dispatch('REPORT_CLEAR_ERRORS')
         dispatch('REPORT_CLEAR_FIELDS')
       }
     }
@@ -201,9 +201,8 @@ export default {
     this.getCategories(this)
   },
   components: {
-    'v-header': Header,
     'v-modal': Modal,
-    'v-autocomplete': AutoComplete,
+    'v-dropdown': Dropdown,
     'v-spinner': Spinner
   }
 }

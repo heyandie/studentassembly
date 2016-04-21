@@ -1,6 +1,5 @@
 <template>
   <div class="v-spinner" v-bind:style="[containerStyle]" v-show="loading">
-  <!-- <div class="v-spinner" v-bind:style="containerStyle"> -->
     <div class="v-fade v-fade1" v-bind:style="[spinnerStyle,animationStyle1]">
     </div><div class="v-fade v-fade2" v-bind:style="[spinnerStyle,animationStyle2]">
     </div><div class="v-fade v-fade3" v-bind:style="[spinnerStyle,animationStyle3]">
