@@ -14,7 +14,7 @@ import boto3
 
 from account.models import User
 from .models import Category, Report, School
-from .serializers import CategorySerializer, ReportSerializer, SchoolSerializer
+from .serializers import CategorySerializer, ReportFullSerializer, ReportBasicSerializer, SchoolSerializer
 
 def _randomstr():
     while 1:
@@ -29,7 +29,7 @@ def _randomstr():
 class ListReportAPIView(APIView):
 
     queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+    serializer_class = ReportBasicSerializer
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -73,7 +73,7 @@ class ListReportAPIView(APIView):
 class CreateReportAPIView(APIView):
 
     queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+    serializer_class = ReportFullSerializer
 
     def post(self, request, format=None):
         data = request.data
@@ -132,7 +132,7 @@ class CreateReportAPIView(APIView):
                     url = 'http://{}/{}'.format(settings.AWS_S3_CUSTOM_DOMAIN, filename)
                     report_data['files'][i] = url
 
-        serializer = ReportSerializer(data=report_data)
+        serializer = ReportFullSerializer(data=report_data)
 
         if serializer.is_valid():
             report = serializer.save()
@@ -146,7 +146,7 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
                             viewsets.GenericViewSet):
     permission_classes = (AllowAny,)
     queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+    serializer_class = ReportFullSerializer
 
     def retrieve(self, request, pk):
 

@@ -60,6 +60,10 @@ class SubmitRatingTest(APITestCase):
             }
         }, format='json', HTTP_AUTHORIZATION=auth)
 
+        response = self.client.patch('/api/rating/'+str(rating.id), {
+            'comment' : "hehe"
+        }, format='json', HTTP_AUTHORIZATION=auth)
+
 class StaffTest(APITestCase):
 
     fixtures = ['staff.json', 'schools.json']

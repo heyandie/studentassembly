@@ -52,7 +52,7 @@ class CreateReportTest(APITestCase):
 
         response = self.client.get('/api/report', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        print(response.data)
         response = self.client.get('/api/report?user='+str(self.user.id.hex), HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
