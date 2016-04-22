@@ -7,7 +7,8 @@
   margin-bottom: 14px;
   background-color: #fff;
   border-radius: 4px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  border: 1px #ddd solid;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.09);
 
   @include media("<=tablet") {
     padding: 16px;

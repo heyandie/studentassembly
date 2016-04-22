@@ -31,8 +31,8 @@ section.page__wrapper.page--min-height
                 a.button.button--small.button--twitter(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
                   img.button__icon(src="/static/img/twitter-logo-white.png" height="14")
                   span Tweet
-          //- .form__wrapper
-          //-   pre {{ staffMember | json 2 }}
+          .form__wrapper
+            pre {{ staffMember | json 2 }}
 
       aside.content__secondary
         template(v-if="!$loadingRouteData")
@@ -116,11 +116,11 @@ export default {
         staff_id: null,
         overall_rating: 0,
         values: {
+          accessibility: 0,
+          attendance: 0,
           communication_skills: 0,
           efficiency: 0,
-          attendance: 0,
-          fairness: 0,
-          accessibility: 0
+          fairness: 0
         },
         comment: ''
       }

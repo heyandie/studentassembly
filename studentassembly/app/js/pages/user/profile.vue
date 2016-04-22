@@ -5,7 +5,6 @@ section.page__wrapper.page--min-height
       aside.content__secondary
         v-avatar(v-bind:alias="alias")
         h3.u-ta-c Hello, {{ alias }}!
-        //- a.button.button--small.button--inverted(href="#0") Edit profile
         hr
         ul.stats
           li.stat
@@ -17,6 +16,9 @@ section.page__wrapper.page--min-height
           li.stat
             p.stat__header Upvoted
             span.stat__value 3
+        hr
+        a.button.button--block.button--small.button--inverted(href="#0") Edit profile
+
 
       article.content__main
         .tabs
