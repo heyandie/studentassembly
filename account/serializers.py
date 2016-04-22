@@ -26,4 +26,5 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('contact_number', 'email', 'id', 'is_verified', 'name')
+        fields = ('contact_number', 'name')
+        read_only_fields = ('id', 'is_verified', 'email')

@@ -4,7 +4,8 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from .api import (
     RegisterAPIView,
     UserContactDetailsAPIView,
-    ResendVerificationAPIView
+    ResendVerificationAPIView,
+    UpdateUserDetailsAPIView
     )
 
 from .views import ActivateAccountView
@@ -15,6 +16,7 @@ urlpatterns = [
     url(r'^verify_account/(?P<token>[0-9A-Za-z]+)$', ActivateAccountView, name='verify'),
     url(r'^api/token_auth$', obtain_jwt_token, name='auth'),
     url(r'^api/token_refresh$', refresh_jwt_token, name='refresh-token'),
+    url(r'^api/account/(?P<pk>[\-0-9A-Za-z]+)$', UpdateUserDetailsAPIView.as_view(), name='update-user-details'),
     url(r'^api/user$', UserContactDetailsAPIView.as_view(), name='user-details'),
     url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend-verification'),
 ]

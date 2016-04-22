@@ -63,6 +63,8 @@ class SubmitRatingTest(APITestCase):
         response = self.client.patch('/api/rating/'+str(rating.id), {
             'comment' : "hehe"
         }, format='json', HTTP_AUTHORIZATION=auth)
+        rating = Rating.objects.latest('id')
+        
 
 class StaffTest(APITestCase):
 

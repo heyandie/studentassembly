@@ -129,7 +129,7 @@ class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
         data = serializer.data
         return Response(data)
 
-    def update(self, request, *args, **kwargs):
+    def partial_update(self, request, *args, **kwargs):
 
         rating = self.get_object()
         if not rating.user_id == self.request.user.id:
@@ -139,8 +139,6 @@ class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer = self.get_serializer(rating, data=data, partial=True)
             if serializer.is_valid():
                 self.perform_update(serializer)
-            rating = self.get_object()
-            serializer = self.get_serializer(rating)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy():

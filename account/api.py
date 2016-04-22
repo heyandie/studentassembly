@@ -18,6 +18,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework import generics
 from rest_framework_jwt.compat import get_username, get_username_field
 from rest_framework_jwt.settings import api_settings
 from rest_framework import exceptions
@@ -120,6 +121,24 @@ class UserContactDetailsAPIView(APIView):
                 'contact_number': request.user.contact_number
             }
         return Response(data)
+
+
+class UpdateUserDetailsAPIView(generics.UpdateAPIView):
+
+    queryset = User.objects.all()
+    serializer_class = AccountSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def partial_update(self, request, *args, **kwargs):
+        user = self.get_object()
+        if not user.id == request.user.id:
+            return Response({}, status.HTTP_403_FORBIDDEN)
+        else:
+            data = request.data
+            serializer = self.get_serializer(user, data=data, partial=True)
+            if serializer.is_valid():
+                self.perform_update(serializer)
+            return Response({}, status=status.HTTP_200_OK)
 
 
 class ResendVerificationAPIView(APIView):
