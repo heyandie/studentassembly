@@ -198,6 +198,12 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
 
         if self.request.user.id == report.user_id or report.allow_publish:
             data = serializer.data
+
+            if self.request.user.is_authenticated():
+                vote = ReportVote.objects.filter(report_id=report.id, user_id= self.request.user.id).all()
+                if len(vote) > 0:
+                    data['vote'] = True
+
             return Response(data)
         else:
             return Response({}, status.HTTP_403_FORBIDDEN)
