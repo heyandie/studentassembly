@@ -63,8 +63,9 @@ class SubmitRatingTest(APITestCase):
                 'overall_rating': 4,
                 'comment': 'Hehe'
             }}, format='json', HTTP_AUTHORIZATION=auth)
-        rating = Rating.objects.latest('id')
-        print(rating.comment)
+
+        response = self.client.get('/api/rating?q=Eric')
+
 
 class StaffTest(APITestCase):
 

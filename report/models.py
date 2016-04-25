@@ -28,3 +28,10 @@ class Report(models.Model):
     allow_publish = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     school = models.IntegerField(blank=False)
+
+
+class ReportVote(models.Model):
+
+    user_id = models.UUIDField()
+    report_id = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)

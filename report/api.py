@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 import boto3
 
 from account.models import User
-from .models import Category, Report, School
+from .models import Category, Report, School, ReportVote
 from .serializers import CategorySerializer, ReportFullSerializer, ReportBasicSerializer, SchoolSerializer
 
 def _randomstr():
@@ -27,6 +27,36 @@ def _randomstr():
         string = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for x in range(20))
 
         return string
+
+class UpvoteReportAPIView(APIView):
+
+    queryset = Report.objects.all()
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
+    def post(self, request):
+        data = request.data
+        vote, created = ReportVote.objects.get_or_create(user_id=data['user_id'], report_id=data['report_id'])
+        if created:
+            return Response({}, status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Upvote for this report already exists'}, status.HTTP_400_BAD_REQUEST)
+
+
+class UnvoteReportAPIView(APIView):
+
+    queryset = Report.objects.all()
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
+    def post(self, request):
+        data = request.data
+        try:
+            ReportVote.objects.get(user_id=data['user_id'], report_id=data['report_id']).delete()
+            return Response({}, status.HTTP_200_OK)
+        except:
+            return Response({'error': 'No previous upvote record exists'}, status.HTTP_400_BAD_REQUEST)
+
 
 
 class ListReportAPIView(APIView):

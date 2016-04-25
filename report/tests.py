@@ -61,7 +61,21 @@ class CreateReportTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/report?q=Discrimination', format='json')
-        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Test first upvote = success
+        response = self.client.post('/api/report/upvote', {
+            'report_id': report.id,
+            'user_id': self.user.id
+        }, HTTP_AUTHORIZATION=auth, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Test second upvote = fail
+        response = self.client.post('/api/report/unvote', {
+            'report_id': report.id,
+            'user_id': self.user.id
+        }, HTTP_AUTHORIZATION=auth, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def testUnauthorizedCreateReport(self):
         response = self.client.post('/api/report/', {
