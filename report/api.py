@@ -1,7 +1,10 @@
 from uuid import UUID
+from functools import reduce
+import operator
 
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.db.models import Q
 
 from rest_framework import viewsets
 from rest_framework import mixins
@@ -37,24 +40,31 @@ class ListReportAPIView(APIView):
         return [AllowAny()]
 
     def filter_queryset(self, queryset):
-        filters = {'deleted_at': None}
+        kwargs = {'deleted_at': None}
+        args = ()
         if self.request.GET.get('q', None):
-            filters['text__icontains'] = self.request.GET.get('q')
-            category = Category.objects.get(name__icontains=self.request.GET.get('q'))
-            filters['category'] = category.id
-            schools = School.objects.filter(name__icontains=self.request.GET.get('q')).only('id')
-            filters['school__in'] = schools
+            search_query = self.request.GET.get('q').split()
+
+            def _get_categories(q):
+                return Category.objects.filter(name__icontains=self.request.GET.get('q')).only('id')
+
+            def _get_schools(q):
+                return School.objects.filter(name__icontains=self.request.GET.get('q')).only('id')
+
+            args = reduce(operator.or_, ((Q(text__icontains=x)|Q(category__in=_get_categories(x))|Q(school__in=_get_schools(x))) for x in search_query))
+            args = (args,)
+        # TODO: Filter based on permission to publish report
+
+        queryset = queryset.filter(*args, **kwargs)
 
         if self.request.GET.get('user', None):
             user_id = UUID(self.request.GET.get('user'))
-            filters['user_id'] = user_id
+            queryset = queryset.filter(user_id=user_id)
 
         else:
-            filters['allow_publish'] = True
+            queryset = queryset.filter(allow_publish=True)
 
-        # TODO: Filter based on permission to publish report
-
-        queryset = queryset.filter(**filters).order_by('-created_at')
+        queryset = queryset.order_by('-created_at')
 
         if self.request.GET.get('limit', None):
             limit = int(self.request.GET.get('limit'))

@@ -52,7 +52,6 @@ class CreateReportTest(APITestCase):
 
         response = self.client.get('/api/report', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
         response = self.client.get('/api/report?user='+str(self.user.id.hex), HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -61,6 +60,8 @@ class CreateReportTest(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        response = self.client.get('/api/report?q=Discrimination', format='json')
+        print(response.data)
 
     def testUnauthorizedCreateReport(self):
         response = self.client.post('/api/report/', {

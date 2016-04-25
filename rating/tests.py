@@ -50,21 +50,21 @@ class SubmitRatingTest(APITestCase):
         response = self.client.get('/api/rating?user='+str(rating.user_id), HTTP_AUTHORIZATION=auth)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.patch('/api/rating/'+str(rating.id), {
-            'values' : {
-                'attendance': 6,
-                'communication_skills': 4,
-                'accessibility': 4,
-                'efficiency': 5,
-                'fairness': 3
-            }
-        }, format='json', HTTP_AUTHORIZATION=auth)
-
-        response = self.client.patch('/api/rating/'+str(rating.id), {
-            'comment' : "hehe"
-        }, format='json', HTTP_AUTHORIZATION=auth)
+        response = self.client.put('/api/rating/'+str(rating.id),{
+            'rating': {
+                'staff_id': str(staff.id),
+                'values': {
+                    'attendance': 3,
+                    'communication_skills': 4,
+                    'accessibility': 4,
+                    'efficiency': 5,
+                    'fairness': 3
+                },
+                'overall_rating': 4,
+                'comment': 'Hehe'
+            }}, format='json', HTTP_AUTHORIZATION=auth)
         rating = Rating.objects.latest('id')
-        
+        print(rating.comment)
 
 class StaffTest(APITestCase):
 

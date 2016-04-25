@@ -129,16 +129,17 @@ class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
         data = serializer.data
         return Response(data)
 
-    def partial_update(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
 
         rating = self.get_object()
         if not rating.user_id == self.request.user.id:
             return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
         else:
-            data = request.data
+            data = request.data['rating']
+            data['values']['overall'] = data.get('overall_rating', 0)
             serializer = self.get_serializer(rating, data=data, partial=True)
-            if serializer.is_valid():
-                self.perform_update(serializer)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy():
