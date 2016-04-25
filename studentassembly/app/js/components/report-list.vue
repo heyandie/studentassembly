@@ -4,22 +4,28 @@
     v-spinner
   h4.u-ta-c.u-pd-b-24(v-if="loading") Loading your reports...
   template(v-if="!loading")
-    .list__filters(v-if="filters")
-      .list__search.pull-left
-        input(type="text" placeholder="Search by school or category" v-model="searchKey" @input="resetPagination")
-      .list__options.pull-right
-        .form__select
-          select(name="sort-by")
-            option(disabled selected hidden value="") Filter by status
-            option(value="for-verification") For Verification
-            option(value="under-investigation") Under Investigation
-            option(value="resolved") Resolved
-            option(value="unresolved") Unresolved
+    template(v-if="hasReports")
+      .list__filters(v-if="filters")
+        .list__search.pull-left
+          input(type="text" placeholder="Search by school or category" v-model="searchKey" @input="resetPagination")
+        .list__options.pull-right
+          .form__select
+            select(name="sort-by")
+              option(disabled selected hidden value="") Filter by status
+              option(value="for-verification") For Verification
+              option(value="under-investigation") Under Investigation
+              option(value="resolved") Resolved
+              option(value="unresolved") Unresolved
     template(v-if="!filteredLength")
-      .list__empty
+      .list__empty(v-if="hasReports")
         img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
         h3 No search results for '{{ searchKey }}'
-    template(v-if="filteredAndNonEmpty")
+      .list__empty(v-if="!hasReports")
+        img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
+        h3 You don't have reports yet.
+        p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
+        a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+    template(v-if="filteredAndHasSearchkey")
       .list__results
         h5 {{ filteredLength }} {{ filteredLength | pluralize 'result' }}
     a.list__item(
@@ -75,7 +81,10 @@ export default {
     offset () {
       return this.limit * this.currentPage
     },
-    filteredAndNonEmpty () {
+    hasReports () {
+      return this.reports.length > 0
+    },
+    filteredAndHasSearchkey () {
       return this.filteredLength && this.searchKey !== ''
     },
     moreThanLimit () {

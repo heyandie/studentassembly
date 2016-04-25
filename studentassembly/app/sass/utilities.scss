@@ -5,6 +5,15 @@
 .u-pos-rel {
   position: relative;
 }
+.u-pos-abs {
+  position: absolute;
+}
+.u-trbl-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 
 .u-div-180 {
   @include media("<=tablet") {
@@ -17,9 +26,11 @@
 
 .u-bg-img {
   height: 100%;
-  background-position: center center;
+  background-position: center 500px;
   background-size: cover;
+  filter: grayscale(100%);
 }
+
 .u-bg-c-brand {
   background-color: $brand-color;
 }
@@ -35,6 +46,19 @@
   color: white;
 }
 
+.u-pd-b-24 {
+  padding-bottom: 24px;
+}
+
+.u-ta-c {
+  text-align: center;
+}
+
+.u-cur-p {
+  cursor: pointer;
+}
+
+// Margins
 .u-mg-t-0 {
   margin-top: 0;
 }
@@ -46,18 +70,6 @@
 }
 .u-mg-b-24 {
   margin-bottom: 24px;
-}
-
-.u-pd-b-24 {
-  padding-bottom: 24px;
-}
-
-.u-ta-c {
-  text-align: center;
-}
-
-.u-cur-p {
-  cursor: pointer;
 }
 
 @each $mg in 100, 120, 140 {

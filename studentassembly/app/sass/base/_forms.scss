@@ -71,6 +71,8 @@ button[type="submit"] {
 
   min-width: 108px;
   background-color: $brand-color;
+  border: 1px $brand-color solid;
+  box-shadow: 0 1px 1px rgba(black, 0.05);
   border-radius: 4px;
   padding: 12px 24px;
 
@@ -101,9 +103,9 @@ button[type="submit"] {
 .form__wrapper {
   margin-bottom: 14px;
   background-color: #fff;
-  // border: 1px #eee solid;
+  border: 1px #ddd solid;
   border-radius: 4px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.09);
 
   @include media("<=tablet") {
     padding: 20px;

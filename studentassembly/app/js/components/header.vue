@@ -10,10 +10,10 @@ header.header__wrapper
       template(v-if="userId")
         a.nav__link(v-link="{ name: 'report' }") Report
         a.nav__link(v-link="{ name: 'rate' }") Rate
-        .nav__link
+        .nav__link#user_menu(@click="openUserMenu = !openUserMenu")
           v-avatar(v-bind:alias="alias" v-bind:inline="true" height="24px" width="24px")
           img(src="/static/img/icons/navigation/ic_arrow_drop_down_18px.svg")
-          .nav__link-menu
+          .nav__link-menu(v-bind:class="openUserMenu ? 'nav__link-menu--open' : ''")
             a.nav__link-menu-item(v-link="{ name: 'profile' }") Profile
             a.nav__link-menu-item(v-link="{ name: 'logout' }") Logout
 
@@ -37,13 +37,29 @@ export default {
       getProfile
     }
   },
-  created () {
-    this.getProfile()
+  data () {
+    return {
+      openUserMenu: false
+    }
   },
   methods: {
     search (e) {
       this.$router.go('/search?q=' + e.target.value)
     }
+  },
+  created () {
+    this.getProfile()
+  },
+  ready () {
+    document.addEventListener("keydown", (e) => {
+      if (this.openUserMenu && e.keyCode == 27)
+        this.openUserMenu = false
+    })
+    document.addEventListener("click", (e) => {
+      console.log(e.target.id)
+      if (e.target.id !== 'user_menu')
+        this.openUserMenu = false
+    })
   },
   components: {
     'v-avatar': Avatar

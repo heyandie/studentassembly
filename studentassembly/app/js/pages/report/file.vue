@@ -1,10 +1,16 @@
 <template lang="jade">
 section.page__wrapper
+  .u-div-180.u-pos-rel(style="background-color:#293757;")
+    .u-bg-img(style="opacity:0.1;background-image:url('/static/img/report-header.jpg');")
+    .u-pos-abs.u-trbl-0
+      .content__wrapper
+        .content__section
+          h1.u-c-white File a Report
+section.page__wrapper
   .content__wrapper
     .content__section
-      h1 File a report
       article.content__main
-        .form__wrapper
+        .form__wrapper.u-pos-rel.u-mg-t-120-n
           form(@submit.prevent="showConfirmModal = true" enctype="multipart/form-data")
             .form__element(:class="error.school ? 'form--empty' : ''")
               .form__label School
@@ -16,9 +22,6 @@ section.page__wrapper
               .form__label Type of Report
               .form__select
                 v-dropdown(name="category" placeholder="Choose a category.." v-bind:datalist="categories" v-on:value="updateCategory")
-                //- select(name="category" v-on:change="updateCategory")
-                //-   option(disabled selected hidden value="0") Choose a category..
-                //-   option(v-for="category in categories" value="{{ category.id }}") {{ category.name }}
               .form__error(v-if="error.category")
                 span {{ error.category }}
             .form__element(v-for="(index, question) in questions")
@@ -78,7 +81,6 @@ section.page__wrapper
                 span(v-show="!loading") Submit
                 .button__spinner(v-show="loading")
                   v-spinner(color="#fff" height="6px" width="3px" radius="8px")
-
       aside.content__secondary.content--additional-info
         h4
           img(src="/static/img/icons/action/ic_lightbulb_outline_24px.svg" height="18")

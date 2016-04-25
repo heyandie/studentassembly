@@ -12,6 +12,7 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 100;
 
   transition: opacity 350ms;
   background-color: rgba(#1e2022, 0.5);
@@ -41,7 +42,8 @@
 
     border-radius: 4px;
     background-color: #fff;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px #888 solid;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.09);
     padding: 28px;
 
     transition: 250ms;
