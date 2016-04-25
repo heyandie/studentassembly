@@ -64,8 +64,6 @@ class SubmitRatingTest(APITestCase):
                 'comment': 'Hehe'
             }}, format='json', HTTP_AUTHORIZATION=auth)
 
-        response = self.client.get('/api/rating?q=Eric')
-
 
 class StaffTest(APITestCase):
 
@@ -80,6 +78,6 @@ class StaffTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def testSearch(self):
-        response = self.client.get('/api/staff?name=Juan')
+        response = self.client.get('/api/staff?q=Juan')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 3)

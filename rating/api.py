@@ -1,6 +1,8 @@
 from uuid import UUID
+from functools import reduce
+import operator
 
-from django.db.models import F
+from django.db.models import F, Q
 
 from rest_framework import generics
 from rest_framework import mixins
@@ -10,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Rating, Staff
+from report.models import School
 from .serializers import RatingSerializer, StaffSerializer
 
 class ListStaffAPIView(generics.ListAPIView):
@@ -23,10 +26,31 @@ class ListStaffAPIView(generics.ListAPIView):
         return Staff.objects.all()
 
     def filter_queryset(self, queryset):
-        filters = {'deleted_at': None}
-        if self.request.GET.get('name', None):
-            filters['name__icontains'] = self.request.GET.get('name')
-        return queryset.filter(**filters)
+        kwargs = {'deleted_at': None}
+        args = ()
+        if self.request.GET.get('q', None):
+            search_query = self.request.GET.get('q').split()
+
+            def _get_schools(q):
+                return School.objects.filter(name__icontains=self.request.GET.get('q')).only('id')
+
+            args = reduce(operator.or_, ((Q(name__icontains=x)|Q(school__in=_get_schools(x))) for x in search_query))
+            args = (args,)
+        # TODO: Filter based on permission to publish report
+
+        queryset = queryset.filter(*args, **kwargs)
+
+        if self.request.GET.get('user', None):
+            user_id = UUID(self.request.GET.get('user'))
+            queryset = queryset.filter(user_id=user_id)
+
+        queryset = queryset.order_by('-created_at')
+
+        if self.request.GET.get('limit', None):
+            limit = int(self.request.GET.get('limit'))
+            return queryset[:limit]
+        else:
+            return queryset
 
     def list(self, request):
         queryset = self.get_queryset()
