@@ -115,24 +115,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'studentassembly.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'studentassembly',
-    }
-}
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-db_config =  dj_database_url.config()
-if db_config:
-    DATABASES['default'] =  db_config
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -189,15 +171,3 @@ AWS_ACCESS_KEY_ID = 'AKIAJDXNLFLHZ3WUHM5A'
 AWS_SECRET_ACCESS_KEY = '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'
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
-STATIC_ROOT = 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

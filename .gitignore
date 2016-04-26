@@ -2,3 +2,5 @@ ENV
 __pycache__
 /node_modules
 /ignore
+andieofstudentassembly2016.pem
+./fabfile/
