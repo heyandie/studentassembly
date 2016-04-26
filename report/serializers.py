@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from account.models import User
 from .models import Category, Report, School
 
 
@@ -27,6 +28,8 @@ class ReportBasicSerializer(serializers.ModelSerializer):
         data['school'] = School.objects.get(pk=data['school']).name
         category = Category.objects.get(pk=data['category'])
         data['category'] = category.name
+        data['alias'] = User.objects.get(pk=data['user_id']).username
+        del data['user_id']
         return data
 
 

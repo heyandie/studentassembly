@@ -83,6 +83,7 @@ class ListReportAPIView(APIView):
 
             args = reduce(operator.or_, ((Q(text__icontains=x)|Q(category__in=_get_categories(x))|Q(school__in=_get_schools(x))) for x in search_query))
             args = (args,)
+
         # TODO: Filter based on permission to publish report
 
         queryset = queryset.filter(*args, **kwargs)
@@ -93,6 +94,10 @@ class ListReportAPIView(APIView):
 
         else:
             queryset = queryset.filter(allow_publish=True)
+
+        if self.request.GET.get('school', None):
+            school = self.request.GET.get('school')
+            queryset = queryset.filter(school=school)
 
         queryset = queryset.order_by('-created_at')
 
