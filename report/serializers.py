@@ -24,7 +24,7 @@ class ReportFullSerializer(serializers.ModelSerializer):
 class ReportBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        exclude = ('answers',)
+        exclude = ('answers', 'files',)
 
     def to_representation(self, instance):
         data = super(ReportBasicSerializer, self).to_representation(instance)
