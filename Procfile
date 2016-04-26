@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT studentassembly.wsgi:application
+web: uwsgi uwsgi.ini

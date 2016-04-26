@@ -19,3 +19,4 @@ static3==0.6.1
 waitress==0.8.10
 wheel==0.24.0
 whitenoise==2.0.6
+uwsgi==2.0.12
