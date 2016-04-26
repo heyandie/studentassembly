@@ -208,6 +208,8 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
                 vote = ReportVote.objects.filter(report_id=report.id, user_id= self.request.user.id).all()
                 if len(vote) > 0:
                     data['vote'] = True
+                else:
+                    data['vote'] = False
 
             return Response(data)
         else:
