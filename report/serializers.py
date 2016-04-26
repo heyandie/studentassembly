@@ -11,6 +11,7 @@ class ReportFullSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(ReportFullSerializer, self).to_representation(instance)
+        data['school_id'] = data['school']
         data['school'] = School.objects.get(pk=data['school']).name
         category = Category.objects.get(pk=data['category'])
         data['questions'] = category.questions
@@ -25,6 +26,7 @@ class ReportBasicSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(ReportBasicSerializer, self).to_representation(instance)
+        data['school_id'] = data['school']
         data['school'] = School.objects.get(pk=data['school']).name
         category = Category.objects.get(pk=data['category'])
         data['category'] = category.name
