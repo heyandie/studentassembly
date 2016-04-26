@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
@@ -16,7 +18,7 @@ class School(models.Model):
 
 
 class Report(models.Model):
-
+    id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
     category = models.IntegerField(null=False)
     text = models.TextField(blank=False)
     answers = JSONField(null=True)
