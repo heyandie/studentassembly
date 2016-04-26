@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from .common import *
 
+DATABASES = {}
 
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
