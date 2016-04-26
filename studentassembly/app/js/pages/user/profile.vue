@@ -17,27 +17,26 @@ section.page__wrapper.page--min-height
             p.stat__header Upvoted
             span.stat__value 3
         hr
-        a.button.button--block.button--small.button--inverted(href="#0") Edit profile
-
-
+        .button__group.u-ta-c
+          a.button.button--tiny.button--light(href="#0") Edit profile
       article.content__main
         .tabs
           .tabs__nav
-            .tab__nav(v-on:click="activeTab = 'reports'" v-bind:class="activeTab === 'reports' ? 'active' : ''")
+            .tab__nav(@click="activeTab = 'reports'", :class="activeTab === 'reports' ? 'active' : ''")
               h4
                 | Reports&nbsp;
                 span.header--light {{ reportCount }}
-            .tab__nav(v-on:click="activeTab = 'ratings'" v-bind:class="activeTab === 'ratings' ? 'active' : ''")
+            .tab__nav(@click="activeTab = 'ratings'", :class="activeTab === 'ratings' ? 'active' : ''")
               h4
                 | Ratings&nbsp;
                 span.header--light 3
-            .tab__nav(v-on:click="activeTab = 'following'" v-bind:class="activeTab === 'following' ? 'active' : ''")
+            .tab__nav(@click="activeTab = 'following'", :class="activeTab === 'following' ? 'active' : ''")
               h4
                 | Following&nbsp;
                 span.header--light 10
           .tabs__content
             .tab__content(v-if="activeTab === 'reports'")
-              v-report-list(v-bind:reports="reports" v-bind:loading="loading" v-bind:filters="true")
+              v-report-list(:reports="reports", :loading="loading", :filters="true")
 </template>
 
 <script>
@@ -65,6 +64,11 @@ export default {
   created () {
     this.getReports(this)
   },
+  // watch: {
+  //   'reports': function () {
+  //     console.log(JSON.stringify(this.reports).length)
+  //   }
+  // },
   computed: {
     resolvedReportsCount () {
       return this.$options.filters.filterBy(this.reports, 'true', 'is_approved').length

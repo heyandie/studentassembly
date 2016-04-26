@@ -3,7 +3,7 @@ section.page__wrapper
   .content__wrapper
     .content__section
       .about__main-logo
-        img(src="/static/img/logo.png" height="64")
+        img(src="/static/img/logo.png", height="64")
       article.content__main
         .about__container
           .about__section
@@ -46,7 +46,7 @@ section.page__wrapper
             h2 Our partners
             .about__partner
               .about__partner-logo
-                img(src="/static/img/nimc-logo.png" style="background-color:#0b0b0b;padding:9px;")
+                img(src="/static/img/nimc-logo.png", style="background-color:#0b0b0b;padding:9px;")
               h3 Not in my Country
               p Student Assembly is an idea that originates from a non-profit organization called "Not in my country" (NIMC). NIMC operates in Uganda and Kenya, wherein 25% of university students are bribed. It provides university students with a website where they can rate their professors and school admin and report them for corruption.
               a.button.button--small.button--inverted(href="https://uganda.notinmycountry.org") Visit website

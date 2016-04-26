@@ -1,9 +1,9 @@
 <template lang="jade">
 input(
-  type="text"
-  v-bind:name="name"
-  v-bind:placeholder="placeholder"
-  @keydown.enter.prevent="true"
+  type="text",
+  :name="name",
+  :placeholder="placeholder",
+  @keydown.enter.prevent="true",
   @input="dispatchIfEmpty"
 )
 </template>
@@ -20,6 +20,10 @@ export default {
     placeholder: {
       type: String,
       default: 'Placeholder'
+    },
+    initValue: {
+      type: String,
+      default: ''
     },
     datalist: {
       type: Array,
@@ -56,6 +60,8 @@ export default {
           that.$dispatch('value', parseInt(item.getAttribute('data-id')))
         }
       })
+
+      console.log(this.initValue)
     }
   },
   methods: {

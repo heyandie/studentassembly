@@ -1,168 +1,114 @@
-<template>
-  <div class="v-spinner" v-bind:style="[containerStyle]" v-show="loading">
-    <div class="v-fade v-fade1" v-bind:style="[spinnerStyle,animationStyle1]">
-    </div><div class="v-fade v-fade2" v-bind:style="[spinnerStyle,animationStyle2]">
-    </div><div class="v-fade v-fade3" v-bind:style="[spinnerStyle,animationStyle3]">
-    </div><div class="v-fade v-fade4" v-bind:style="[spinnerStyle,animationStyle4]">
-    </div><div class="v-fade v-fade5" v-bind:style="[spinnerStyle,animationStyle5]">
-    </div><div class="v-fade v-fade6" v-bind:style="[spinnerStyle,animationStyle6]">
-    </div><div class="v-fade v-fade7" v-bind:style="[spinnerStyle,animationStyle7]">
-    </div><div class="v-fade v-fade8" v-bind:style="[spinnerStyle,animationStyle8]">
-    </div>
-  </div>
+<template lang="jade">
+  .spinner(:style="dimensions")
+    svg.circular(:style="dimensions")
+      circle.path(
+        :class="onButton ? 'path--button' : ''",
+        :cx="radius",
+        :cy="radius",
+        :r="radius",
+        fill="none",
+        stroke-miterlimit="10",
+        :stroke-width="strokeWidth",
+        :style="pathStyle"
+      )
 </template>
 
 <script>
 export default {
   props: {
-    loading: {
+    onButton: {
       type: Boolean,
-      default: true
+      default: false
     },
     color: {
       type: String,
-      default: '#555'
+      default: '#ff5f2e'
     },
-    height: {
+    strokeWidth: {
       type: String,
-      default: '12px'
-    },
-    width: {
-      type: String,
-      default: '5px'
-    },
-    margin: {
-      type: String,
-      default: '4px'
-    },
-    borderRadius: {
-      type: String,
-      default: '3px'
+      default: '2'
     },
     radius: {
       type: String,
-      default: '16px'
+      default: '20'
     }
   },
   data () {
     return {
-      containerStyle: {
-        position: 'relative',
-        left: '-' + this.height,
-        fontSize: 0
+      dimensions: {
+        overflow: 'visible',
+      	height: Math.ceil(parseInt(this.radius) * 2) + 'px',
+     		width: Math.ceil(parseInt(this.radius) * 2) + 'px'
       },
-      spinnerStyle: {
-      	backgroundColor: this.color,
-      	height: this.height,
-     		width: this.width,
-      	margin: this.margin,
-      	borderRadius: this.borderRadius
+      pathStyle: {
+        stroke: this.color,
+        strokeDasharray: '1,' + Math.ceil(parseInt(this.radius) * 2 * 3.14),
+        strokeDashoffset: '0'
       }
     }
   },
   computed: {
-    ngRadius () {
-      return '-' + this.radius
-    },
-    quarter () {
-      return (parseFloat(this.radius)/2 + parseFloat(this.radius)/5.5) + 'px'
-    },
-    ngQuarter () {
-      return '-' + this.quarter
-    },
-    animationStyle1 () {
-      return {
-        top: this.radius,
-        left: 0,
-        animationDelay: '0.12s'
-      }
-    },
-    animationStyle2 () {
-      return {
-        top: this.quarter,
-        left: this.quarter,
-        animationDelay: '0.24s',
-        transform: 'rotate(-45deg)'
-      }
-    },
-    animationStyle3 () {
-      return {
-        top: 0,
-        left: this.radius,
-        animationDelay: '0.36s',
-        transform: 'rotate(90deg)'
-      }
-    },
-    animationStyle4 () {
-      return {
-        top: this.ngQuarter,
-        left: this.quarter,
-        animationDelay: '0.48s',
-        transform: 'rotate(45deg)'
-      }
-    },
-    animationStyle5 () {
-      return {
-        top: this.ngRadius,
-        left: 0,
-        animationDelay: '0.60s'
-      }
-    },
-    animationStyle6 () {
-      return {
-        top: this.ngQuarter,
-        left: this.ngQuarter,
-        animationDelay: '0.72s',
-        transform: 'rotate(-45deg)'
-      }
-    },
-    animationStyle7 () {
-      return {
-        top: 0,
-        left: this.ngRadius,
-        animationDelay: '0.84s',
-        transform: 'rotate(90deg)'
-      }
-    },
-    animationStyle8 () {
-      return {
-        top: this.quarter,
-        left: this.ngQuarter,
-        animationDelay: '0.96s',
-        transform: 'rotate(45deg)'
-      }
+    diameter () {
+      this.radius
     }
   }
-
 }
 </script>
 
-<style>
-.v-spinner .v-fade {
-  -webkit-animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
-  -webkit-animation-fill-mode: both;
-  animation: v-fadeStretchDelay 1.2s infinite ease-in-out;
-  animation-fill-mode: both;
-  position: absolute;
-}
-@-webkit-keyframes v-fadeStretchDelay {
-  50% {
-    -webkit-opacity: 0.3;
-    opacity: 0.3;
-  }
-  100% {
-    -webkit-opacity: 1;
-    opacity: 1;
+<style lang="scss">
+.spinner {
+  margin: 0 auto;
+
+  & + h3, & + h4 {
+    margin-top: 16px;
   }
 }
-@keyframes v-fadeStretchDelay {
-  50% {
-    -webkit-opacity: 0.3;
-    opacity: 0.3;
+
+.circular{
+  position: relative;
+  animation: rotate 2s linear infinite;
+}
+
+.path {
+  animation: dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+
+  &.path--button {
+    animation: dash-button 1.5s ease-in-out infinite;
   }
-  100% {
-    -webkit-opacity: 1;
-    opacity: 1;
+}
+
+@keyframes rotate{
+  100%{
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash{
+  0%{
+    stroke-dasharray: 1, 125;
+    stroke-dashoffset: 0;
+  }
+  50%{
+    stroke-dasharray: 94, 125;
+    stroke-dashoffset: -32;
+  }
+  100%{
+    stroke-dasharray: 94, 125;
+    stroke-dashoffset: -125;
+  }
+}
+@keyframes dash-button{
+  0%{
+    stroke-dasharray: 1, 44;
+    stroke-dashoffset: 0;
+  }
+  50%{
+    stroke-dasharray: 33, 44;
+    stroke-dashoffset: -11;
+  }
+  100%{
+    stroke-dasharray: 33, 44;
+    stroke-dashoffset: -44;
   }
 }
 </style>

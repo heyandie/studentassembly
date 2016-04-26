@@ -12,32 +12,31 @@ section.page__wrapper.page--min-height
         form(@submit.prevent="register(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
-            input(type="email" name="email" placeholder="University email is highly discouraged." v-bind:value="user.email" @input="updateEmail")
+            input(type="email", name="email", placeholder="University email is highly discouraged.", autofocus="true", :value="user.email", @input="updateEmail")
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password || error.passwordRepeat ? 'form--empty' : ''")
             .form__label Password
-            input(type="password" name="password" placeholder="Must be at least 8 characters long." v-bind:value="user.password" @input="updatePassword")
+            input(type="password", name="password", placeholder="Must be at least 8 characters long.", :value="user.password", @input="updatePassword")
             .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element(:class="error.passwordRepeat ? 'form--empty' : ''")
             .form__label Repeat password
-            input(type="password" name="passwordRepeat" placeholder="Just to be sure." v-bind:value="user.passwordRepeat" @input="updatePasswordRepeat")
+            input(type="password", name="passwordRepeat", placeholder="Just to be sure.", :value="user.passwordRepeat", @input="updatePasswordRepeat")
             .form__error(v-if="error.passwordRepeat")
               span {{ error.passwordRepeat }}
           .form__element
             .form__checkbox
-              input(type="checkbox" name="agree_terms" id="agree_terms" v-bind:checked="termsAgree" @change="toggleTerms")
+              input(type="checkbox", name="agree_terms", id="agree_terms", :checked="termsAgree", @change="toggleTerms")
               label(for="agree_terms")
                 | I agree with the&nbsp;
                 a(href="#0") Terms of Service.
             .form__error(v-if="error.termsAgree")
               span {{ error.termsAgree }}
           .form__element
-            button(type="submit" v-bind:disabled="loading")
+            button(type="submit", :disabled="loading")
               span(v-show="!loading") Register
-              .button__spinner(v-show="loading")
-                v-spinner(color="#fff" height="6px" width="3px" radius="8px")
+              v-spinner(v-show="loading", :on-button="true", color="#fff", radius="7")
       p.small
         | Already have an account?&nbsp;
         a(v-link="{ name: 'login' }") Log in.

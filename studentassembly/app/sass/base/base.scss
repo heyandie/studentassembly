@@ -24,7 +24,7 @@ body {
   // background-image: url('/static/img/cubes.png');
   // background-repeat: repeat;
 
-  font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Segoe UI', 'Roboto', sans-serif;
   font-size: 16px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .004);
   color: #1e2022;
@@ -37,6 +37,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.2;
 
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-smoothing: antialiased;
@@ -62,6 +63,10 @@ h1, h2, h3, h4, h5, h6 {
 
 h1, h2, h3 {
   margin: 0 0 14px 0;
+
+  & + .form__wrapper {
+    margin-top: 24px;
+  }
 }
 h4, h5, h6 {
   margin: 0 0 6px 0;
@@ -70,7 +75,7 @@ h4, h5, h6 {
 p {
   margin: 0 0 14px 0;
   word-wrap: break-word;
-  line-height: 1.8;
+  line-height: 1.675;
   font-size: 16px;
   color: lighten(#1e2022, 20%);
 
@@ -79,14 +84,19 @@ p {
   }
 
   &.small {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.4;
+
+    & + .button, & + button {
+      margin-top: 10px;
+    }
   }
 }
 
 a {
   color: #0080ff;
+  text-decoration: none;
 
   &:visited {
     color: #6a60a9;
@@ -94,6 +104,8 @@ a {
 }
 
 small {
+  color: #4e5358;
+
   &.light {
     color: #9aa0a5;
   }
@@ -121,6 +133,10 @@ hr {
   height: 1px;
   background-color: #eee;
   border: none;
+
+  &.small {
+    margin: 8px 0;
+  }
 }
 
 table {
@@ -130,18 +146,28 @@ table {
     border-bottom: 1px #eee solid;
     transition: 200ms;
 
+    &:nth-child(even) {
+      background-color: #fdfdfd;
+    }
+
     &.u-cur-p:hover {
-      background-color: #fcfcfc;
+      background-color: #fbfbfb;
     }
   }
 
   th {
-    padding: 14px 28px;
-    font-size: 15px;
+    padding: 13px 28px;
+    font-size: 12px;
     font-weight: 600;
     text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 
     transition: 200ms;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
 
     span {
       margin-right: 8px;

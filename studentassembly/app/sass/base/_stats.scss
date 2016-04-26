@@ -2,14 +2,14 @@
   @include clearfix();
   padding: 0;
   margin: 0;
+
+  text-align: center;
 }
 
 .stat {
   margin: 0;
   float: left;
   width: 33.3%;
-
-  text-align: center;
   list-style: none;
   line-height: 1;
 }

@@ -115,6 +115,7 @@ router.beforeEach((transition) => {
 router.afterEach((transition) => {
   let title = transition.to.name || 'page-not-found'
   document.title = 'Student Assembly - ' + toTitleCase(title)
+  window.scrollTo(0, 0)
 })
 
 export default router
