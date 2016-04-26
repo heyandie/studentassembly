@@ -2,12 +2,12 @@
 .list__group
   .spinner__wrapper(v-if="loading")
     v-spinner
-  h4.u-ta-c.u-pd-b-24(v-if="loading") Loading your reports...
+    h4 Loading reports...
   template(v-if="!loading")
     template(v-if="hasReports")
       .list__filters(v-if="filters")
         .list__search.pull-left
-          input(type="text" placeholder="Search by school or category" v-model="searchKey" @input="resetPagination")
+          input(type="text", placeholder="Search by school or category", v-model="searchKey", @input="resetPagination")
         .list__options.pull-right
           .form__select
             select(name="sort-by")
@@ -29,7 +29,7 @@
       .list__results
         h5 {{ filteredLength }} {{ filteredLength | pluralize 'result' }}
     a.list__item(
-      v-for="report in reports | filterBy searchKey in 'category' 'school' | count | limitBy limit offset"
+      v-for="report in reports | filterBy searchKey in 'category' 'school' | count | limitBy limit offset",
       v-link="{ name: 'report-view', params: { id: report.id } }"
     )
       h4
@@ -44,8 +44,8 @@
 
     .list__pagination(v-if="moreThanLimit")
       .list__page(
-        v-for="i in reports.length / limit"
-        v-bind:class="i === currentPage ? 'list__page--current' : ''"
+        v-for="i in reports.length / limit",
+        :class="i === currentPage ? 'list__page--current' : ''",
         @click="goToPage(i)"
       )
         | {{ i + 1 }}

@@ -45,3 +45,105 @@
     background: #fcfcfc;
   }
 }
+
+.dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -8px;
+  z-index: 15;
+
+  min-width: 160px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px #ddd solid;
+  box-shadow: 0 1px 2px 0 rgba(black, 0.09);
+
+  transition: 250ms;
+  transform: translateY(-10px);
+  opacity: 0;
+  visibility: hidden;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+
+  &:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: rgba(204, 204, 204, 0);
+    border-left: 7.5px solid transparent;
+    border-right: 7.5px solid transparent;
+    border-bottom: 7px solid #ddd;
+    position: absolute;
+    top: 0;
+    right: 24px;
+    margin-top: -7px
+  }
+  &:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: rgba(204, 204, 204, 0);
+    border-left: 7.5px solid transparent;
+    border-right: 7.5px solid transparent;
+    border-bottom: 7px solid #fcfcfc;
+    position: absolute;
+    right: 24px;
+    top: 0;
+    margin-top: -6px
+  }
+
+  &.dropdown__menu--open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dropdown__menu-header {
+    cursor: default;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px #eee solid;
+    background-color: #fcfcfc;
+    padding: 9px 16px;
+
+    font-size: 12px;
+    font-weight: 500;
+    text-align: left;
+    text-transform: none;
+    color: lighten(#6E7783, 20%);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .dropdown__menu-item {
+    position: relative;
+    display: block;
+    border-bottom: 1px #eee solid;
+    padding: 11px 16px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    text-transform: none;
+    color: #6E7783;
+    line-height: 1;
+    letter-spacing: 0;
+
+    .button__icon {
+      width: 16px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+}

@@ -38,12 +38,14 @@
     padding: 4px 0 4px 24px;
     font-size: 14px;
     border: none;
+    box-shadow: none;
   }
 
   select {
     padding: 4px 0;
     font-size: 14px;
     border: none;
+    box-shadow: none;
   }
 
   .form__select {
@@ -217,7 +219,7 @@
 }
 
 .list__item-date {
-  color: #aaa;
+  color: #999;
 }
 
 .list__item-remark {

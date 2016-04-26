@@ -21,21 +21,20 @@ section.page__wrapper.page--min-height
         form(@submit.prevent="login(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
-            input(type="email" name="email" placeholder="juan@student.ph" v-bind:value="user.email" @input="updateEmail")
+            input(type="email", name="email", placeholder="juan@student.ph", autofocus="true", :value="user.email", @input="updateEmail")
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password ? 'form--empty' : ''")
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
             .form__label Password
-            input(type="password" name="password" placeholder="••••••••" v-bind:value="user.password" @input="updatePassword")
+            input(type="password", name="password", placeholder="••••••••", :value="user.password", @input="updatePassword")
             .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element
-            button(type="submit" v-bind:disabled="loading")
+            button(type="submit", :disabled="loading")
               span(v-show="!loading") Login
-              .button__spinner(v-show="loading")
-                v-spinner(color="#fff" height="6px" width="3px" radius="8px")
+              v-spinner(v-show="loading", :on-button="true", color="#fff", radius="7")
       p.small
         | Don't have an account yet?&nbsp;
         a(v-link="{ name: 'register' }") Create one.

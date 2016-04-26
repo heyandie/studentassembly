@@ -6,7 +6,7 @@ section.page__wrapper.page--min-height
         .form__wrapper(v-if="$loadingRouteData")
           .spinner__wrapper
             v-spinner
-          h4.u-ta-c Loading staff member...
+            h4 Loading staff member...
         template(v-if="!$loadingRouteData")
           .form__wrapper
             h2
@@ -26,13 +26,13 @@ section.page__wrapper.page--min-height
             .button__group
               .pull-right
                 a.button.button--small.button--facebook(href="#0")
-                  img.button__icon(src="/static/img/fb-logo-white.png" height="14")
+                  img.button__icon(src="/static/img/fb-logo-white.png", height="14")
                   span Share
-                a.button.button--small.button--twitter(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
-                  img.button__icon(src="/static/img/twitter-logo-white.png" height="14")
+                a.button.button--small.button--twitter(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
+                  img.button__icon(src="/static/img/twitter-logo-white.png", height="14")
                   span Tweet
-          .form__wrapper
-            pre {{ staffMember | json 2 }}
+          //- .form__wrapper
+          //-   pre {{ staffMember | json 2 }}
 
       aside.content__secondary
         template(v-if="!$loadingRouteData")
@@ -48,7 +48,7 @@ section.page__wrapper.page--min-height
           a.button.button--block.button--small(@click.prevent="showRatingModal = true") {{ staffMember.user_rating ? 'Edit' : 'Add' }} your rating
 
 v-modal(:show.sync="showRatingModal")
-  div(slot="content" style="width:300px;")
+  div(slot="content", style="width:300px;")
     i.modal-close.icon.ion-android-close(@click="showRatingModal = false")
     template(v-if="!$loadingRouteData")
       form(@submit.prevent="submitRating")
@@ -58,12 +58,12 @@ v-modal(:show.sync="showRatingModal")
             .u-cf
               .pull-left
                 input(
-                  v-for="i in 5"
-                  type="radio"
-                  name="{{ key }}_{{ i + 1 }}"
-                  data-tooltip="Give {{ i + 1 }} points"
-                  value="{{ i + 1 }}"
-                  v-bind:checked="checkRating(key, i + 1)"
+                  v-for="i in 5",
+                  type="radio",
+                  name="{{ key }}_{{ i + 1 }}",
+                  data-tooltip="Give {{ i + 1 }} points",
+                  value="{{ i + 1 }}",
+                  :checked="checkRating(key, i + 1)",
                   @click="updateRating(key, $event)"
                 )
               .pull-right
@@ -74,19 +74,19 @@ v-modal(:show.sync="showRatingModal")
             .u-cf
               .pull-left
                 input(
-                  v-for="i in 5"
-                  type="radio"
-                  name="overall_{{ i + 1 }}"
-                  data-tooltip="Give {{ i + 1 }} points"
-                  value="{{ i + 1 }}"
-                  v-bind:checked="checkRating('overall_rating', i + 1)"
+                  v-for="i in 5",
+                  type="radio",
+                  name="overall_{{ i + 1 }}",
+                  data-tooltip="Give {{ i + 1 }} points",
+                  value="{{ i + 1 }}",
+                  :checked="checkRating('overall_rating', i + 1)",
                   @click="updateRating('overall_rating', $event)"
                 )
               .pull-right
                 small.light {{ rating.overall_rating }} / 5
         .form__element
           .form__label Comment
-          textarea(rows="2" name="text" placeholder="Write additional comments about {{ staffMember.name }}." v-model="rating.comment")
+          textarea(rows="2", name="text", placeholder="Write additional comments about {{ staffMember.name }}.", v-model="rating.comment")
         .form__element
           button(type="submit") Submit rating
 

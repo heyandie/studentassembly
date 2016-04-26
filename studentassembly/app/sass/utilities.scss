@@ -15,13 +15,14 @@
   left: 0;
 }
 
+.u-div-140 {
+  height: 140px;
+}
 .u-div-180 {
-  @include media("<=tablet") {
-    height: 120px;
-  }
-  @include media(">tablet") {
-    height: 180px;
-  }
+  height: 180px;
+}
+.u-div-320 {
+  height: 320px;
 }
 
 .u-bg-img {
@@ -53,26 +54,24 @@
 .u-ta-c {
   text-align: center;
 }
+.u-ta-l {
+  text-align: left;
+}
 
 .u-cur-p {
   cursor: pointer;
 }
 
 // Margins
-.u-mg-t-0 {
-  margin-top: 0;
+@each $mg in (0, 4, 8, 12, 24) {
+  .u-mg-t-#{$mg} {
+    margin-top: #{$mg}px;
+  }
+  .u-mg-b-#{$mg} {
+    margin-bottom: #{$mg}px;
+  }
 }
-.u-mg-b-0 {
-  margin-bottom: 0;
-}
-.u-mg-b-4 {
-  margin-bottom: 4px;
-}
-.u-mg-b-24 {
-  margin-bottom: 24px;
-}
-
-@each $mg in 100, 120, 140 {
+@each $mg in (100, 120, 140, 180) {
   .u-mg-t-#{$mg}-n {
     margin-top: -#{$mg}px;
   }
