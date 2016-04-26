@@ -4,3 +4,8 @@ __pycache__
 /ignore
 andieofstudentassembly2016.pem
 ./fabfile/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
