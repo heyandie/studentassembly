@@ -16,6 +16,8 @@ class ReportFullSerializer(serializers.ModelSerializer):
         category = Category.objects.get(pk=data['category'])
         data['questions'] = category.questions
         data['category'] = category.name
+        data['alias'] = User.objects.get(pk=data['user_id']).username
+        del data['user_id']
         return data
 
 
