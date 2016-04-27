@@ -8,8 +8,8 @@
 @import "forms";
 @import "lists";
 @import "modal";
-@import "stats";
 @import "tabs";
+@import "stats";
 
 html {
   box-sizing: border-box;
@@ -20,10 +20,7 @@ html {
 }
 
 body {
-  background-color: #fbfbfb;
-  // background-image: url('/static/img/cubes.png');
-  // background-repeat: repeat;
-
+  background-color: #f9f9f9;
   font-family: 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, 'Segoe UI', 'Roboto', sans-serif;
   font-size: 16px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, .004);
@@ -67,6 +64,10 @@ h1, h2, h3 {
   & + .form__wrapper {
     margin-top: 24px;
   }
+
+  .profile__avatar + span {
+    margin-left: 6px;
+  }
 }
 h4, h5, h6 {
   margin: 0 0 6px 0;
@@ -79,18 +80,18 @@ p {
   font-size: 16px;
   color: lighten(#1e2022, 20%);
 
-  &:last-child {
-    margin-bottom: 0;
-  }
-
   &.small {
     margin-bottom: 8px;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.5;
 
     & + .button, & + button {
       margin-top: 10px;
     }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 

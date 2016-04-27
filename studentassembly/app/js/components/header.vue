@@ -51,7 +51,8 @@ export default {
   },
   methods: {
     search (e) {
-      this.$router.go('/search?q=' + e.target.value)
+      if (e.target.value.length > 0)
+        this.$router.go('/search?q=' + e.target.value)
     }
   },
   created () {

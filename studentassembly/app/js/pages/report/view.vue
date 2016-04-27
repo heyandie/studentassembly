@@ -1,16 +1,16 @@
 <template lang="jade">
 section.page__wrapper.page--light
   .content__wrapper
-    .content__section.u-mg-b-24
+    .content__section
       article.content__main
         .spinner__wrapper(v-if="loading")
           v-spinner
           h4 Loading report...
         template(v-if="!loading")
-          //- .form__wrapper
           .paragraph__section
             .button__group.pull-right
-              a.button.button--tiny.button--light(href="#0") Follow
+              a.button.button--tiny.button--light(href="#0") Upvote
+              a.button.button--tiny.button--simple(href="#0") Follow
               .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
                 | •••
                 .dropdown__menu(v-bind:class="openShareMenu ? 'dropdown__menu--open' : ''")
@@ -27,14 +27,14 @@ section.page__wrapper.page--light
               span.header--light {{ report.school }}
               small.list__item-remark.u-mg-t-8(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'")
                 span {{ report.is_approved ? 'Approved' : 'Not Approved' }}
-                span.list__item-date &nbsp;as of {{ report.updated_at | humanizeDate }}
+                span.list__item-date &nbsp;as of {{ report.updated_at | humanizeDate }}, reported by {{ report.alias }}
             hr
           .paragraph__section(v-for="(index, question) in report.questions")
             h3 {{ question.text }}
             p {{ report.answers[index].text }}
           .paragraph__section
             h3 Details
-            p {{ report.text }}
+            p(v-for="paragraph in detailText") {{ paragraph }}
           .paragraph__section(v-if="hasAttachments")
             h3 Attachments
             .u-cf
@@ -45,12 +45,10 @@ section.page__wrapper.page--light
       aside.content__secondary.content--additional-info
         template(v-if="relatedReports.length")
           h4 Other reports in this school
-          hr.small
-          template(v-for="related in relatedReports")
-            .u-mg-t-24
-              a(v-link="{ name: 'report-view', params: { id: related.id } }")
-                h5 {{ related.category }}
-                p.small {{ related.text | truncate }}
+          .u-mg-t-24(v-for="related in relatedReports")
+            a(v-link="{ name: 'report-view', params: { id: related.id } }")
+              h5 {{ related.category }}
+              p.small {{ related.text | truncate }}
 
 section.page__wrapper(:class="loading ? 'page--min-height' : ''")
   template(v-if="!loading")
@@ -58,12 +56,13 @@ section.page__wrapper(:class="loading ? 'page--min-height' : ''")
       .content__half
         .content__section.content__half-left
           h4 {{ report.school }}
-          small.light Manila, NCR
+          //- small.light Manila, NCR
           hr.small
           p.small 400 reports
           p.small 224 resolved cases
+          p.small Most reported category: Policies
           a.button.button--tiny.button--inverted(v-link="{ name: 'file-a-report', query: { school: report.school } }") File a report
-          a.button.button--tiny.button--inverted(target="_blank" href="#0") Go to website
+          a.button.button--tiny.button--inverted(v-link="{ name: 'rate', query: { school: report.school } }") Rate their staff
       .content__half
         .u-div-320
           .u-bg-img(:style="schoolLocation")
@@ -100,8 +99,12 @@ export default {
   },
   computed: {
     hasAttachments () {
-      let report = this.report.files
-      return report && typeof report.length !== 'undefined'
+      if (typeof this.report.length !== 'undefined')
+        return this.report.length > 0
+      return false
+    },
+    detailText () {
+      return this.report.text.split('\n\n')
     }
   },
   data () {
@@ -122,14 +125,17 @@ export default {
       if (typeof val.category !== 'undefined')
         this.getRelatedReports()
     },
-    '$route.params.id': function() {
-      this.getID()
-      this.getReport(this)
+    '$route.params.id': {
+      handler: function() {
+        this.getID()
+        this.getReport(this)
+      },
+      immediate: true
     }
   },
   methods: {
     getRelatedReports () {
-      this.$http.get('report?q=' + this.report.school.split(' ')[0] + '&limit=3').then(
+      this.$http.get('report?school=' + this.report.school_id + '&limit=3').then(
         (response) => {
           this.relatedReports = response.data
         },
@@ -138,10 +144,6 @@ export default {
         }
       )
     }
-  },
-  created () {
-    this.getID()
-    this.getReport(this)
   },
   ready () {
     document.addEventListener("keydown", (e) => {

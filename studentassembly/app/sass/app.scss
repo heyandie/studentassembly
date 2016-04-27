@@ -50,6 +50,9 @@
     p {
       color: #8b8687;
     }
+    p.link {
+      color: #0080ff;
+    }
 
     @include media("<=tablet") {
       display: none;
@@ -77,6 +80,10 @@
 .content__secondary {
   float: left;
   width: 27%;
+
+  @include media("<=tablet") {
+    width: 100%;
+  }
 
   & + .content__main {
     float: left;

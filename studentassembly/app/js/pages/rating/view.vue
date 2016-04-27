@@ -9,43 +9,67 @@ section.page__wrapper.page--min-height
             h4 Loading staff member...
         template(v-if="!$loadingRouteData")
           .form__wrapper
-            h2
+            .button__group.pull-right
+              .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
+                | •••
+                .dropdown__menu(v-bind:class="openShareMenu ? 'dropdown__menu--open' : ''")
+                  .dropdown__menu-header
+                    span Share
+                  a.dropdown__menu-item(target="_blank" href="#0")
+                    img.button__icon(src="/static/img/fb-logo.png" height="15")
+                    span Facebook
+                  a.dropdown__menu-item(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
+                    img.button__icon(src="/static/img/twitter-logo.png" height="14")
+                    span Twitter
+            h2.u-mg-b-24
               span {{ staffMember.name }}
               br
               span.header--light {{ staffMember.school }}
-            hr
-            h4(v-for="(key, val) in staffMember.rating")
-              span {{ toTitleCase(key, "_") }}
-              br
-              span.header--light {{ val }} / 5
-            h4
-              span Overall
-              br
-              span.header--light {{ staffMember.overall_rating }} / 5
-            hr
-            .button__group
-              .pull-right
-                a.button.button--small.button--facebook(href="#0")
-                  img.button__icon(src="/static/img/fb-logo-white.png", height="14")
-                  span Share
-                a.button.button--small.button--twitter(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
-                  img.button__icon(src="/static/img/twitter-logo-white.png", height="14")
-                  span Tweet
-          //- .form__wrapper
-          //-   pre {{ staffMember | json 2 }}
+            ul.stats
+              li.stat(v-for="(key, val) in staffMember.rating")
+                p.stat__header {{ toTitleCase(key, "_") }}
+                span.stat__value {{ val }} / 5
+              li.stat
+                p.stat__header Overall
+                span.stat__value {{ staffMember.overall_rating }} / 5
 
-      aside.content__secondary
-        template(v-if="!$loadingRouteData")
-          h3 Your rating
-          template(v-if="staffMember.user_rating")
-            .u-cf(v-for="(key, val) in staffMember.user_rating.values")
-              p.small.pull-left
-                strong {{ toTitleCase(key, "_") }}
-              p.small.pull-right {{ val }} / 5
-            p(v-if="staffMember.user_rating.comment") {{ staffMember.user_rating.comment }}
-          template(v-if="!staffMember.user_rating")
-            p.small You have not rated {{ staffMember.name }}.
-          a.button.button--block.button--small(@click.prevent="showRatingModal = true") {{ staffMember.user_rating ? 'Edit' : 'Add' }} your rating
+          .form__wrapper
+            template(v-if="staffMember.user_rating")
+              h3.u-mg-b-24 Your rating
+              ul.stats.u-mg-b-24
+                li.stat.stat--small(v-for="(key, val) in staffMember.user_rating.values")
+                  p.stat__header {{ toTitleCase(key, "_") }}
+                  span.stat__value {{ val }} / 5
+              template(v-if="staffMember.user_rating.comment")
+                p(v-for="paragraph in splitText(staffMember.user_rating.comment)") {{ paragraph }}
+              a.button.button--tiny(@click.prevent="showRatingModal = true") Edit rating
+            template(v-if="!staffMember.user_rating")
+              .u-ta-c
+                p You have not rated {{ staffMember.name }}.
+                a.button.button--small(@click.prevent="showRatingModal = true") Add rating
+
+          template(v-if="staffMember.ratings.length")
+            .form__wrapper(v-for="otherRating in staffMember.ratings")
+              h4.u-mg-b-24
+                v-avatar(:alias="otherRating.alias", :inline="true", height="28px", width="28px")
+                span.u-mg-l-4 {{ otherRating.alias }}'s rating
+              ul.stats.u-mg-b-24
+                li.stat.stat--small(v-for="(key, val) in otherRating.values")
+                  p.stat__header {{ toTitleCase(key, "_") }}
+                  span.stat__value {{ val }} / 5
+              template(v-if="otherRating.comment")
+                p(v-for="paragraph in splitText(otherRating.comment)") {{ paragraph }}
+
+      aside.content__secondary.content--additional-info
+        h4 Related staff members
+        .u-mg-t-24(v-for="otherStaffMember in otherStaffMembers", v-if="otherStaffMember.id !== staffMember.id")
+          a(v-link="{ name: 'rate-view', params: { 'id': otherStaffMember.id } }")
+            h5 {{ otherStaffMember.name }}
+            p.small
+              span {{ otherStaffMember.school | truncate }}
+              br
+              strong {{ otherStaffMember.votes || 'No' }} {{ otherStaffMember.votes | pluralize 'rating' }}
+              span(v-if="otherStaffMember.votes") &nbsp;&mdash; overall: {{ otherStaffMember.overall_rating }}
 
 v-modal(:show.sync="showRatingModal")
   div(slot="content", style="width:300px;")
@@ -86,7 +110,12 @@ v-modal(:show.sync="showRatingModal")
                 small.light {{ rating.overall_rating }} / 5
         .form__element
           .form__label Comment
-          textarea(rows="2", name="text", placeholder="Write additional comments about {{ staffMember.name }}.", v-model="rating.comment")
+          textarea(
+            rows="2",
+            name="text",
+            placeholder="Write additional comments about {{ staffMember.name }}.",
+            v-model="rating.comment"
+          )
         .form__element
           button(type="submit") Submit rating
 
@@ -94,6 +123,7 @@ v-modal(:show.sync="showRatingModal")
 
 <script>
 import Modal from '../../components/modal.vue'
+import Avatar from '../../components/avatar.vue'
 import Spinner from '../../components/spinner.vue'
 import { toTitleCase } from '../../util'
 
@@ -111,7 +141,9 @@ export default {
   data () {
     return {
       staffMember: null,
+      otherStaffMembers: [],
       showRatingModal: false,
+      openShareMenu: false,
       rating: {
         staff_id: null,
         overall_rating: 0,
@@ -126,8 +158,25 @@ export default {
       }
     }
   },
+  filters: {
+    truncate (string) {
+      if (string.length > 36)
+        return string.substring(0, 36) + '...'
+      else
+        return string
+    }
+  },
+  watch: {
+    'staffMember': function (val) {
+      if (typeof val.user_rating !== 'undefined')
+        this.getOtherStaffMembers()
+    }
+  },
   methods: {
     toTitleCase: toTitleCase,
+    splitText (text) {
+      return text.split('\n\n')
+    },
     checkRating (key, val) {
       if (key === 'overall_rating')
         return val <= this.rating.overall_rating
@@ -141,7 +190,7 @@ export default {
         this.rating.values[key] = parseInt(e.target.value)
     },
     submitRating () {
-      let method = this.staffMember.user_rating ? 'patch' : 'post',
+      let method = this.staffMember.user_rating ? 'put' : 'post',
           query = this.staffMember.user_rating ? '/' + this.staffMember.user_rating.id : ''
 
       this.rating.staff_id = this.staffMember.id
@@ -154,10 +203,31 @@ export default {
           console.log('Error', response)
         }
       )
+    },
+    getOtherStaffMembers () {
+      this.$http.get('staff?school=' + this.staffMember.school_id + '&limit=5').then(
+        (response) => {
+          this.otherStaffMembers = response.data
+        },
+        (response) => {
+          console.log('Failed')
+        }
+      )
     }
+  },
+  ready () {
+    document.addEventListener("keydown", (e) => {
+      if (this.openShareMenu && e.keyCode == 27)
+        this.openShareMenu = false
+    })
+    document.addEventListener("click", (e) => {
+      if (e.target.id !== 'share_menu')
+        this.openShareMenu = false
+    })
   },
   components: {
     'v-modal': Modal,
+    'v-avatar': Avatar,
     'v-spinner': Spinner
   }
 }
