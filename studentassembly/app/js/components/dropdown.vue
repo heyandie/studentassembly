@@ -60,8 +60,6 @@ export default {
           that.$dispatch('value', parseInt(item.getAttribute('data-id')))
         }
       })
-
-      console.log(this.initValue)
     }
   },
   methods: {
