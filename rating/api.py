@@ -164,6 +164,7 @@ class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
             serializer = self.get_serializer(rating, data=data, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
+            Staff.objects.get(pk=rating.staff_id).update_rating()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy():
