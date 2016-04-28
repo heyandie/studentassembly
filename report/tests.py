@@ -40,18 +40,19 @@ class CreateReportTest(APITestCase):
         }, HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        report = Report.objects.get(pk=1)
+        report = Report.objects.latest('created_at')
         self.assertEqual(True, report.allow_publish)
 
         self.user = User.objects.get(email='rabinoandie@gmail.com')
         self.assertEqual(self.user.name, 'Andie Rabino')
         self.assertEqual(self.user.contact_number, '09175226502')
 
-        response = self.client.get('/api/report/1', HTTP_AUTHORIZATION=auth, format='json')
+        response = self.client.get('/api/report/'+str(report.id), HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/report', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         response = self.client.get('/api/report?user='+str(self.user.id.hex), HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -61,7 +62,6 @@ class CreateReportTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.get('/api/report?q=Discrimination', format='json')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Test first upvote = success
@@ -71,9 +71,12 @@ class CreateReportTest(APITestCase):
         }, HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.get('/api/report/1', HTTP_AUTHORIZATION=auth, format='json')
+        response = self.client.get('/api/report/'+str(report.id), HTTP_AUTHORIZATION=auth, format='json')
         self.assertEqual(response.data['vote'], True)
-        
+
+        response = self.client.get('/api/report?user='+str(self.user.id.hex)+'&upvoted=True', HTTP_AUTHORIZATION=auth, format='json')
+        print(response.data)
+
 
     def testUnauthorizedCreateReport(self):
         response = self.client.post('/api/report/', {

@@ -13,9 +13,9 @@ from .api import (
 urlpatterns = [
     url(r'^api/report/$', CreateReportAPIView.as_view(), name="create-report"),
     url(r'^api/report$', ListReportAPIView.as_view(), name="list-report"),
-    url(r'^api/report/(?P<pk>[A-Za-z0-9\-]+)$', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),
     url(r'^api/report/upvote$', UpvoteReportAPIView.as_view(), name="upvote-report"),
     url(r'^api/report/unvote$', UnvoteReportAPIView.as_view(), name="unvote-report"),
+    url(r'^api/report/(?P<pk>[A-Za-z0-9\-]+)$', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),
     url(r'^api/categories',ListCategoryAPIView.as_view({'get': 'list'}), name="list-categories"),
     url(r'^api/schools',ListSchoolsAPIView.as_view({'get': 'list'}), name="list-schools"),
 ]

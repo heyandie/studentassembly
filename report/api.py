@@ -112,7 +112,16 @@ class ListReportAPIView(APIView):
         queryset = self.filter_queryset(queryset)
         serializer = self.serializer_class(data=queryset, many=True)
         serializer.is_valid(raise_exception=False)
-        return Response(serializer.data)
+        data = {}
+        data['reports'] = serializer.data
+
+        if self.request.GET.get('user', None) and self.request.GET.get('upvoted', False):
+            upvoted = ReportVote.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()
+            serializer = self.serializer_class(data=queryset, many=True)
+            serializer.is_valid(raise_exception=False)
+            data['upvoted'] = serializer.data
+
+        return Response(data)
 
 
 class CreateReportAPIView(APIView):

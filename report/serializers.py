@@ -22,6 +22,8 @@ class ReportFullSerializer(serializers.ModelSerializer):
 
 
 class ReportBasicSerializer(serializers.ModelSerializer):
+
+    id = serializers.CharField(allow_null=False)
     class Meta:
         model = Report
         exclude = ('answers', 'files',)
