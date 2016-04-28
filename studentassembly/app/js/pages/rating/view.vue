@@ -168,6 +168,7 @@ export default {
   },
   watch: {
     'staffMember': function (val) {
+      this.prefillRating()
       if (typeof val.user_rating !== 'undefined')
         this.getOtherStaffMembers()
     }
@@ -183,6 +184,21 @@ export default {
       else
         return val <= this.rating.values[key]
     },
+    prefillRating () {
+      let staffMemberRating = this.staffMember.user_rating
+
+      if (!staffMemberRating) return
+
+      this.rating.staff_id = staffMemberRating.staff_id
+      this.rating.comment = staffMemberRating.comment
+      for (const category in staffMemberRating.values) {
+        let value = staffMemberRating.values[category]
+        if (category === 'overall')
+          this.rating.overall_rating = value
+        else
+          this.rating.values[category] = value
+      }
+    },
     updateRating (key, e) {
       if (key === 'overall_rating')
         this.rating.overall_rating = parseInt(e.target.value)
@@ -193,7 +209,6 @@ export default {
       let method = this.staffMember.user_rating ? 'put' : 'post',
           query = this.staffMember.user_rating ? '/' + this.staffMember.user_rating.id : ''
 
-      this.rating.staff_id = this.staffMember.id
       this.$http('rating' + query, { method: method, data: { rating: this.rating }}).then(
         (response) => {
           this.staffMember.user_rating = response.data

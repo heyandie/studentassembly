@@ -21,14 +21,29 @@ section.page__wrapper.page--min-height
         form(@submit.prevent="login(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
-            input(type="email", name="email", placeholder="juan@student.ph", autofocus="true", :value="user.email", @input="updateEmail")
+            input(
+              type="email",
+              name="email",
+              placeholder="juan@student.ph",
+              autofocus="true",
+              :value="user.email",
+              :disabled="loading",
+              @input="updateEmail"
+            )
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password ? 'form--empty' : ''")
             .form__note.pull-right.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
             .form__label Password
-            input(type="password", name="password", placeholder="••••••••", :value="user.password", @input="updatePassword")
+            input(
+              type="password",
+              name="password",
+              placeholder="••••••••",
+              :value="user.password",
+              :disabled="loading",
+              @input="updatePassword"
+            )
             .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element
