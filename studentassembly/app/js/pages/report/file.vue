@@ -71,7 +71,7 @@ section.page__wrapper
                 .form__radio
                   input(type="radio", name="allow_contact", id="allow_contact_2", value="0", @change="updateAllowContact", checked)
                   label(for="allow_contact_2") No, I don't want to give my contact details.
-                template(v-if="contact.allow_contact === 1")
+                template(v-if="contact.allow_contact")
                   input(type="text", name="name", placeholder="Name", :value="contact.name", @input="updateName")
                   input(type="text", name="mobile_number", placeholder="Mobile Number", :value="contact.contact_number", @input="updateContact")
               .form__element

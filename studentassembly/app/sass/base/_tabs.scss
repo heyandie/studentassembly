@@ -6,11 +6,22 @@
 
 .tab__nav {
   float: left;
-  padding: 11px 28px;
   border-radius: 4px 4px 0 0;
   border: 1px transparent solid;
   border-bottom: none;
   cursor: pointer;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+
+  @include media("<=tablet") {
+    padding: 11px 16px;
+  }
+  @include media(">tablet") {
+    padding: 11px 28px;
+  }
 
   &.active {
     background-color: white;

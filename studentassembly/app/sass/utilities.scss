@@ -8,12 +8,6 @@
 .u-pos-abs {
   position: absolute;
 }
-.u-trbl-0 {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
 
 .u-div-140 {
   height: 140px;
@@ -69,6 +63,12 @@
   }
   .u-mg-b-#{$mg} {
     margin-bottom: #{$mg}px;
+  }
+  .u-mg-r-#{$mg} {
+    margin-right: #{$mg}px;
+  }
+  .u-mg-l-#{$mg} {
+    margin-left: #{$mg}px;
   }
 }
 @each $mg in (100, 120, 140, 180) {

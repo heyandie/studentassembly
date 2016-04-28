@@ -44,6 +44,10 @@ class ListStaffAPIView(generics.ListAPIView):
             user_id = UUID(self.request.GET.get('user'))
             queryset = queryset.filter(user_id=user_id)
 
+        if self.request.GET.get('school', None):
+            school = self.request.GET.get('school')
+            queryset = queryset.filter(school=school)
+
         queryset = queryset.order_by('-created_at')
 
         if self.request.GET.get('limit', None):

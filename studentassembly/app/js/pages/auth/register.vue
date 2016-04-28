@@ -12,22 +12,51 @@ section.page__wrapper.page--min-height
         form(@submit.prevent="register(this)")
           .form__element(:class="error.email ? 'form--empty' : ''")
             .form__label Email
-            input(type="email", name="email", placeholder="University email is highly discouraged.", autofocus="true", :value="user.email", @input="updateEmail")
+            input(
+              type="email",
+              name="email",
+              placeholder="University email is highly discouraged.",
+              autofocus="true",
+              :value="user.email",
+              :disabled="loading",
+              @input="updateEmail"
+            )
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password || error.passwordRepeat ? 'form--empty' : ''")
             .form__label Password
-            input(type="password", name="password", placeholder="Must be at least 8 characters long.", :value="user.password", @input="updatePassword")
+            input(
+              type="password",
+              name="password",
+              placeholder="Must be at least 8 characters long.",
+              :value="user.password",
+              :disabled="loading",
+              @input="updatePassword"
+            )
             .form__error(v-if="error.password")
               span {{ error.password }}
           .form__element(:class="error.passwordRepeat ? 'form--empty' : ''")
             .form__label Repeat password
-            input(type="password", name="passwordRepeat", placeholder="Just to be sure.", :value="user.passwordRepeat", @input="updatePasswordRepeat")
+            input(
+              type="password",
+              name="passwordRepeat",
+              placeholder="Just to be sure.",
+              :value="user.passwordRepeat",
+              :disabled="loading",
+              @input="updatePasswordRepeat"
+            )
             .form__error(v-if="error.passwordRepeat")
               span {{ error.passwordRepeat }}
           .form__element
             .form__checkbox
-              input(type="checkbox", name="agree_terms", id="agree_terms", :checked="termsAgree", @change="toggleTerms")
+              input(
+                type="checkbox",
+                name="agree_terms",
+                id="agree_terms",
+                :checked="termsAgree",
+                :disabled="loading",
+                @change="toggleTerms"
+              )
               label(for="agree_terms")
                 | I agree with the&nbsp;
                 a(href="#0") Terms of Service.

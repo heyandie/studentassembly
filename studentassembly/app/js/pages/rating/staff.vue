@@ -15,7 +15,7 @@ section.page__wrapper.page--min-height
         template(v-if="!$loadingRouteData")
           .list__group
             .list__filters
-              .list__search
+              .list__search.list__search--full
                 input(type="text", placeholder="Search by name or school", v-model="searchKey")
             table
               thead
@@ -54,7 +54,7 @@ export default {
   data () {
     return {
       params: ['name', 'school', 'overall_rating'],
-      searchKey: '',
+      searchKey: this.$route.query.school || '',
       sortKey: 'overall_rating', // TODO: discuss implications
       order: -1,
       staff: []
