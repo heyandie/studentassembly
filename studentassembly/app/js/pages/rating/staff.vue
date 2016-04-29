@@ -34,6 +34,7 @@ section.page__wrapper.page--min-height
                   v-link="{ name: 'rate-view', params: { 'id': member.id } }"
                   )
                   td(v-for="param in params") {{ member[param] }}
+pre {{ staff | json 2 }}
 </template>
 
 <script>

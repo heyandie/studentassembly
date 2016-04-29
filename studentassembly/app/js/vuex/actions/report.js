@@ -27,7 +27,6 @@ export const getReport = ({ dispatch, state }, context) => {
 
   context.$http.get('report/' + state.report.view.id).then(
     (response) => {
-      console.log(response.data)
       dispatch(types.REPORT_RECEIVE_REPORT, response.data)
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
     },

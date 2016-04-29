@@ -19,7 +19,7 @@ section.page__wrapper
               .form__element(:class="error.category ? 'form--empty' : ''")
                 .form__label Type of Report
                 .form__select
-                  v-dropdown(name="category", placeholder="Choose a category..", :datalist="categories", @value="updateCategory")
+                  v-dropdown(name="category", placeholder="Choose a category..", :init-value="$route.query.category", :datalist="categories", @value="updateCategory")
                 .form__error(v-if="error.category")
                   span {{ error.category }}
               .form__element(v-for="(index, question) in questions")
@@ -126,7 +126,6 @@ export default {
       getCategories,
       submitReport,
       updateSchool: ({ dispatch }, value) => {
-        console.log(value)
         dispatch('REPORT_UPDATE_REPORT_FIELD', 'school', value)
       },
       updateCategory: ({ dispatch }, value) => {

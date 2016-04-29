@@ -9,7 +9,7 @@ section.page__wrapper.page--light
         template(v-if="!loading")
           .paragraph__section
             .button__group.pull-right
-              a.button.button--tiny.button--light(href="#0") Upvote
+              a.button.button--tiny.button--light(href="#0", @click.prevent="testUpvote") Upvote
               a.button.button--tiny.button--simple(href="#0") Follow
               .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
                 | •••
@@ -76,6 +76,7 @@ import { getReport } from '../../vuex/actions/report'
 export default {
   vuex: {
     getters: {
+      userID: ({ user }) => user.id,
       report: ({ report }) => report.view,
       loading: ({ report }) => report.buttonLoading
     },
@@ -143,6 +144,20 @@ export default {
           console.log('Failed')
         }
       )
+    },
+    testUpvote () {
+      let data = {
+        report_id: this.report.id,
+        user_id: this.userID
+      }
+      // this.$http.post('report/upvote', data).then(
+      //   (response) => {
+      //     console.log(response)
+      //   },
+      //   (response) => {
+      //     console.log('Failed')
+      //   }
+      // )
     }
   },
   ready () {

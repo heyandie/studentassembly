@@ -22,7 +22,7 @@
         h3 No search results for '{{ searchKey }}'
       .list__empty(v-if="!hasReports")
         img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
-        h3 You don't have reports yet.
+        h3(v-if="onProfile") You don't have reports yet.
         p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
         a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
     template(v-if="filteredAndHasSearchkey")
@@ -56,7 +56,7 @@ import RelativeDate from 'relative-date'
 import Spinner from './spinner.vue'
 
 export default {
-  props: ['loading', 'reports', 'filters'],
+  props: ['loading', 'reports', 'filters', 'onProfile'],
   data () {
     return {
       limit: 10,

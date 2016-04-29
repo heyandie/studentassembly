@@ -33,9 +33,9 @@ const mutations = {
     state.report_count = profile.report_count
   },
 
-  [USER_RECEIVE_REPORTS] (state, reports) {
-    state.reports = reports
-    state.report_count = reports.length
+  [USER_RECEIVE_REPORTS] (state, data) {
+    state.reports = data.reports
+    state.report_count = data.reports.length
   }
 }
 

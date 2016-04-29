@@ -60,12 +60,21 @@ export default {
           that.$dispatch('value', parseInt(item.getAttribute('data-id')))
         }
       })
+
+      // datalist won't be present if declared as a separate watch
+      if (this.initValue.length)
+        this.prefillInput()
     }
   },
   methods: {
     dispatchIfEmpty (e) {
       if (e.target.value.length < 1)
         this.$dispatch('value', null)
+    },
+    prefillInput () {
+      let data = this.datalist.find((v) => { return v.name.toLowerCase() === this.initValue.toLowerCase() })
+      this.$el.value = data.name || ''
+      this.$dispatch('value', data.id || 0)
     }
   },
   beforeDestroy () {

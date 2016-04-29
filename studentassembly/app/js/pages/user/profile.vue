@@ -32,27 +32,27 @@ section.page__wrapper.page--min-height
         .tabs
           .tabs__content
             .tab__content(v-if="activeTab === 'reports'")
-              v-report-list(:reports="reports", :loading="loading", :filters="true")
+              v-report-list(:reports="reports", :loading="loading", :filters="true", :on-profile="true")
       aside.content__secondary.content--additional-info
         template(v-if="reports")
-          h4
-            | Upvoted reports
-            span.header--light.u-mg-l-8 6
-          template(v-if="reports.length === 0")
-            .u-mg-t-12
-              p.small Make other reports more visible by upvoting them!
-          template(v-else)
-            .u-mg-t-24(v-for="upvoted in reports | limitBy 3")
-              a(v-link="{ name: 'report-view', params: { id: upvoted.id } }")
-                h5 {{ upvoted.category }}
-                p.small {{ upvoted.text | truncate }}
-            .u-mg-t-24
-              a.button.button--tiny.button--light(href="#0") Load more
+          h4 Profile stats
+          .u-mg-t-12
+            p.small
+              | (reports by category, ratings, etc)
+          //- template(v-else)
+          //-   .u-mg-t-24(v-for="upvoted in reports | limitBy 3")
+          //-     a(v-link="{ name: 'report-view', params: { id: upvoted.id } }")
+          //-       h5 {{ upvoted.category }}
+          //-       p.small {{ upvoted.text | truncate }}
+          //-   .u-mg-t-24
+          //-     a.button.button--tiny.button--light(href="#0") Load more
 
 v-modal(:show.sync="showEditProfileModal")
   div(slot="content", style="width:320px;")
     i.modal-close.icon.ion-android-close(@click="showEditProfileModal = false")
     //- h3 Edit your profile
+    .spinner__wrapper
+      v-spinner
     form
       .form__element
         .form__label Email address
@@ -71,6 +71,7 @@ v-modal(:show.sync="showEditProfileModal")
 import Modal from '../../components/modal.vue'
 import ReportList from '../../components/report-list.vue'
 import Avatar from '../../components/avatar.vue'
+import Spinner from '../../components/spinner.vue'
 import { getReports } from '../../vuex/actions/user'
 
 export default {
@@ -118,7 +119,8 @@ export default {
   components: {
     'v-modal': Modal,
     'v-report-list': ReportList,
-    'v-avatar': Avatar
+    'v-avatar': Avatar,
+    'v-spinner': Spinner
   }
 }
 </script>

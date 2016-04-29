@@ -26,8 +26,8 @@ section.page__wrapper.page--min-height
               br
               span.header--light {{ staffMember.school }}
             ul.stats
-              li.stat(v-for="(key, val) in staffMember.rating")
-                p.stat__header {{ toTitleCase(key, "_") }}
+              li.stat(v-for="val in staffMember.rating")
+                p.stat__header {{ toTitleCase($key, "_") }}
                 span.stat__value {{ val }} / 5
               li.stat
                 p.stat__header Overall
@@ -37,8 +37,8 @@ section.page__wrapper.page--min-height
             template(v-if="staffMember.user_rating")
               h3.u-mg-b-24 Your rating
               ul.stats.u-mg-b-24
-                li.stat.stat--small(v-for="(key, val) in staffMember.user_rating.values")
-                  p.stat__header {{ toTitleCase(key, "_") }}
+                li.stat.stat--small(v-for="val in staffMember.user_rating.values")
+                  p.stat__header {{ toTitleCase($key, "_") }}
                   span.stat__value {{ val }} / 5
               template(v-if="staffMember.user_rating.comment")
                 p(v-for="paragraph in splitText(staffMember.user_rating.comment)") {{ paragraph }}
@@ -168,6 +168,7 @@ export default {
   },
   watch: {
     'staffMember': function (val) {
+      console.log(JSON.parse(JSON.stringify(this.staffMember)))
       this.prefillRating()
       if (typeof val.user_rating !== 'undefined')
         this.getOtherStaffMembers()
