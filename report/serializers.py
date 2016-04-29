@@ -6,6 +6,7 @@ from .models import Category, Report, School
 
 class ReportFullSerializer(serializers.ModelSerializer):
 
+    id = serializers.CharField(read_only=True)
     class Meta:
         model = Report
 
@@ -23,7 +24,6 @@ class ReportFullSerializer(serializers.ModelSerializer):
 
 class ReportBasicSerializer(serializers.ModelSerializer):
 
-    id = serializers.CharField(allow_null=False)
     class Meta:
         model = Report
         exclude = ('answers', 'files',)

@@ -110,15 +110,14 @@ class ListReportAPIView(APIView):
     def get(self, request):
         queryset = self.queryset
         queryset = self.filter_queryset(queryset)
-        serializer = self.serializer_class(data=queryset, many=True)
-        serializer.is_valid(raise_exception=False)
+        serializer = self.serializer_class(queryset, many=True)
         data = {}
         data['reports'] = serializer.data
 
         if self.request.GET.get('user', None) and self.request.GET.get('upvoted', False):
-            upvoted = ReportVote.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()
-            serializer = self.serializer_class(data=queryset, many=True)
-            serializer.is_valid(raise_exception=False)
+            upvoted = [x.report_id for x in ReportVote.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()]
+            upvoted_reports = self.queryset.filter(id__in=upvoted)
+            serializer = self.serializer_class(upvoted_reports, many=True)
             data['upvoted'] = serializer.data
 
         return Response(data)
