@@ -74,13 +74,13 @@
     width: 0;
     height: 0;
     border-color: rgba(204, 204, 204, 0);
-    border-left: 7.5px solid transparent;
-    border-right: 7.5px solid transparent;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
     border-bottom: 7px solid #ddd;
     position: absolute;
     top: 0;
     right: 24px;
-    margin-top: -7px
+    margin-top: -7.5px
   }
   &:after {
     content: '';
@@ -88,8 +88,8 @@
     width: 0;
     height: 0;
     border-color: rgba(204, 204, 204, 0);
-    border-left: 7.5px solid transparent;
-    border-right: 7.5px solid transparent;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
     border-bottom: 7px solid #fcfcfc;
     position: absolute;
     right: 24px;

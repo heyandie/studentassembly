@@ -32,9 +32,9 @@ class SubmitRatingTest(APITestCase):
                     'communication_skills': 4,
                     'accessibility': 4,
                     'efficiency': 5,
-                    'fairness': 3
-                },
-                'overall_rating': 4
+                    'fairness': 3,
+                    'overall': 4
+                }
             }
 
         }, HTTP_AUTHORIZATION=auth, format='json')
@@ -58,9 +58,9 @@ class SubmitRatingTest(APITestCase):
                     'communication_skills': 4,
                     'accessibility': 4,
                     'efficiency': 5,
-                    'fairness': 3
+                    'fairness': 3,
+                    'overall': 4
                 },
-                'overall_rating': 4,
                 'comment': 'Hehe'
             }}, format='json', HTTP_AUTHORIZATION=auth)
 

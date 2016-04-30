@@ -130,8 +130,6 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
         except:
             return Response({'error': 'Staff member does not exist.'}, status.HTTP_400_BAD_REQUEST)
 
-        rating_data['values']['overall'] = rating_data.get('overall_rating', 0)
-
         serializer = self.get_serializer(data=rating_data)
 
         if serializer.is_valid():
@@ -164,7 +162,6 @@ class RetrieveRatingAPIView(generics.RetrieveUpdateDestroyAPIView):
             return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
         else:
             data = request.data['rating']
-            data['values']['overall'] = data.get('overall_rating', 0)
             serializer = self.get_serializer(rating, data=data, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)

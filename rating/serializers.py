@@ -28,6 +28,4 @@ class StaffSerializer(serializers.ModelSerializer):
         data = super(StaffSerializer, self).to_representation(instance)
         data['school_id'] = School.objects.get(pk=data['school']).id
         data['school'] = School.objects.get(pk=data['school']).name
-        data['overall_rating'] = data['rating'].get('overall', 0)
-        del data['rating']['overall']
         return data

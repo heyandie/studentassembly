@@ -34,7 +34,6 @@ section.page__wrapper.page--min-height
                   v-link="{ name: 'rate-view', params: { 'id': member.id } }"
                   )
                   td(v-for="param in params") {{ member[param] }}
-pre {{ staff | json 2 }}
 </template>
 
 <script>
@@ -45,7 +44,15 @@ export default {
   route: {
     data (transition) {
       return this.$http.get('staff').then(
-        (response) => ({ staff: response.data }),
+        (response) => {
+          let staff = response.data
+          staff.forEach((mem) => {
+            Object.defineProperty(mem, 'rating_-_overall', {
+              get () { return this.rating.overall }
+            })
+          })
+          this.staff = staff
+        },
         (response) => {
           console.log('Failed to retrieve staff list.')
         }
@@ -54,9 +61,9 @@ export default {
   },
   data () {
     return {
-      params: ['name', 'school', 'overall_rating'],
+      params: ['name', 'school', 'rating_-_overall'],
       searchKey: this.$route.query.school || '',
-      sortKey: 'overall_rating', // TODO: discuss implications
+      sortKey: 'rating_-_overall', // TODO: discuss implications
       order: -1,
       staff: []
     }

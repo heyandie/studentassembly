@@ -89,7 +89,6 @@ const mutations = {
 
   [REPORT_UPDATE_CONTACT_FIELD] (state, field, value) {
     state.request.contact[field] = value
-    console.log(JSON.parse(JSON.stringify(state.request.contact)))
   },
 
   [REPORT_UPDATE_ATTACHMENT] (state, index, attachment) {
