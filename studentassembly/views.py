@@ -35,7 +35,7 @@ class IndexView(TemplateView):
                     'og:site_name': 'StudentAssembly',
                     'og:title': 'Report on ' + category.name + ' | ' + school.name,
                     'og:description': description,
-                    'og:url': self.request.META['HTTP_HOST'] + '/report/view/' + report_view_path[0],
+                    'og:url': self.request.get_full_path(),
                 }
 
                 tw_cards = {
