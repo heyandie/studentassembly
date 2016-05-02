@@ -48,8 +48,8 @@ class IndexView(TemplateView):
                 context['tw_cards'] = tw_cards
                 context['title'] = ' | '.join([category.name.title(), school.name.title(), 'Student Assembly'])
             except:
-                raise
+                pass
 
-        print(context.get('og_tags'))
+        context['FB_APP_ID'] = settings.FB.get('APP_ID')
 
         return context
