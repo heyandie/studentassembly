@@ -8,11 +8,15 @@ from .api import (
     ListSchoolsAPIView,
     UpvoteReportAPIView,
     UnvoteReportAPIView,
+    FollowReportAPIView,
+    UnfollowReportAPIView
 )
 
 urlpatterns = [
     url(r'^api/report/$', CreateReportAPIView.as_view(), name="create-report"),
     url(r'^api/report$', ListReportAPIView.as_view(), name="list-report"),
+    url(r'^api/report/follow$', FollowReportAPIView.as_view(), name="follow-report"),
+    url(r'^api/report/unfollow$', UnfollowReportAPIView.as_view(), name="unfollow-report"),
     url(r'^api/report/upvote$', UpvoteReportAPIView.as_view(), name="upvote-report"),
     url(r'^api/report/unvote$', UnvoteReportAPIView.as_view(), name="unvote-report"),
     url(r'^api/report/(?P<pk>[A-Za-z0-9\-]+)$', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),

@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 import boto3
 
 from account.models import User
-from .models import Category, Report, School, ReportVote
+from .models import Category, Report, School, ReportVote, ReportFollow
 from .serializers import CategorySerializer, ReportFullSerializer, ReportBasicSerializer, SchoolSerializer
 
 def _randomstr():
@@ -57,6 +57,35 @@ class UnvoteReportAPIView(APIView):
         except:
             return Response({'error': 'No previous upvote record exists'}, status.HTTP_400_BAD_REQUEST)
 
+
+class FollowReportAPIView(APIView):
+
+    queryset = Report.objects.all()
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
+    def post(self, request):
+        data = request.data
+        vote, created = ReportFollow.objects.get_or_create(user_id=data['user_id'], report_id=data['report_id'])
+        if created:
+            return Response({}, status.HTTP_200_OK)
+        else:
+            return Response({'error': 'User already follows this report'}, status.HTTP_400_BAD_REQUEST)
+
+
+class UnfollowReportAPIView(APIView):
+
+    queryset = Report.objects.all()
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
+    def post(self, request):
+        data = request.data
+        try:
+            ReportFollow.objects.get(user_id=data['user_id'], report_id=data['report_id']).delete()
+            return Response({}, status.HTTP_200_OK)
+        except:
+            return Response({'error': 'No previous upvote record exists'}, status.HTTP_400_BAD_REQUEST)
 
 
 class ListReportAPIView(APIView):
@@ -119,6 +148,12 @@ class ListReportAPIView(APIView):
             upvoted_reports = self.queryset.filter(id__in=upvoted)
             serializer = self.serializer_class(upvoted_reports, many=True)
             data['upvoted'] = serializer.data
+
+            following = [x.report_id for x in ReportFollow.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()]
+            following_reports = self.queryset.filter(id__in=following)
+            serializer = self.serializer_class(following_reports, many=True)
+            data['following'] = serializer.data
+
 
         return Response(data)
 

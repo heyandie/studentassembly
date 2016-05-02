@@ -37,3 +37,10 @@ class ReportVote(models.Model):
     user_id = models.UUIDField()
     report_id = models.UUIDField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class ReportFollow(models.Model):
+
+    user_id = models.UUIDField()
+    report_id = models.UUIDField()
+    created_at = models.DateTimeField(auto_now_add=True)
