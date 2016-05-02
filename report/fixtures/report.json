@@ -1,0 +1,48 @@
+[
+{
+    "model": "report.report",
+    "pk": "b7dc1f25-bf03-4068-98ab-298dd76841ee",
+    "fields": {
+        "category": 1,
+        "text": "They say I'm black.",
+        "answers": [
+            {
+                "id": 1,
+                "text": "Bullying"
+            }
+        ],
+        "user_id": "1cbcd02c-a152-48af-868d-7e34803680bb",
+        "files": null,
+        "created_at": "2016-05-02T07:31:48.911Z",
+        "updated_at": "2016-05-02T07:31:48.911Z",
+        "deleted_at": null,
+        "allow_publish": true,
+        "is_approved": false,
+        "school": 1,
+        "status": "Pending"
+    }
+},
+{
+    "model": "report.report",
+    "pk": "b7dc1f25-bf03-4068-98ab-298dd76841ae",
+    "fields": {
+        "category": 1,
+        "text": "They say I can't sit with them",
+        "answers": [
+            {
+                "id": 1,
+                "text": "Bullying"
+            }
+        ],
+        "user_id": "1cbcd02c-a152-48af-868d-7e34803680bb",
+        "files": null,
+        "created_at": "2016-05-02T07:31:48.911Z",
+        "updated_at": "2016-05-02T07:31:48.911Z",
+        "deleted_at": null,
+        "allow_publish": true,
+        "is_approved": false,
+        "school": 1,
+        "status": "Resolved"
+    }
+}
+]

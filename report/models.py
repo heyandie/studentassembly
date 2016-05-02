@@ -30,7 +30,7 @@ class Report(models.Model):
     allow_publish = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     school = models.IntegerField(blank=False)
-
+    status = models.CharField(default="Pending", max_length=20)
 
 class ReportVote(models.Model):
 
