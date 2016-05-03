@@ -149,6 +149,7 @@ class ListReportAPIView(APIView):
             serializer = self.serializer_class(upvoted_reports, many=True)
             data['upvoted'] = serializer.data
 
+        if self.request.GET.get('user', None) and self.request.GET.get('following', False):
             following = [x.report_id for x in ReportFollow.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()]
             following_reports = self.queryset.filter(id__in=following)
             serializer = self.serializer_class(following_reports, many=True)
