@@ -19,7 +19,8 @@ function defaultReportErrors () {
     school: null,
     category: null,
     text: null,
-    attachment: null
+    attachment: null,
+    other: null
   }
 }
 

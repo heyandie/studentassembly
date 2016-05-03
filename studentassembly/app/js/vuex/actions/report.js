@@ -48,14 +48,18 @@ export const submitReport = ({ dispatch, state }, context) => {
     },
     (response) => {
       for (var key in response.data) {
-        if (key === 'school') {
-          dispatch(types.REPORT_SHOW_ERROR, 'school', response.data[key])
-        }
-        if (key === 'category') {
-          dispatch(types.REPORT_SHOW_ERROR, 'category', response.data[key])
-        }
-        if (key === 'text') {
-          dispatch(types.REPORT_SHOW_ERROR, 'text', response.data[key])
+        switch (key) {
+          case 'school':
+            dispatch(types.REPORT_SHOW_ERROR, 'school', response.data[key])
+          break;
+          case 'category':
+            dispatch(types.REPORT_SHOW_ERROR, 'category', response.data[key])
+          break;
+          case 'text':
+            dispatch(types.REPORT_SHOW_ERROR, 'text', response.data[key])
+          break;
+          default:
+            dispatch(types.REPORT_SHOW_ERROR, 'other', response.data[key])
         }
       }
       dispatch(types.BUTTON_SUBMIT_LOADING, false)

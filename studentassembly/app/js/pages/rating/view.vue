@@ -9,17 +9,19 @@ section.page__wrapper.page--min-height
             h4 Loading staff member...
         template(v-if="!$loadingRouteData")
           .form__wrapper
-            .button__group.pull-right
+            .button__group.u-fl-r
               .button.button--tiny.button--simple#share_menu(@click="showShareMenu = !showShareMenu")
-                | •••
+                span.u-c-facebook •
+                span.u-c-twitter •
+                span.u-c-brand •
                 .dropdown__menu(v-bind:class="showShareMenu ? 'dropdown__menu--open' : ''")
                   .dropdown__menu-header
                     span Share
                   a.dropdown__menu-item(target="_blank" href="#0")
-                    img.button__icon(src="/static/img/fb-logo.png" height="15")
+                    img.button__icon(src="/static/img/fb-logo.png", height="15")
                     span Facebook
-                  a.dropdown__menu-item(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
-                    img.button__icon(src="/static/img/twitter-logo.png" height="14")
+                  a.dropdown__menu-item(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
+                    img.button__icon(src="/static/img/twitter-logo.png", height="14")
                     span Twitter
             h2.u-mg-b-24
               span {{ member.name }}
@@ -39,9 +41,9 @@ section.page__wrapper.page--min-height
                   p.stat__header {{ toTitleCase($key, "_") }}
                   span.stat__value {{ val }} / 5
               template(v-if="member.user_rating.comment")
-                p(v-for="paragraph in splitText(member.user_rating.comment)") {{ paragraph }}
+                p {{{ member.user_rating.comment | nl2br }}}
               a.button.button--tiny(@click.prevent="showRatingModal = true") Edit rating
-            template(v-if="!member.user_rating")
+            template(v-else)
               .u-ta-c
                 p You have not rated {{ member.name }}.
                 a.button.button--small(@click.prevent="showRatingModal = true") Add rating
@@ -56,7 +58,7 @@ section.page__wrapper.page--min-height
                   p.stat__header {{ toTitleCase(key, "_") }}
                   span.stat__value {{ val }} / 5
               template(v-if="otherRating.comment")
-                p(v-for="paragraph in splitText(otherRating.comment)") {{ paragraph }}
+                p {{{ otherRating.comment | nl2br }}}
 
       aside.content__secondary.content--additional-info
         h4 Related staff members
@@ -78,7 +80,7 @@ v-modal(:show.sync="showRatingModal")
           .form__label.u-mg-b-4 {{ toTitleCase(key, "_") }}
           .form__radio.u-mg-b-0
             .u-cf
-              .pull-left
+              .u-fl-l
                 input(
                   v-for="i in 5",
                   type="radio",
@@ -88,7 +90,7 @@ v-modal(:show.sync="showRatingModal")
                   :checked="checkRating(key, i + 1)",
                   @click="updateRating(key, $event)"
                 )
-              .pull-right
+              .u-fl-r
                 small.light {{ rating.values[key] }} / 5
         .form__element
           .form__label Comment
@@ -109,6 +111,21 @@ import Avatar from '../../components/avatar.vue'
 import Spinner from '../../components/spinner.vue'
 import { toTitleCase } from '../../util'
 
+function defaultRating () {
+  return {
+    staff_id: null,
+    values: {
+      accessibility: 0,
+      attendance: 0,
+      communication_skills: 0,
+      efficiency: 0,
+      fairness: 0,
+      overall: 0
+    },
+    comment: ''
+  }
+}
+
 export default {
   route: {
     data (transition) {
@@ -126,18 +143,7 @@ export default {
       relatedMembers: [],
       showRatingModal: false,
       showShareMenu: false,
-      rating: {
-        staff_id: null,
-        values: {
-          accessibility: 0,
-          attendance: 0,
-          communication_skills: 0,
-          efficiency: 0,
-          fairness: 0,
-          overall: 0
-        },
-        comment: ''
-      }
+      rating: defaultRating()
     }
   },
   filters: {
@@ -146,30 +152,32 @@ export default {
         return string.substring(0, 36) + '...'
       else
         return string
+    },
+    nl2br (text) {
+      return String(text).replace(/\n\n/g, "<div class='u-mg-b-12'></div>")
     }
   },
   watch: {
     'member': function (val) {
-      if (val.user_rating)
-        this.prefillRating()
+      if (val.user_rating) {
+        Object.keys(this.rating).forEach((key) => {
+          this.rating[key] = this.member.user_rating[key]
+        })
+      }
+      else {
+        this.rating = defaultRating()
+      }
+
       this.getOtherStaffMembers()
     }
   },
   methods: {
     toTitleCase: toTitleCase,
-    splitText (text) {
-      return text.split('\n\n')
-    },
     checkRating (key, val) {
       return val <= this.rating.values[key]
     },
     updateRating (key, e) {
       this.rating.values[key] = parseInt(e.target.value)
-    },
-    prefillRating () {
-      Object.keys(this.rating).forEach((key) => {
-        this.rating[key] = this.member.user_rating[key]
-      })
     },
     submitRating () {
       let method = this.member.user_rating ? 'put' : 'post',
@@ -191,7 +199,7 @@ export default {
           this.relatedMembers = response.data
         },
         (response) => {
-          console.log('Failed')
+          console.log('Failed to retrieve related members.')
         }
       )
     }

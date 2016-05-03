@@ -172,6 +172,7 @@ button[type="submit"] {
   select {
     display: block;
     width: 100%;
+    min-width: 84px;
     appearance: none;
     border: 1px #e5e5dc solid;
     border-radius: 4px;

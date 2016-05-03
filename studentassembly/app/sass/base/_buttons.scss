@@ -108,13 +108,8 @@
     }
   }
 
-  &.button--facebook {
-    background-color: #3b5998;
-    border-color: darken(#3b5998, 15%);
-  }
-  &.button--twitter {
-    background-color: #1b95e0;
-    border-color: darken(#1b95e0, 15%);
+  span {
+    pointer-events: none;
   }
 
   .button__icon {

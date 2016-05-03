@@ -8,7 +8,7 @@ export const getProfile = ({ dispatch }) => {
 
 export const getReports = ({ dispatch, state }, context) => {
   dispatch(types.BUTTON_SUBMIT_LOADING, true)
-  context.$http.get('report?user=' + state.user.id + '&upvoted=True').then(
+  context.$http.get('report?user=' + state.user.id + '&upvoted=True&following=True').then(
     (response) => {
       dispatch(types.USER_RECEIVE_REPORTS, response.data)
       dispatch(types.BUTTON_SUBMIT_LOADING, false)

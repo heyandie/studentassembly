@@ -17,7 +17,10 @@
   font-smoothing: antialiased;
 
   @include media("<=tablet") {
-    padding: 11px 16px;
+    // padding: 11px 16px;
+    width: 25%;
+    padding: 11px 0;
+    text-align: center;
   }
   @include media(">tablet") {
     padding: 11px 28px;

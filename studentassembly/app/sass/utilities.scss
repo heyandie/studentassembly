@@ -1,6 +1,14 @@
 .u-cf {
   @include clearfix();
 }
+.u-fl-r {
+  @include clearfix();
+  float: right;
+}
+.u-fl-l {
+  @include clearfix();
+  float: left;
+}
 
 .u-pos-rel {
   position: relative;
@@ -15,6 +23,9 @@
 .u-div-180 {
   height: 180px;
 }
+.u-div-240 {
+  height: 240px;
+}
 .u-div-320 {
   height: 320px;
 }
@@ -26,19 +37,21 @@
   filter: grayscale(100%);
 }
 
-.u-bg-c-brand {
-  background-color: $brand-color;
-}
-.u-bg-c-ikb {
-  background-color: $ikb;
-}
-
 .u-br-4 {
   border-radius: 4px;
 }
 
 .u-c-white {
   color: white;
+}
+.u-c-brand {
+  color: $brand-color;
+}
+.u-c-facebook {
+  color: #3b5998;
+}
+.u-c-twitter {
+  color: #1b95e0;
 }
 
 .u-pd-b-24 {

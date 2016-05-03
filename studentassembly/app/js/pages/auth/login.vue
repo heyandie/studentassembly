@@ -32,7 +32,7 @@ section.page__wrapper.page--min-height
             .form__error(v-if="error.email")
               span {{ error.email }}
           .form__element(:class="error.password ? 'form--empty' : ''")
-            .form__note.pull-right.u-mg-t-0
+            .form__note.u-fl-r.u-mg-t-0
               a(v-link="{ name: 'login' }") Forgot your password?
             .form__label Password
             input(

@@ -103,7 +103,14 @@
     width: 100%;
   }
   @include media(">tablet") {
-    width: 50%;
+    width: 48%;
+    margin-right: 4%;
+  }
+
+  &:nth-child(2n) {
+    @include media(">tablet") {
+      margin-right: 0;
+    }
   }
 
   .content__half-left {
@@ -130,14 +137,4 @@
 .spinner__wrapper {
   text-align: center;
   padding: 56px 0;
-}
-
-.pull-right {
-  @include clearfix();
-  float: right;
-}
-
-.pull-left {
-  @include clearfix();
-  float: left;
 }

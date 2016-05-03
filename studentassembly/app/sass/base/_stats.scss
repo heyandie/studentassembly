@@ -56,4 +56,9 @@
 
   line-height: 1.2;
   text-transform: uppercase;
+
+  @include media("<=tablet") {
+    height: 26px;
+    word-wrap: normal;
+  }
 }

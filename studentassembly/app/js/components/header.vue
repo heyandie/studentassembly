@@ -10,7 +10,7 @@ header.header__wrapper
       form.nav__search#search_menu_bar(:class="showSearchBar ? 'nav__search--open' : ''")
         input(type="text", tabindex="-1", placeholder="Search Student Assembly", @keydown.enter.prevent="search", @click.stop="true")
     .nav.nav--right
-      template(v-if="userId")
+      template(v-if="userID")
         a.nav__link(v-link="{ name: 'report' }") Report
         a.nav__link(v-link="{ name: 'rate' }") Rate
         .nav__link#user_menu(@click="showUserMenu = !showUserMenu", :class="showUserMenu ? 'hovered' : ''")
@@ -36,7 +36,7 @@ import { getProfile } from '../vuex/actions/user'
 export default {
   vuex: {
     getters: {
-      userId: ({ user }) => user.id,
+      userID: ({ user }) => user.id,
       alias: ({ user }) => user.alias
     },
     actions: {

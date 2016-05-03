@@ -8,25 +8,30 @@ section.page__wrapper.page--light
           h4 Loading report...
         template(v-if="!loading")
           .paragraph__section
-            .button__group.pull-right
-              a.button.button--tiny.button--light(href="#0", @click.prevent="testUpvote") Upvote
+            .button__group.u-fl-r
+              a.button.button--tiny.button--light(href="#0", @click.prevent="testUpvote")
+                span {{ report.vote ? 'Upvoted' : 'Upvote' }}
               a.button.button--tiny.button--simple(href="#0") Follow
               .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
-                | •••
+                span.u-c-facebook •
+                span.u-c-twitter •
+                span.u-c-brand •
                 .dropdown__menu(v-bind:class="openShareMenu ? 'dropdown__menu--open' : ''")
                   .dropdown__menu-header
                     span Share
-                  a.dropdown__menu-item(target="_blank" href="#0")
-                    img.button__icon(src="/static/img/fb-logo.png" height="15")
+                  a.dropdown__menu-item(target="_blank", href="#0")
+                    img.button__icon(src="/static/img/fb-logo.png", height="15")
                     span Facebook
-                  a.dropdown__menu-item(target="_blank" href="https://twitter.com/intent/tweet?text=Share%20Report")
-                    img.button__icon(src="/static/img/twitter-logo.png" height="14")
+                  a.dropdown__menu-item(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
+                    img.button__icon(src="/static/img/twitter-logo.png", height="14")
                     span Twitter
             h2 {{ report.category }}
             h3.u-mg-b-24
               span.header--light {{ report.school }}
-              small.list__item-remark.u-mg-t-8(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'")
-                span {{ report.is_approved ? 'Approved' : 'Not Approved' }}
+              small.list__item-remark.u-mg-t-8(
+                :class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'"
+              )
+                span {{ report.status }}
                 span.list__item-date &nbsp;as of {{ report.updated_at | humanizeDate }}, reported by {{ report.alias }}
             hr
           .paragraph__section(v-for="(index, question) in report.questions")
@@ -46,26 +51,30 @@ section.page__wrapper.page--light
         template(v-if="relatedReports.length")
           h4 Other reports in this school
           .u-mg-t-24(v-for="related in relatedReports")
-            a(v-link="{ name: 'report-view', params: { id: related.id } }")
+            a(v-link="{ name: 'report-view', params: { id: related.id }}")
               h5 {{ related.category }}
               p.small {{ related.text | truncate }}
 
 section.page__wrapper(:class="loading ? 'page--min-height' : ''")
-  template(v-if="!loading")
-    .content__full
-      .content__half
-        .content__section.content__half-left
+  .content__wrapper
+    .content__section
+      template(v-if="!loading")
+        .content__half
           h4 {{ report.school }}
-          //- small.light Manila, NCR
           hr.small
           p.small 400 reports
           p.small 224 resolved cases
-          p.small Most reported category: Policies
-          a.button.button--tiny.button--inverted(v-link="{ name: 'file-a-report', query: { school: report.school } }") File a report
-          a.button.button--tiny.button--inverted(v-link="{ name: 'rate', query: { school: report.school } }") Rate their staff
-      .content__half
-        .u-div-320
-          .u-bg-img(:style="schoolLocation")
+          p.small Most reported category &mdash; Policies
+          p.small Average staff rating (overall) &mdash; 3 / 5
+          a.button.button--tiny.button--inverted(
+            v-link="{ name: 'file-a-report', query: { school: report.school }}"
+          ) File a report
+          a.button.button--tiny.button--inverted(
+            v-link="{ name: 'rate', query: { school: report.school }}"
+          ) Rate their staff
+        .content__half
+          .u-div-240
+            .u-bg-img(:style="schoolLocation")
 
 </template>
 
@@ -118,9 +127,10 @@ export default {
   watch: {
     'report': function (val, oldVal) {
       this.schoolLocation = {
+        backgroundImage: 'url("/static/img/map.jpg")',
         backgroundPosition: 'center',
-        filter: 'grayscale(0)',
-        backgroundImage: 'url("/static/img/map.jpg")'
+        backgroundSize: 'auto',
+        filter: 'grayscale(0)'
       }
 
       if (typeof val.category !== 'undefined')
@@ -138,7 +148,7 @@ export default {
     getRelatedReports () {
       this.$http.get('report?school=' + this.report.school_id + '&limit=3').then(
         (response) => {
-          this.relatedReports = response.data
+          this.relatedReports = response.data.reports
         },
         (response) => {
           console.log('Failed')

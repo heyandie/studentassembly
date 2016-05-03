@@ -44,9 +44,6 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    @property
-    def report_count(self):
-        return Report.objects.filter(user_id=self.id).count()
 
 class VerificationToken(models.Model):
     user_id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)

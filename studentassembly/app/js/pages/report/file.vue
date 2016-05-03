@@ -9,25 +9,53 @@ section.page__wrapper
         .u-pos-rel.u-mg-t-180-n
           h1.u-c-white File a Report
           .form__wrapper
+            .alert__wrapper.alert--error(v-if="error.other")
+              h3 Oops!
+              p
+                | Sorry, something happened on our side. Please try filling the form again.
             form(@submit.prevent="showConfirmModal = true", enctype="multipart/form-data")
               .form__element(:class="error.school ? 'form--empty' : ''")
                 .form__label School
                 .form__select
-                  v-dropdown(name="school", placeholder="Find your school...", :init-value="$route.query.school", :datalist="schools", @value="updateSchool")
+                  v-dropdown(
+                    name="school",
+                    placeholder="Find your school...",
+                    :init-value="$route.query.school",
+                    :datalist="schools",
+                    @value="updateSchool"
+                  )
                 .form__error(v-if="error.school")
                   span {{ error.school }}
               .form__element(:class="error.category ? 'form--empty' : ''")
                 .form__label Type of Report
                 .form__select
-                  v-dropdown(name="category", placeholder="Choose a category..", :init-value="$route.query.category", :datalist="categories", @value="updateCategory")
+                  v-dropdown(
+                    name="category",
+                    placeholder="Choose a category..",
+                    :init-value="$route.query.category",
+                    :datalist="categories",
+                    @value="updateCategory"
+                  )
                 .form__error(v-if="error.category")
                   span {{ error.category }}
               .form__element(v-for="(index, question) in questions")
                 .form__label {{ question.text }}
-                input(@keydown.enter.prevent="true", type="text", name="question-{{ question.id }}", :value="report.answers[index].text", @input="updateAnswer($event, index)")
+                input(
+                  type="text",
+                  name="question-{{ question.id }}",
+                  :value="report.answers[index].text",
+                  @keydown.enter.prevent="true",
+                  @input="updateAnswer($event, index)"
+                )
               .form__element(:class="error.text ? 'form--empty' : ''")
                 .form__label Report Details
-                textarea(rows="6", name="text", placeholder="State the corruption case in detail.", :value="report.text", @input="updateText")
+                textarea(
+                  rows="6",
+                  name="text",
+                  placeholder="State the corruption case in detail.",
+                  :value="report.text",
+                  @input="updateText"
+                )
                 .form__error(v-if="error.text")
                   span {{ error.text }}
               .form__element
@@ -36,7 +64,14 @@ section.page__wrapper
                 .form__attachments
                   template(v-for="index in [0,1,2]")
                     .form__attachment
-                      input(type="file", id="file{{ index + 1 }}", accept="image/*,application/pdf,text/pdf", name="files[]", @change="updateAttachment($event, index)", :disabled="filesLengthLessThan(index)")
+                      input(
+                        type="file",
+                        id="file{{ index + 1 }}",
+                        accept="image/*,application/pdf,text/pdf",
+                        name="files[]",
+                        @change="updateAttachment($event, index)",
+                        :disabled="filesLengthLessThan(index)"
+                      )
                       label(for="file{{ index + 1 }}")
                         template(v-if="filesLengthGreaterThan(index)")
                           | {{ report.files[index].name }}
@@ -52,10 +87,23 @@ section.page__wrapper
                     strong &nbsp;{{ alias }}
                     | .
                 .form__radio
-                  input(type="radio", name="allow_publish", id="allow_publish_1", value="1", @change="updateAllowPublish")
+                  input(
+                    type="radio",
+                    name="allow_publish",
+                    id="allow_publish_1",
+                    value="1",
+                    @change="updateAllowPublish"
+                  )
                   label(for="allow_publish_1") Yes, publish my report.
                 .form__radio
-                  input(type="radio", name="allow_publish", id="allow_publish_2", value="0", @change="updateAllowPublish", checked)
+                  input(
+                    type="radio",
+                    name="allow_publish",
+                    id="allow_publish_2",
+                    value="0",
+                    @change="updateAllowPublish",
+                    checked
+                  )
                   label(for="allow_publish_2") No, don't publish my report.
               .form__element
                 .form__label Are you willing to provide your contact details?
@@ -66,14 +114,39 @@ section.page__wrapper
                   strong &nbsp;discrimination
                   | &nbsp;report and you would like to pursue legal action, kindly give your contact information.
                 .form__radio
-                  input(type="radio", name="allow_contact", id="allow_contact_1", value="1", @change="updateAllowContact")
+                  input(
+                    type="radio",
+                    name="allow_contact",
+                    id="allow_contact_1",
+                    value="1",
+                    @change="updateAllowContact"
+                  )
                   label(for="allow_contact_1") Yes, I want to give my contact details.
                 .form__radio
-                  input(type="radio", name="allow_contact", id="allow_contact_2", value="0", @change="updateAllowContact", checked)
+                  input(
+                    type="radio",
+                    name="allow_contact",
+                    id="allow_contact_2",
+                    value="0",
+                    @change="updateAllowContact",
+                    checked
+                  )
                   label(for="allow_contact_2") No, I don't want to give my contact details.
                 template(v-if="contact.allow_contact")
-                  input(type="text", name="name", placeholder="Name", :value="contact.name", @input="updateName")
-                  input(type="text", name="mobile_number", placeholder="Mobile Number", :value="contact.contact_number", @input="updateContact")
+                  input(
+                    type="text",
+                    name="name",
+                    placeholder="Name",
+                    :value="contact.name",
+                    @input="updateName"
+                  )
+                  input(
+                    type="text",
+                    name="mobile_number",
+                    placeholder="Mobile Number",
+                    :value="contact.contact_number",
+                    @input="updateContact"
+                  )
               .form__element
                 button(type="submit", :disabled="loading")
                   span(v-show="!loading") Submit

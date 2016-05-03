@@ -54,7 +54,6 @@ def jwt_payload_handler(user):
     payload = {
         'user_id': str(user.id.hex),
         'alias': user.username,
-        'report_count': user.report_count,
         'exp': datetime.utcnow() + api_settings.JWT_EXPIRATION_DELTA
     }
 

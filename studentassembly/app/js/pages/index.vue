@@ -12,6 +12,11 @@ section.page__wrapper
       article.content__main
         h3 Latest reports
         v-report-list(:reports="reports", :loading="loading", :filters="false")
+          template(slot="list_empty")
+            img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
+            p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
+            a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+
       aside.content__secondary
         h3 Top staff ratings
         ul
@@ -76,7 +81,7 @@ export default {
   created () {
     this.$http.get('report?limit=5').then(
       function(response) {
-        this.reports = response.data
+        this.reports = response.data.reports
         this.loading = false
       },
       function(response) {
