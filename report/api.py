@@ -54,7 +54,8 @@ class UnvoteReportAPIView(APIView):
         data = request.data
         try:
             ReportVote.objects.get(user_id=data['user_id'], report_id=data['report_id']).delete()
-            return Response({}, status.HTTP_200_OK)
+            upvotes = ReportVote.objects.filter(report_id=data['report_id']).count()
+            return Response({ 'upvotes': upvotes }, status.HTTP_200_OK)
         except:
             return Response({'error': 'No previous upvote record exists'}, status.HTTP_400_BAD_REQUEST)
 
@@ -225,8 +226,9 @@ class CreateReportAPIView(APIView):
 
         if serializer.is_valid():
             report = serializer.save()
-            # Upvote automatically (a la Reddit)
+            # Upvote and follow automatically (a la Reddit)
             upvote = ReportVote.objects.create(user_id=request.user.id, report_id=serializer.data['id'])
+            follow = ReportFollow.objects.create(user_id=request.user.id, report_id=serializer.data['id'])
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -256,6 +258,12 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
                     data['did_upvote'] = True
                 else:
                     data['did_upvote'] = False
+
+                follow = ReportFollow.objects.filter(report_id=report.id, user_id= self.request.user.id).all()
+                if len(follow) > 0:
+                    data['did_follow'] = True
+                else:
+                    data['did_follow'] = False
 
             return Response(data)
         else:

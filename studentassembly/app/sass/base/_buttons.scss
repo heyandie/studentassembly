@@ -14,6 +14,10 @@
     opacity: 1;
   }
 
+  .button {
+    vertical-align: middle;
+  }
+
   .button--half {
     width: 49%;
 
@@ -48,6 +52,12 @@
 
   user-select: none;
 
+  &[disabled] {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.85;
+  }
+
   & + .button {
     margin-left: 10px;
   }
@@ -79,10 +89,14 @@
     color: $brand-color;
   }
   &.button--light {
+    min-width: 80px;
     background-color: #fcfcfc;
     border: 1px #ddd solid;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     color: #999;
+
+    // background-color: lighten($brand-color, 40%);
+    // border: 1px lighten($brand-color, 28%) solid;
 
     &:hover {
       background: #fcfcfc;
@@ -110,6 +124,18 @@
 
   span {
     pointer-events: none;
+  }
+
+  .button--tiny-header {
+    color: #1e2022; //#ff5f2e;
+  }
+  .button--tiny-number {
+    display: block;
+    margin: -7px -6px -7px 14px;
+    float: right;
+    height: 29px;
+    border-left: 1px #ddd solid;
+    padding: 7px 0 7px 9px;
   }
 
   .button__icon {

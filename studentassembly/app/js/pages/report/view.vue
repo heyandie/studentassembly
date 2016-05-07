@@ -9,10 +9,14 @@ section.page__wrapper.page--light
         template(v-if="!loading")
           .paragraph__section
             .button__group.u-fl-r
-              a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport")
-                span {{ report.did_upvote ? 'Upvoted' : 'Upvote' }}
-                span(v-if="report.upvotes") &nbsp;{{ report.upvotes }}
-              a.button.button--tiny.button--simple(href="#0") Follow
+              a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport", :disabled="upvoting")
+                span(v-show="!upvoting")
+                  span(:class="!report.did_upvote ? 'button--tiny-header' : ''") {{ report.did_upvote ? 'Upvoted' : 'Upvote' }}
+                  span.button--tiny-number {{ report.upvotes }}
+                v-spinner(v-show="upvoting", :on-button="true", color="#999", radius="7")
+              a.button.button--tiny.button--simple(href="#0", @click.prevent="followReport", :disabled="following")
+                span(v-show="!following") {{ report.did_follow ? 'Unfollow' : 'Follow' }}
+                v-spinner(v-show="following", :on-button="true", color="#999", radius="7")
               .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
                 span.u-c-facebook •
                 span.u-c-twitter •
@@ -101,6 +105,9 @@ export default {
       },
       updateUpvotes: ({ dispatch, state }, upvotes) => {
         dispatch('REPORT_UPDATE_UPVOTES', upvotes)
+      },
+      updateFollow: ({ dispatch, state }) => {
+        dispatch('REPORT_UPDATE_FOLLOW')
       }
     }
   },
@@ -127,6 +134,8 @@ export default {
   },
   data () {
     return {
+      upvoting: false,
+      following: false,
       openShareMenu: false,
       relatedReports: [],
       schoolLocation: {}
@@ -177,9 +186,29 @@ export default {
           },
           endpoint = this.report.did_upvote ? 'unvote' : 'upvote'
 
+      this.upvoting = true
       this.$http.post('report/' + endpoint, data).then(
         (response) => {
           this.updateUpvotes(response.data.upvotes)
+          this.upvoting = false
+        },
+        (response) => {
+          console.log('Failed to ' + endpoint)
+        }
+      )
+    },
+    followReport () {
+      let data = {
+            report_id: this.report.id,
+            user_id: this.userID
+          },
+          endpoint = this.report.did_follow ? 'unfollow' : 'follow'
+
+      this.following = true
+      this.$http.post('report/' + endpoint, data).then(
+        (response) => {
+          this.updateFollow()
+          this.following = false
         },
         (response) => {
           console.log('Failed to ' + endpoint)

@@ -44,7 +44,7 @@ section.page__wrapper.page--min-height
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_late_48px.svg")
                   h3 No upvotes to see here.
-                  p.small Make other reports visible by upvoting them!
+                  p.small Make other reports visible by upvoting them! Your reports are automatically upvoted, so you won't see them here.
           .tabs__content
             .tab__content(v-if="activeTab === 'following'")
               v-report-list(:reports="following", :loading="loading", :filters="true")

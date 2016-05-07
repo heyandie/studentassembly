@@ -12,7 +12,8 @@ import {
   REPORT_CLEAR_ERRORS,
   REPORT_RECEIVE_ID,
   REPORT_RECEIVE_REPORT,
-  REPORT_UPDATE_UPVOTES
+  REPORT_UPDATE_UPVOTES,
+  REPORT_UPDATE_FOLLOW
 } from '../mutation-types'
 
 function defaultReportErrors () {
@@ -123,6 +124,10 @@ const mutations = {
   [REPORT_UPDATE_UPVOTES] (state, upvotes) {
     state.view.did_upvote = !state.view.did_upvote
     state.view.upvotes = upvotes
+  },
+
+  [REPORT_UPDATE_FOLLOW] (state) {
+    state.view.did_follow = !state.view.did_follow
   }
 }
 
