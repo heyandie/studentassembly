@@ -51,8 +51,11 @@ export default {
   },
   methods: {
     search (e) {
-      if (e.target.value.length > 0)
-        this.$router.go('/search?q=' + e.target.value)
+      if (e.target.value.length > 0) {
+        let escaped = encodeURIComponent(e.target.value).replace(/%20/g, "+")
+        e.target.value = ''
+        this.$router.go('/search?q=' + escaped)
+      }
     }
   },
   created () {

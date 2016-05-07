@@ -15,10 +15,6 @@ router.map({
     guest: true,
     component: require('./pages/index.vue')
   },
-  '/about': {
-    name: 'about',
-    component: require('./pages/about.vue')
-  },
   '/register': {
     name: 'register',
     guest: true,
@@ -57,7 +53,6 @@ router.map({
   },
   '/rate': {
     name: 'rate',
-    needAuth: true,
     component: {
       template: "<router-view></router-view>"
     },
@@ -71,6 +66,14 @@ router.map({
         component: require('./pages/rating/view.vue')
       }
     }
+  },
+  '/search': {
+    name: 'search',
+    component: require('./pages/search.vue')
+  },
+  '/about': {
+    name: 'about',
+    component: require('./pages/about.vue')
   },
   '*': {
     component: require('./pages/404.vue')

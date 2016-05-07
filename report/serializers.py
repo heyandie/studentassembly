@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from account.models import User
-from .models import Category, Report, School
+from .models import Category, Report, School, ReportVote
 
 
 class ReportFullSerializer(serializers.ModelSerializer):
@@ -18,6 +18,7 @@ class ReportFullSerializer(serializers.ModelSerializer):
         data['questions'] = category.questions
         data['category'] = category.name
         data['alias'] = User.objects.get(pk=data['user_id']).username
+        data['upvotes'] = ReportVote.objects.filter(report_id=data['id']).count()
         del data['user_id']
         return data
 

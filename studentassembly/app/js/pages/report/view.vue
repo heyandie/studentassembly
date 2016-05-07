@@ -10,7 +10,8 @@ section.page__wrapper.page--light
           .paragraph__section
             .button__group.u-fl-r
               a.button.button--tiny.button--light(href="#0", @click.prevent="testUpvote")
-                span {{ report.vote ? 'Upvoted' : 'Upvote' }}
+                span {{ report.did_upvote ? 'Upvoted' : 'Upvote' }}
+                span(v-if="report.upvotes") &nbsp;{{ report.upvotes }}
               a.button.button--tiny.button--simple(href="#0") Follow
               .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
                 span.u-c-facebook •
@@ -19,10 +20,14 @@ section.page__wrapper.page--light
                 .dropdown__menu(v-bind:class="openShareMenu ? 'dropdown__menu--open' : ''")
                   .dropdown__menu-header
                     span Share
-                  a.dropdown__menu-item(target="_blank", href="#0")
+                  a.dropdown__menu-item(
+                    @click.prevent="shareDialog('https://facebook.com/sharer/sharer.php?u=http%3A%2F%2Fstudentassembly.herokuapp.com%2F')"
+                  )
                     img.button__icon(src="/static/img/fb-logo.png", height="15")
                     span Facebook
-                  a.dropdown__menu-item(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
+                  a.dropdown__menu-item(
+                    @click.prevent="shareDialog('https://twitter.com/intent/tweet?text=Share%20Report')"
+                  )
                     img.button__icon(src="/static/img/twitter-logo.png", height="14")
                     span Twitter
             h2 {{ report.category }}
@@ -153,6 +158,13 @@ export default {
         (response) => {
           console.log('Failed')
         }
+      )
+    },
+    shareDialog (url, width = 500, height = 300) {
+      let left = (screen.width / 2) - (width / 2),
+          top = (screen.height / 2) - (height / 2)
+      window.open(url, '',
+        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left
       )
     },
     testUpvote () {

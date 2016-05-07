@@ -120,7 +120,6 @@ class ListReportAPIView(APIView):
         if self.request.GET.get('user', None):
             user_id = UUID(self.request.GET.get('user'))
             queryset = queryset.filter(user_id=user_id)
-
         else:
             queryset = queryset.filter(allow_publish=True)
 
@@ -225,6 +224,8 @@ class CreateReportAPIView(APIView):
 
         if serializer.is_valid():
             report = serializer.save()
+            # Upvote automatically (a la Reddit)
+            upvote = ReportVote.objects.create(user_id=request.user.id, report_id=serializer.data['id'])
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -251,9 +252,9 @@ class RetrieveReportAPIView(mixins.RetrieveModelMixin,
             if self.request.user.is_authenticated():
                 vote = ReportVote.objects.filter(report_id=report.id, user_id= self.request.user.id).all()
                 if len(vote) > 0:
-                    data['vote'] = True
+                    data['did_upvote'] = True
                 else:
-                    data['vote'] = False
+                    data['did_upvote'] = False
 
             return Response(data)
         else:

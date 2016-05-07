@@ -13,7 +13,7 @@ section.page__wrapper.page--min-height
           | Log in using your email and password to start using Student Assembly.
       .alert__wrapper.alert--error(v-if="$route.query.s === 'expired'")
         p
-          | You have been logged out due to inactivity. For security measures, please log in again.
+          | You have been inactive for 24 hours. For security measures, please log in again.
 
       h2 Log in
       .form__wrapper

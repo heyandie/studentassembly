@@ -159,15 +159,15 @@ export default {
   },
   watch: {
     'member': function (val) {
+      this.rating = defaultRating()
+      this.rating.staff_id = this.member.id
+
       if (val.user_rating) {
         Object.keys(this.rating).forEach((key) => {
           this.rating[key] = this.member.user_rating[key]
         })
       }
-      else {
-        this.rating = defaultRating()
-      }
-
+      
       this.getOtherStaffMembers()
     }
   },
