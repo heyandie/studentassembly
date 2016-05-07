@@ -11,7 +11,8 @@ import {
   REPORT_SHOW_ERROR,
   REPORT_CLEAR_ERRORS,
   REPORT_RECEIVE_ID,
-  REPORT_RECEIVE_REPORT
+  REPORT_RECEIVE_REPORT,
+  REPORT_UPDATE_UPVOTES
 } from '../mutation-types'
 
 function defaultReportErrors () {
@@ -117,6 +118,11 @@ const mutations = {
   [REPORT_RECEIVE_REPORT] (state, report) {
     state.view = report
     state.view.questions = JSON.parse(report.questions)
+  },
+
+  [REPORT_UPDATE_UPVOTES] (state, upvotes) {
+    state.view.did_upvote = !state.view.did_upvote
+    state.view.upvotes = upvotes
   }
 }
 

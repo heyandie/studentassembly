@@ -9,7 +9,7 @@ section.page__wrapper.page--light
         template(v-if="!loading")
           .paragraph__section
             .button__group.u-fl-r
-              a.button.button--tiny.button--light(href="#0", @click.prevent="testUpvote")
+              a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport")
                 span {{ report.did_upvote ? 'Upvoted' : 'Upvote' }}
                 span(v-if="report.upvotes") &nbsp;{{ report.upvotes }}
               a.button.button--tiny.button--simple(href="#0") Follow
@@ -98,6 +98,9 @@ export default {
       getReport,
       getID: ({ dispatch, state }) => {
         dispatch('REPORT_RECEIVE_ID', state.route.params.id)
+      },
+      updateUpvotes: ({ dispatch, state }, upvotes) => {
+        dispatch('REPORT_UPDATE_UPVOTES', upvotes)
       }
     }
   },
@@ -167,19 +170,21 @@ export default {
         'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left
       )
     },
-    testUpvote () {
+    upvoteReport () {
       let data = {
-        report_id: this.report.id,
-        user_id: this.userID
-      }
-      // this.$http.post('report/upvote', data).then(
-      //   (response) => {
-      //     console.log(response)
-      //   },
-      //   (response) => {
-      //     console.log('Failed')
-      //   }
-      // )
+            report_id: this.report.id,
+            user_id: this.userID
+          },
+          endpoint = this.report.did_upvote ? 'unvote' : 'upvote'
+
+      this.$http.post('report/' + endpoint, data).then(
+        (response) => {
+          this.updateUpvotes(response.data.upvotes)
+        },
+        (response) => {
+          console.log('Failed to ' + endpoint)
+        }
+      )
     }
   },
   ready () {

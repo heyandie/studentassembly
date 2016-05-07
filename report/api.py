@@ -37,8 +37,9 @@ class UpvoteReportAPIView(APIView):
     def post(self, request):
         data = request.data
         vote, created = ReportVote.objects.get_or_create(user_id=data['user_id'], report_id=data['report_id'])
+        upvotes = ReportVote.objects.filter(report_id=data['report_id']).count()
         if created:
-            return Response({}, status.HTTP_200_OK)
+            return Response({ 'upvotes': upvotes }, status.HTTP_200_OK)
         else:
             return Response({'error': 'Upvote for this report already exists'}, status.HTTP_400_BAD_REQUEST)
 
