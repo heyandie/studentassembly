@@ -88,6 +88,8 @@ button[type="submit"] {
   font-weight: 600;
   text-transform: uppercase;
 
+  transition: background-color 175ms;
+
   &[disabled],
   &[disabled]:hover {
     background-color: rgba($brand-color, 0.5);
@@ -98,7 +100,7 @@ button[type="submit"] {
   }
 
   &:hover {
-    background-color: darken($brand-color, 6);
+    background-color: darken($brand-color, 15%);
   }
 }
 

@@ -69,6 +69,15 @@
   cursor: pointer;
 }
 
+.u-google-map {
+  overflow: hidden;
+
+  // YASS IT'S A HACK I KNOW
+  iframe {
+    margin-top: -180px;
+  }
+}
+
 // Margins
 @each $mg in (0, 4, 8, 12, 16, 24) {
   .u-mg-t-#{$mg} {

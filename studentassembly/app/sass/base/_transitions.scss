@@ -1,0 +1,9 @@
+.fade-transition {
+  transition: 250ms;
+  opacity: 1;
+  visibility: visible;
+}
+.fade-enter, .fade-leave {
+  opacity: 0;
+  visibility: hidden;
+}

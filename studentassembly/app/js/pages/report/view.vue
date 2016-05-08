@@ -57,12 +57,18 @@ section.page__wrapper.page--light
                   .list__item-attachment-preview(v-bind:style="{ backgroundImage: 'url(' + file.blob + ')' }")
                   span {{ file.name }}
       aside.content__secondary.content--additional-info
+        h4 Other reports in this school
         template(v-if="relatedReports.length")
-          h4 Other reports in this school
           .u-mg-t-24(v-for="related in relatedReports")
             a(v-link="{ name: 'report-view', params: { id: related.id }}")
               h5 {{ related.category }}
               p.small {{ related.text | truncate 72 }}
+        template(v-else)
+          .u-mg-t-12
+            p.small There are no related reports.
+            a.button.button--mini.button--hollow(
+              v-link="{ name: 'file-a-report', query: { school: report.school }}"
+            ) File a report
 
 section.page__wrapper(:class="loading ? 'page--min-height' : ''")
   .content__wrapper
@@ -82,8 +88,15 @@ section.page__wrapper(:class="loading ? 'page--min-height' : ''")
             v-link="{ name: 'rate', query: { school: report.school }}"
           ) Rate their staff
         .content__half
-          .u-div-240
-            .u-bg-img(:style="schoolLocation")
+          .u-div-240.u-google-map
+            iframe(
+              :src="googleMap",
+              width="100%",
+              height="600",
+              frameborder="0",
+              style="border:0",
+              allowfullscreen
+            )
 
 </template>
 
@@ -119,6 +132,11 @@ export default {
     },
     detailText () {
       return this.report.text.split('\n\n')
+    },
+    googleMap () {
+      return 'https://www.google.com/maps?q='
+        + encodeURIComponent(this.report.school)
+        + '&z=15&output=embed'
     }
   },
   data () {
@@ -152,7 +170,11 @@ export default {
   },
   methods: {
     getRelatedReports () {
-      this.$http.get('report?school=' + this.report.school_id + '&limit=3').then(
+      this.$http.get(
+        'report?school=' + this.report.school_id +
+        '&exclude=' + this.report.id +
+        '&limit=3'
+      ).then(
         (response) => {
           this.relatedReports = response.data.reports
         },
@@ -161,11 +183,12 @@ export default {
         }
       )
     },
-    shareDialog (url, width = 500, height = 300) {
+    shareDialog (url, width = 570, height = 370) {
       let left = (screen.width / 2) - (width / 2),
-          top = (screen.height / 2) - (height / 2)
+          top = (screen.height / 2) - (height / 2) - 80
       window.open(url, '',
-        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=' + width + ',height=' + height + ',top=' + top + ',left=' + left
+        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=' +
+        width + ',height=' + height + ',top=' + top + ',left=' + left
       )
     },
     upvoteReport () {

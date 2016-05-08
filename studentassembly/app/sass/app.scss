@@ -34,10 +34,13 @@
 .content__wrapper {
   margin: 0 auto;
   max-width: $content-width;
-  // background-color: #e5e5dc;
 
   &.content--small {
     max-width: 440px;
+  }
+
+  &.content--large {
+    max-width: $content-large;
   }
 }
 
@@ -101,27 +104,22 @@
 
   @include media("<=tablet") {
     width: 100%;
+    margin-bottom: 28px;
   }
   @include media(">tablet") {
     width: 48%;
     margin-right: 4%;
   }
 
-  &:nth-child(2n) {
-    @include media(">tablet") {
-      margin-right: 0;
+  &:last-child {
+    @include media("<=tablet") {
+      margin-bottom: 0;
     }
   }
 
-  .content__half-left {
-    max-width: 500px;
-
-    @include media("<=tablet") {
-      margin: 0 auto;
-    }
+  &:nth-child(2n) {
     @include media(">tablet") {
-      padding-right: 4%;
-      margin-left: auto;
+      margin-right: 0;
     }
   }
 }

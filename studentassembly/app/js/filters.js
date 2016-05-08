@@ -36,6 +36,14 @@ export const registerFilters = () => {
     }).join(' ')
   })
 
+  Vue.filter('orderObjectKeys', (unordered) => {
+    const ordered = {}
+    Object.keys(unordered).sort().forEach((key) => {
+      ordered[key] = unordered[key]
+    })
+    return ordered
+  })
+
   // Vue.filter('currencyDisplay', {
   //   // model -> view
   //   // formats the value when updating the input element.

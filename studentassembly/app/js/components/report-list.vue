@@ -1,10 +1,10 @@
 <template lang="jade">
-.list__group
-  .spinner__wrapper(v-if="loading")
+.list
+  .spinner__wrapper(v-if="loading" transition="fade")
     v-spinner
     h4 Loading reports...
 
-  template(v-if="!loading")
+  .list__group(v-else transition="fade")
     template(v-if="reports.length")
       .list__filters(v-if="filters")
         .list__search.u-fl-l

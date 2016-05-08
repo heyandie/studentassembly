@@ -1,7 +1,7 @@
 <template lang="jade">
 section.page__wrapper
   .u-div-180(style="background-color:#293757;")
-    .u-bg-img(style="opacity:0.1;background-image:url('/static/img/report-header.jpg');")
+    .u-bg-img(style="opacity:0.1;background-image:url('/static/img/rating-header.jpg');")
 section.page__wrapper.page--min-height
   .content__wrapper
     .content__section
@@ -23,17 +23,17 @@ section.page__wrapper.page--min-height
                   @input="updateSearchKey | debounce 250"
                 )
 
-            template(v-if="!filtered")
-              .list__empty(v-if="staff.length")
-                img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
-                h3 No search results for '{{ searchKey }}'
-              .list__empty(v-else)
-                img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
-                p.small No staff members available.
-
-            template(v-if="(filtered) * (searchKey !== '')")
-              .list__results
-                h5 {{ filtered }} {{ filtered | pluralize 'result' }}
+            //- template(v-if="!filtered")
+            //-   .list__empty(v-if="staff.length")
+            //-     img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+            //-     h3 No search results for '{{ searchKey }}'
+            //-   .list__empty(v-else)
+            //-     img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
+            //-     p.small No staff members available.
+            //-
+            //- template(v-if="(filtered) * (searchKey !== '')")
+            //-   .list__results
+            //-     h5 {{ filtered }} {{ filtered | pluralize 'result' }}
 
             table
               thead

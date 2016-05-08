@@ -31,35 +31,32 @@ section.page__wrapper.page--min-height
       article.content__main
         .tabs
           .tabs__content
-            .tab__content(v-if="activeTab === 'reports'")
+            .tab__content(v-show="activeTab === 'reports'")
               v-report-list(:reports="reports", :loading="loading", :filters="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
                   h3 You don't have reports yet.
                   p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
                   a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
-          .tabs__content
-            .tab__content(v-if="activeTab === 'ratings'")
+            .tab__content(v-show="activeTab === 'ratings'")
               v-rating-list(:ratings="ratings", :loading="loading", :filters="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_ind_48px.svg")
                   h3 You have not rated anyone yet.
                   p.small Start by looking for staff members in your school. You can also look for existing ratings by using the search bar on the topmost area of the page.
                   a.button.button--small(v-link="{ name: 'rate-staff' }") Submit a rating
-          .tabs__content
-            .tab__content(v-if="activeTab === 'upvoted'")
+            .tab__content(v-show="activeTab === 'upvoted'")
               v-report-list(:reports="upvoted", :loading="loading", :filters="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_late_48px.svg")
                   h3 No upvotes to see here.
                   p.small Make other reports visible by upvoting them! Your reports are automatically upvoted, so you won't see them here.
-          .tabs__content
-            .tab__content(v-if="activeTab === 'following'")
+            .tab__content(v-show="activeTab === 'following'")
               v-report-list(:reports="following", :loading="loading", :filters="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_turned_in_48px.svg")
                   h3 You have not followed any report.
-                  p.small Follow reports so you can receive updates regarding their statuses.
+                  p.small Follow reports so you can receive updates regarding their statuses. Your reports are automatically followed, so you won't see them here.
 
       aside.content__secondary.content--additional-info
         template(v-if="reports")

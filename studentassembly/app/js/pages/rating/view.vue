@@ -29,7 +29,7 @@ section.page__wrapper.page--min-height
               span.header--light {{ member.school }}
             h4.u-mg-b-12 Average of {{ member.votes }} {{ member.votes | pluralize 'rating' }}
             ul.stats
-              li.stat(v-for="val in member.rating")
+              li.stat(v-for="val in member.rating | orderObjectKeys")
                 p.stat__header {{ $key | toTitleCase '_' }}
                 span.stat__value {{ val }} / 5
 
@@ -37,7 +37,7 @@ section.page__wrapper.page--min-height
             template(v-if="member.user_rating")
               h3.u-mg-b-24 Your rating
               ul.stats.u-mg-b-24
-                li.stat.stat--small(v-for="val in member.user_rating.values")
+                li.stat.stat--small(v-for="val in member.user_rating.values | orderObjectKeys")
                   p.stat__header {{ $key | toTitleCase '_' }}
                   span.stat__value {{ val }} / 5
               template(v-if="member.user_rating.comment")
@@ -54,7 +54,7 @@ section.page__wrapper.page--min-height
                 v-avatar(:alias="otherRating.alias", :inline="true", height="28px", width="28px")
                 span.u-mg-l-4 {{ otherRating.alias }}'s rating
               ul.stats.u-mg-b-24
-                li.stat.stat--small(v-for="val in otherRating.values")
+                li.stat.stat--small(v-for="val in otherRating.values | orderObjectKeys")
                   p.stat__header {{ $key | toTitleCase '_' }}
                   span.stat__value {{ val }} / 5
               template(v-if="otherRating.comment")

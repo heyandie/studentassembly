@@ -129,6 +129,10 @@ class ListReportAPIView(APIView):
             school = self.request.GET.get('school')
             queryset = queryset.filter(school=school)
 
+        if self.request.GET.get('exclude', None):
+            exclude = UUID(self.request.GET.get('exclude'))
+            queryset = queryset.filter(~Q(id=exclude))
+
         queryset = queryset.order_by('-created_at')
 
         if self.request.GET.get('limit', None):
@@ -145,14 +149,16 @@ class ListReportAPIView(APIView):
         data['reports'] = serializer.data
 
         if self.request.GET.get('user', None) and self.request.GET.get('upvoted', False):
-            upvoted = [x.report_id for x in ReportVote.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()]
-            upvoted_reports = self.queryset.filter(id__in=upvoted)
+            user_id = UUID(self.request.GET.get('user'))
+            upvoted = [x.report_id for x in ReportVote.objects.filter(user_id=user_id).all()]
+            upvoted_reports = self.queryset.filter(~Q(user_id=user_id), id__in=upvoted)
             serializer = self.serializer_class(upvoted_reports, many=True)
             data['upvoted'] = serializer.data
 
         if self.request.GET.get('user', None) and self.request.GET.get('following', False):
-            following = [x.report_id for x in ReportFollow.objects.filter(user_id=UUID(self.request.GET.get('user'))).all()]
-            following_reports = self.queryset.filter(id__in=following)
+            user_id = UUID(self.request.GET.get('user'))
+            following = [x.report_id for x in ReportFollow.objects.filter(user_id=user_id).all()]
+            following_reports = self.queryset.filter(~Q(user_id=user_id), id__in=following)
             serializer = self.serializer_class(following_reports, many=True)
             data['following'] = serializer.data
 

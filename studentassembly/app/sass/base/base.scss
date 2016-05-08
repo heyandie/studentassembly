@@ -9,6 +9,7 @@
 @import "lists";
 @import "modal";
 @import "tabs";
+@import "transitions";
 @import "stats";
 
 html {
@@ -87,6 +88,10 @@ p {
 
     & + .button, & + button {
       margin-top: 10px;
+    }
+
+    & + .button--mini {
+      margin-top: 6px;
     }
   }
 
