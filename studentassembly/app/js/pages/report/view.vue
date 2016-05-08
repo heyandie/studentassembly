@@ -41,7 +41,7 @@ section.page__wrapper.page--light
                 :class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'"
               )
                 span {{ report.status }}
-                span.list__item-date &nbsp;as of {{ report.updated_at | humanizeDate }}, reported by {{ report.alias }}
+                span.list__item-date &nbsp;as of {{ report.updated_at | toDateString }}, reported by {{ report.alias }}
             hr
           .paragraph__section(v-for="(index, question) in report.questions")
             h3 {{ question.text }}
@@ -62,7 +62,7 @@ section.page__wrapper.page--light
           .u-mg-t-24(v-for="related in relatedReports")
             a(v-link="{ name: 'report-view', params: { id: related.id }}")
               h5 {{ related.category }}
-              p.small {{ related.text | truncate }}
+              p.small {{ related.text | truncate 72 }}
 
 section.page__wrapper(:class="loading ? 'page--min-height' : ''")
   .content__wrapper
@@ -109,17 +109,6 @@ export default {
       updateFollow: ({ dispatch, state }) => {
         dispatch('REPORT_UPDATE_FOLLOW')
       }
-    }
-  },
-  filters: {
-    humanizeDate (date) {
-      return new Date(date).toDateString()
-    },
-    truncate (string) {
-      if (string.length > 72)
-        return string.substring(0, 72) + '...'
-      else
-        return string
     }
   },
   computed: {

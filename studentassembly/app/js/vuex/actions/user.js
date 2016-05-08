@@ -14,7 +14,20 @@ export const getReports = ({ dispatch, state }, context) => {
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
     },
     (response) => {
-      console.log('Retrieving user reports failed.')
+      console.log('Failed to retrieve user reports.')
+    }
+  )
+}
+
+export const getRatings = ({ dispatch, state }, context) => {
+  dispatch(types.BUTTON_SUBMIT_LOADING, true)
+  context.$http.get('rating?user=' + state.user.id).then(
+    (response) => {
+      dispatch(types.USER_RECEIVE_RATINGS, response.data)
+      dispatch(types.BUTTON_SUBMIT_LOADING, false)
+    },
+    (response) => {
+      console.log('Failed to retrieve user ratings.')
     }
   )
 }

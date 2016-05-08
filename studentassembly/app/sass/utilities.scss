@@ -70,7 +70,7 @@
 }
 
 // Margins
-@each $mg in (0, 4, 8, 12, 24) {
+@each $mg in (0, 4, 8, 12, 16, 24) {
   .u-mg-t-#{$mg} {
     margin-top: #{$mg}px;
   }

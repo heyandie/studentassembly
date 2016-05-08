@@ -2,28 +2,21 @@
 .list__group
   .spinner__wrapper(v-if="loading")
     v-spinner
-    h4 Loading reports...
+    h4 Loading ratings...
 
   template(v-if="!loading")
-    template(v-if="reports.length")
+    template(v-if="ratings.length")
       .list__filters(v-if="filters")
-        .list__search.u-fl-l
+        .list__search.list__search--full
           input(
             type="text",
-            placeholder="Search by category or school",
+            placeholder="Search by name or school",
             v-model="searchKey",
             @input="resetPagination | debounce 250"
           )
-        .list__options.u-fl-r
-          .form__select
-            select(name="sort-by")
-              option(disabled selected hidden value="") Status
-              option(value="pending") Pending
-              option(value="accepted") Accepted
-              option(value="resolved") Resolved
 
     template(v-if="!filteredCount")
-      .list__empty(v-if="reports.length")
+      .list__empty(v-if="ratings.length")
         img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
         h3 No search results for '{{ searchKey }}'
       .list__empty(v-else)
@@ -34,22 +27,21 @@
         h5 {{ filteredCount }} {{ filteredCount | pluralize 'result' }}
 
     a.list__item(
-      v-for="report in reports | filterBy searchKey in 'category' 'school' | count | limitBy limit offset",
-      v-link="{ name: 'report-view', params: { id: report.id } }"
+      v-for="rating in ratings | filterBy searchKey in 'staff_name' 'school' | count | limitBy limit offset",
+      v-link="{ name: 'rate-view', params: { id: rating.staff_id } }"
     )
       h4
-        .u-fl-r
-          small.list__item-remark(:class="report.is_approved ? 'list__item--approved' : 'list__item--not-approved'")
-            | {{ report.status }}
-        span {{ report.category }}
+        span {{ rating.staff_name }}
         br
-        small {{ report.school }}
-      p.small {{ report.updated_at | relativeDate | capitalize }}
-      p {{ report.text | truncate }}
+        small {{ rating.school }}
+      ul.stats.u-mg-t-16
+        li.stat.stat--small(v-for="val in rating.values")
+          p.stat__header {{ $key | toTitleCase '_' }}
+          span.stat__value {{ val }} / 5
 
     .list__pagination(v-if="moreThanLimit")
       .list__page(
-        v-for="i in reports.length / limit",
+        v-for="i in ratings.length / limit",
         :class="i === currentPage ? 'list__page--current' : ''",
         @click="setPage(i)"
       ) {{ i + 1 }}
@@ -59,7 +51,7 @@
 import Spinner from './spinner.vue'
 
 export default {
-  props: ['loading', 'reports', 'filters'],
+  props: ['loading', 'ratings', 'filters'],
   data () {
     return {
       limit: 10,
@@ -85,7 +77,7 @@ export default {
       return this.limit * this.currentPage
     },
     moreThanLimit () {
-      return this.reports.length > this.limit && this.searchKey === ''
+      return this.ratings.length > this.limit && this.searchKey === ''
     }
   },
   filters: {

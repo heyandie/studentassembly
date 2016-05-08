@@ -30,7 +30,7 @@ section.page__wrapper.page--min-height
             h4.u-mg-b-12 Average of {{ member.votes }} {{ member.votes | pluralize 'rating' }}
             ul.stats
               li.stat(v-for="val in member.rating")
-                p.stat__header {{ toTitleCase($key, "_") }}
+                p.stat__header {{ $key | toTitleCase '_' }}
                 span.stat__value {{ val }} / 5
 
           .form__wrapper
@@ -38,7 +38,7 @@ section.page__wrapper.page--min-height
               h3.u-mg-b-24 Your rating
               ul.stats.u-mg-b-24
                 li.stat.stat--small(v-for="val in member.user_rating.values")
-                  p.stat__header {{ toTitleCase($key, "_") }}
+                  p.stat__header {{ $key | toTitleCase '_' }}
                   span.stat__value {{ val }} / 5
               template(v-if="member.user_rating.comment")
                 p {{{ member.user_rating.comment | nl2br }}}
@@ -54,8 +54,8 @@ section.page__wrapper.page--min-height
                 v-avatar(:alias="otherRating.alias", :inline="true", height="28px", width="28px")
                 span.u-mg-l-4 {{ otherRating.alias }}'s rating
               ul.stats.u-mg-b-24
-                li.stat.stat--small(v-for="(key, val) in otherRating.values")
-                  p.stat__header {{ toTitleCase(key, "_") }}
+                li.stat.stat--small(v-for="val in otherRating.values")
+                  p.stat__header {{ $key | toTitleCase '_' }}
                   span.stat__value {{ val }} / 5
               template(v-if="otherRating.comment")
                 p {{{ otherRating.comment | nl2br }}}
@@ -66,7 +66,7 @@ section.page__wrapper.page--min-height
           a(v-link="{ name: 'rate-view', params: { 'id': relatedMember.id } }")
             h5 {{ relatedMember.name }}
             p.small
-              span {{ relatedMember.school | truncate }}
+              span {{ relatedMember.school | truncate 36 }}
               br
               strong {{ relatedMember.votes || 'No' }} {{ relatedMember.votes | pluralize 'rating' }}
               span(v-if="relatedMember.votes") &nbsp;&mdash; overall: {{ relatedMember.rating.overall }}
@@ -77,7 +77,7 @@ v-modal(:show.sync="showRatingModal")
     template(v-if="!$loadingRouteData")
       form(@submit.prevent="submitRating")
         .form__element(v-for="(key, val) in member.rating")
-          .form__label.u-mg-b-4 {{ toTitleCase(key, "_") }}
+          .form__label.u-mg-b-4 {{ key | toTitleCase '_' }}
           .form__radio.u-mg-b-0
             .u-cf
               .u-fl-l
@@ -109,7 +109,6 @@ v-modal(:show.sync="showRatingModal")
 import Modal from '../../components/modal.vue'
 import Avatar from '../../components/avatar.vue'
 import Spinner from '../../components/spinner.vue'
-import { toTitleCase } from '../../util'
 
 function defaultRating () {
   return {
@@ -146,17 +145,6 @@ export default {
       rating: defaultRating()
     }
   },
-  filters: {
-    truncate (string) {
-      if (string.length > 36)
-        return string.substring(0, 36) + '...'
-      else
-        return string
-    },
-    nl2br (text) {
-      return String(text).replace(/\n\n/g, "<div class='u-mg-b-12'></div>")
-    }
-  },
   watch: {
     'member': function (val) {
       this.rating = defaultRating()
@@ -167,12 +155,11 @@ export default {
           this.rating[key] = this.member.user_rating[key]
         })
       }
-      
+
       this.getOtherStaffMembers()
     }
   },
   methods: {
-    toTitleCase: toTitleCase,
     checkRating (key, val) {
       return val <= this.rating.values[key]
     },

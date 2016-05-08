@@ -2,7 +2,8 @@ import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT_SUCCESS,
   USER_RECEIVE_PROFILE,
-  USER_RECEIVE_REPORTS
+  USER_RECEIVE_REPORTS,
+  USER_RECEIVE_RATINGS
 } from '../mutation-types'
 
 function defaultUserState () {
@@ -40,6 +41,10 @@ const mutations = {
     state.reports = data.reports
     state.upvoted = data.upvoted
     state.following = data.following
+  },
+
+  [USER_RECEIVE_RATINGS] (state, data) {
+    state.ratings = data
   }
 }
 

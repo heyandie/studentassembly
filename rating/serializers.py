@@ -15,8 +15,11 @@ class RatingSerializer(serializers.ModelSerializer):
         data = super(RatingSerializer, self).to_representation(instance)
         data['staff_name'] = Staff.objects.get(pk=data['staff_id']).name
         data['alias'] = User.objects.get(pk=data['user_id']).username
+        school_id = Staff.objects.get(pk=data['staff_id']).school
+        data['school'] = School.objects.get(pk=school_id).name
         del data['user_id']
         return data
+
 
 class StaffSerializer(serializers.ModelSerializer):
 

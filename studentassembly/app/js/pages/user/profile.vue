@@ -19,7 +19,7 @@ section.page__wrapper.page--min-height
           .tab__nav(@click="activeTab = 'ratings'", :class="activeTab === 'ratings' ? 'active' : ''")
             p.small
               strong Ratings
-              small.light &nbsp;&nbsp;3
+              small.light &nbsp;&nbsp;{{ ratings.length }}
           .tab__nav(@click="activeTab = 'upvoted'", :class="activeTab === 'upvoted' ? 'active' : ''")
             p.small
               strong Upvoted
@@ -38,6 +38,14 @@ section.page__wrapper.page--min-height
                   h3 You don't have reports yet.
                   p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
                   a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+          .tabs__content
+            .tab__content(v-if="activeTab === 'ratings'")
+              v-rating-list(:ratings="ratings", :loading="loading", :filters="true")
+                template(slot="list_empty")
+                  img.list__empty-icon(src="/static/img/icons/action/ic_assignment_ind_48px.svg")
+                  h3 You have not rated anyone yet.
+                  p.small Start by looking for staff members in your school. You can also look for existing ratings by using the search bar on the topmost area of the page.
+                  a.button.button--small(v-link="{ name: 'rate-staff' }") Submit a rating
           .tabs__content
             .tab__content(v-if="activeTab === 'upvoted'")
               v-report-list(:reports="upvoted", :loading="loading", :filters="true")
@@ -78,27 +86,30 @@ v-modal(:show.sync="showEditProfileModal")
         .form__note Fill this if you want to pursue legal action when reporting.
         input(type="text", v-model="profileInfo.contact_number", placeholder="+63 9xx xxx xxxx")
       .form__element
-        button(type="submit", @click.prevent="true") Submit
+        button(type="submit", @click.prevent="submitProfile") Submit
 </template>
 
 <script>
 import Modal from '../../components/modal.vue'
 import ReportList from '../../components/report-list.vue'
+import RatingList from '../../components/rating-list.vue'
 import Avatar from '../../components/avatar.vue'
 import Spinner from '../../components/spinner.vue'
-import { getReports } from '../../vuex/actions/user'
+import { getReports, getRatings } from '../../vuex/actions/user'
 
 export default {
   vuex: {
     getters: {
+      userID: ({ user }) => user.id,
       alias: ({ user }) => user.alias,
       reports: ({ user }) => user.reports,
+      ratings: ({ user }) => user.ratings,
       upvoted: ({ user }) => user.upvoted,
       following: ({ user }) => user.following,
       loading: ({ report }) => report.buttonLoading
     },
     actions: {
-      getReports
+      getReports, getRatings
     }
   },
   data () {
@@ -110,6 +121,7 @@ export default {
   },
   created () {
     this.getReports(this)
+    this.getRatings(this)
   },
   watch: {
     'reports': function () {
@@ -131,9 +143,9 @@ export default {
       }
     },
     submitProfile () {
-      this.$http.patch('user', this.profileInfo).then(
+      this.$http.patch('account/' + this.userID, this.profileInfo).then(
         (response) => {
-          console.log('Success.')
+          this.showEditProfileModal = false
         },
         (response) => {
           console.log('Failed to patch user info.')
@@ -144,6 +156,7 @@ export default {
   components: {
     'v-modal': Modal,
     'v-report-list': ReportList,
+    'v-rating-list': RatingList,
     'v-avatar': Avatar,
     'v-spinner': Spinner
   }

@@ -22,6 +22,19 @@ section.page__wrapper.page--min-height
                   :value="searchKey",
                   @input="updateSearchKey | debounce 250"
                 )
+
+            template(v-if="!filtered")
+              .list__empty(v-if="staff.length")
+                img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+                h3 No search results for '{{ searchKey }}'
+              .list__empty(v-else)
+                img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
+                p.small No staff members available.
+
+            template(v-if="(filtered) * (searchKey !== '')")
+              .list__results
+                h5 {{ filtered }} {{ filtered | pluralize 'result' }}
+
             table
               thead
                 tr
@@ -29,7 +42,7 @@ section.page__wrapper.page--min-height
                     v-for="param in params",
                     @click="updateSort(param)"
                   )
-                    span {{ toTitleCase(param, '_') }}
+                    span {{ param | toTitleCase '_' }}
                     .sort-icon
                       img(
                         v-show="(sortKey === param) * (order === -1)",
@@ -52,7 +65,6 @@ section.page__wrapper.page--min-height
 <script>
 import Spinner from '../../components/spinner.vue'
 import { getStaff } from '../../vuex/actions/staff'
-import { toTitleCase } from '../../util'
 
 export default {
   vuex: {
@@ -80,9 +92,6 @@ export default {
   },
   created () {
     this.getStaff(this)
-  },
-  methods: {
-    toTitleCase: toTitleCase
   },
   components: {
     'v-spinner': Spinner

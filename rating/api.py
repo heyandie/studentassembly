@@ -109,8 +109,9 @@ class ListCreateRatingAPIView(generics.ListCreateAPIView):
         return queryset.filter(**filters)
 
     def list(self, request):
+        user_id = UUID(self.request.GET.get('user', None))
 
-        if not self.request.GET.get('user', None) == str(request.user.id):
+        if not str(user_id) == str(request.user.id):
             return Response({}, status.HTTP_403_FORBIDDEN)
 
         queryset = self.queryset

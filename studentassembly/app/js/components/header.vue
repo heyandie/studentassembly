@@ -54,6 +54,7 @@ export default {
       if (e.target.value.length > 0) {
         let escaped = encodeURIComponent(e.target.value).replace(/%20/g, "+")
         e.target.value = ''
+        this.showSearchBar = false
         this.$router.go('/search?q=' + escaped)
       }
     }
