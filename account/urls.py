@@ -5,20 +5,25 @@ from .api import (
     RegisterAPIView,
     UserContactDetailsAPIView,
     ResendVerificationAPIView,
-    UpdateUserDetailsAPIView
+    UpdateUserDetailsAPIView,
+    SendResetPasswordLinkAPIView,
+    ResetPasswordAPIView,
     )
 
-from .views import ActivateAccountView
+from .views import ActivateAccountView, ResetPasswordView
 
 
 urlpatterns = [
     url(r'^api/register$', RegisterAPIView.as_view({'post':'create'}), name='register'),
     url(r'^verify_account/(?P<token>[0-9A-Za-z]+)$', ActivateAccountView, name='verify'),
+    url(r'^reset_password$', ResetPasswordView, name='reset-password-view'),
     url(r'^api/token_auth$', obtain_jwt_token, name='auth'),
     url(r'^api/token_refresh$', refresh_jwt_token, name='refresh-token'),
     url(r'^api/account/(?P<pk>[\-0-9A-Za-z]+)$', UpdateUserDetailsAPIView.as_view(), name='update-user-details'),
     url(r'^api/user$', UserContactDetailsAPIView.as_view(), name='user-details'),
     url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend-verification'),
+    url(r'^api/send_password_reset_link$', SendResetPasswordLinkAPIView.as_view(), name='request-reset-password'),
+    url(r'^api/reset_password$', ResetPasswordAPIView.as_view(), name='reset-password'),
 ]
 
 """

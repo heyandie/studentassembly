@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 from .common import *
 
+DEBUG = False
+ALLOWED_HOSTS = ['.studentassembly.herokuapp.com',]
 DATABASES = {}
 
 # Parse database configuration from $DATABASE_URL

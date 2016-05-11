@@ -11,6 +11,7 @@ from django.template.loader import get_template
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
 from django.utils.translation import ugettext as _
+from django.contrib.auth.hashers import make_password
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -23,8 +24,8 @@ from rest_framework_jwt.compat import get_username, get_username_field
 from rest_framework_jwt.settings import api_settings
 from rest_framework import exceptions
 
-from .models import User, VerificationToken
-from .serializers import AccountSerializer, CreateAccountSerializer
+from .models import User, VerificationToken, ResetPasswordToken
+from .serializers import AccountSerializer, CreateAccountSerializer, UpdatePasswordSerializer
 
 def send_verification_request(recepient, link):
     from django.conf import settings
@@ -33,6 +34,18 @@ def send_verification_request(recepient, link):
     template = get_template('email/verify_account.html')
     content = template.render({'verification_link': link})
     subject = 'Please verfiy your email address'
+    msg = EmailMessage(subject, content, settings.DEFAULT_FROM_EMAIL, [recepient])
+    msg.content_subtype = "html"
+    msg.send()
+
+
+def send_password_reset_link(recepient, link):
+    from django.conf import settings
+    from django.core.mail import EmailMessage
+
+    template = get_template('email/reset_password.html')
+    content = template.render({'link': link})
+    subject = 'Please click here to reset your password'
     msg = EmailMessage(subject, content, settings.DEFAULT_FROM_EMAIL, [recepient])
     msg.content_subtype = "html"
     msg.send()
@@ -157,3 +170,48 @@ class ResendVerificationAPIView(APIView):
         verification_link = request.build_absolute_uri(reverse('account:verify', kwargs={'token':token.token}))
         send_verification_request(email, verification_link)
         return Response({},status.HTTP_200_OK)
+
+
+class SendResetPasswordLinkAPIView(APIView):
+
+    permission_classes = (AllowAny,)
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Email address is not registered'}, status.HTTP_400_BAD_REQUEST)
+
+        token, _created = ResetPasswordToken.objects.get_or_create(user_id=user.id)
+
+        reset_link = request.build_absolute_uri(reverse('account:reset-password-view',))
+        reset_link = '{}?username={}&token={}'.format(
+            reset_link,
+            user.username,
+            token.token
+        )
+        send_password_reset_link(email, reset_link)
+
+        return Response({},status.HTTP_200_OK)
+
+
+class ResetPasswordAPIView(generics.UpdateAPIView):
+
+    queryset = User.objects.all()
+    serializer_class = UpdatePasswordSerializer
+    permission_classes = (AllowAny,)
+
+    def partial_update(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        user = User.objects.get(username=username)
+        token = request.data.get('token')
+        password = request.data.get('password')
+
+        try:
+            reset_token = ResetPasswordToken.objects.get(user_id=user.id, token=token)
+            serializer = self.get_serializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                self.perform_update(serializer)
+            return Response({},status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Invalid reset password credentials'}, status.HTTP_400_BAD_REQUEST)

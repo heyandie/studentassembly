@@ -16,11 +16,23 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         model = User
         field = ('email', 'password')
 
-
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'].encode('utf-8'), salt=None, hasher='bcrypt')
         return User.objects.create(**validated_data)
 
+
+class UpdatePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(min_length=8, required=True, validators=[PasswordValidator()])
+
+    class Meta:
+        model = User
+        field = ('username', 'password')
+
+    def update(self, instance, validated_data):
+        validated_data['password'] = make_password(validated_data['password'].encode('utf-8'), salt=None, hasher='bcrypt')
+        instance.password = validated_data['password']
+        instance.save()
+        return instance
 
 class AccountSerializer(serializers.ModelSerializer):
 

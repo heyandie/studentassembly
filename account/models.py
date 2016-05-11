@@ -26,9 +26,22 @@ def generate_activation_key():
         activation_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
 
         try:
-            ActivationToken.objects.get(activation_key=activation_key)
+            VerificationToken.objects.get(activation_key=activation_key)
         except:
             return activation_key
+
+
+def generate_password_reset_key():
+    while 1:
+        from django.conf import settings
+        import random, string
+
+        reset_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
+
+        try:
+            ResetPasswordToken.objects.get(reset_key=reset_key)
+        except:
+            return reset_key
 
 
 # Create your models here.
@@ -46,5 +59,10 @@ class User(AbstractBaseUser):
 
 
 class VerificationToken(models.Model):
+    user_id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
+    token = models.CharField(max_length=32, unique=True, default=generate_activation_key, db_index=True)
+
+
+class ResetPasswordToken(models.Model):
     user_id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
     token = models.CharField(max_length=32, unique=True, default=generate_activation_key, db_index=True)
