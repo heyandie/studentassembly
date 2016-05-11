@@ -1,7 +1,7 @@
 <template lang="jade">
 div
   v-header(:class="$route.name === 'home' ? 'header--landing' : ''")
-  router-view
+  router-view(keep-alive)
   v-footer
 </template>
 
