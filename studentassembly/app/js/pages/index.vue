@@ -1,6 +1,6 @@
 <template lang="jade">
 section.page__wrapper
-  .landing__wrapper
+  .landing__hero
     //- .landing__overlay
     .landing__content
       h1 Fight corruption in your university.
@@ -19,13 +19,14 @@ section.page__wrapper
 
       aside.content__secondary
         h3 Top staff ratings
-        ul
-          li(v-for="person in staff")
-            h4
-              span {{ person.name }}
+        .u-mg-t-24(v-for="member in staff")
+          a(v-link="{ name: 'rate-view', params: { 'id': member.id } }")
+            h5 {{ member.name }}
+            p.small
+              span {{ member.school | truncate 36 }}
               br
-              small {{ person.school }}
-            p {{ person.rating }} / 5
+              strong {{ member.votes || 'No' }} {{ member.votes | pluralize 'rating' }}
+              span(v-if="member.votes") &nbsp;&mdash; overall: {{ member.rating.overall }}
 
 section.page__wrapper.page--light
   .content__wrapper
@@ -54,6 +55,15 @@ section.page__wrapper.page--light
             img(src="/static/img/icons/action/ic_timeline_48px.svg", height="40")
           h3 Manage
           p School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!
+
+section.page__wrapper.page--bg-cubes
+  .content__wrapper
+    .content__section
+      .landing__cta
+        h1 You deserve to be heard.
+        p Start using Student Assembly now!
+        a.button(v-link="{ name: 'report' }") File a Report
+
 </template>
 
 <script>
@@ -63,19 +73,8 @@ export default {
   data () {
     return {
       reports: [],
+      staff: [],
       loading: true,
-      staff: [
-        {
-          name: 'Juan dela Cruz',
-          school: 'PUP Manila',
-          rating: 3
-        },
-        {
-          name: 'Juana dela Cruz',
-          school: 'UP Diliman',
-          rating: 3
-        }
-      ]
     }
   },
   created () {
@@ -86,6 +85,15 @@ export default {
       },
       function(response) {
         console.log('Failed to retrieve published reports.')
+      }
+    )
+
+    this.$http.get('staff?top=True&limit=5').then(
+      (response) => {
+        this.staff = response.data
+      },
+      (response) => {
+        console.log('Failed to retrieve staff members.')
       }
     )
   },

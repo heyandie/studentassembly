@@ -3,7 +3,7 @@
 }
 .modal-enter .modal-container,
 .modal-leave .modal-container {
-  transform: scale(0.8);
+  transform: translateY(12%);
 }
 
 .modal-mask {

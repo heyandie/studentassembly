@@ -42,7 +42,6 @@ export const login = ({ dispatch, state }, context) => {
   context.$http.post('token_auth', state.auth.user).then(
     (response) => {
       var user = JSON.parse(atob(response.data.token.split('.')[1]))
-      console.log(user)
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
       dispatch(types.AUTH_LOGIN_SUCCESS, user)
       state.route.path = '/profile'

@@ -17,23 +17,7 @@ section.page__wrapper.page--light
               a.button.button--tiny.button--simple(href="#0", @click.prevent="followReport", :disabled="following")
                 span(v-show="!following") {{ report.did_follow ? 'Unfollow' : 'Follow' }}
                 v-spinner(v-show="following", :on-button="true", color="#999", radius="7")
-              .button.button--tiny.button--simple#share_menu(@click="openShareMenu = !openShareMenu")
-                span.u-c-facebook •
-                span.u-c-twitter •
-                span.u-c-brand •
-                .dropdown__menu(v-bind:class="openShareMenu ? 'dropdown__menu--open' : ''")
-                  .dropdown__menu-header
-                    span Share
-                  a.dropdown__menu-item(
-                    @click.prevent="shareDialog('https://facebook.com/sharer/sharer.php?u=http%3A%2F%2Fstudentassembly.herokuapp.com%2F')"
-                  )
-                    img.button__icon(src="/static/img/fb-logo.png", height="15")
-                    span Facebook
-                  a.dropdown__menu-item(
-                    @click.prevent="shareDialog('https://twitter.com/intent/tweet?text=Share%20Report')"
-                  )
-                    img.button__icon(src="/static/img/twitter-logo.png", height="14")
-                    span Twitter
+              v-share-button(type="report", :type-id="report.id")
             h2 {{ report.category }}
             h3.u-mg-b-24
               span.header--light {{ report.school }}
@@ -102,6 +86,7 @@ section.page__wrapper(:class="loading ? 'page--min-height' : ''")
 
 <script>
 import Spinner from '../../components/spinner.vue'
+import ShareButton from '../../components/share-button.vue'
 import { getReport } from '../../vuex/actions/report'
 
 export default {
@@ -143,20 +128,11 @@ export default {
     return {
       upvoting: false,
       following: false,
-      openShareMenu: false,
-      relatedReports: [],
-      schoolLocation: {}
+      relatedReports: []
     }
   },
   watch: {
     'report': function (val, oldVal) {
-      this.schoolLocation = {
-        backgroundImage: 'url("/static/img/map.jpg")',
-        backgroundPosition: 'center',
-        backgroundSize: 'auto',
-        filter: 'grayscale(0)'
-      }
-
       if (typeof val.category !== 'undefined')
         this.getRelatedReports()
     },
@@ -181,14 +157,6 @@ export default {
         (response) => {
           console.log('Failed')
         }
-      )
-    },
-    shareDialog (url, width = 570, height = 370) {
-      let left = (screen.width / 2) - (width / 2),
-          top = (screen.height / 2) - (height / 2) - 80
-      window.open(url, '',
-        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=' +
-        width + ',height=' + height + ',top=' + top + ',left=' + left
       )
     },
     upvoteReport () {
@@ -228,18 +196,9 @@ export default {
       )
     }
   },
-  ready () {
-    document.addEventListener("keydown", (e) => {
-      if (this.openShareMenu && e.keyCode == 27)
-        this.openShareMenu = false
-    })
-    document.addEventListener("click", (e) => {
-      if (e.target.id !== 'share_menu')
-        this.openShareMenu = false
-    })
-  },
   components: {
-    'v-spinner': Spinner
+    'v-spinner': Spinner,
+    'v-share-button': ShareButton
   }
 }
 </script>

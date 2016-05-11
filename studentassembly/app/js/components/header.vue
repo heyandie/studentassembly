@@ -1,5 +1,5 @@
 <template lang="jade">
-header.header__wrapper
+header.header__wrapper(:class="class")
   nav.nav__wrapper(role="navigation")
     .nav.nav--left
       a.nav__link.nav--home(v-link="{ name: 'home' }")
@@ -43,6 +43,7 @@ export default {
       getProfile
     }
   },
+  props: ['class'],
   data () {
     return {
       showUserMenu: false,

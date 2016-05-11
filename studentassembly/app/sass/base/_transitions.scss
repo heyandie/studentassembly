@@ -1,5 +1,5 @@
 .fade-transition {
-  transition: 250ms;
+  transition: 350ms cubic-bezier(.2, 1, .2, 1);
   opacity: 1;
   visibility: visible;
 }

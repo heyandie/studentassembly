@@ -28,6 +28,7 @@ section.page__wrapper.page--min-height
             p.small
               strong Following
               small.light &nbsp;&nbsp;{{ following.length }}
+              
       article.content__main
         .tabs
           .tabs__content
@@ -65,25 +66,25 @@ section.page__wrapper.page--min-height
             p.small
               | (reports by category, ratings, etc)
 
-v-modal(:show.sync="showEditProfileModal")
-  div(slot="content", style="width:320px;")
-    i.modal-close.icon.ion-android-close(@click="showEditProfileModal = false")
-    .spinner__wrapper(v-if="profileInfo === null")
-      v-spinner
-    form(v-else)
-      .form__element
-        .form__label Email address
-        input(type="email", v-model="profileInfo.email", placeholder="juan@student.ph")
-      .form__element
-        .form__label Name
-        .form__note Fill this if you want to pursue legal action when reporting.
-        input(type="text", v-model="profileInfo.name", placeholder="Juan dela Cruz")
-      .form__element
-        .form__label Mobile number
-        .form__note Fill this if you want to pursue legal action when reporting.
-        input(type="text", v-model="profileInfo.contact_number", placeholder="+63 9xx xxx xxxx")
-      .form__element
-        button(type="submit", @click.prevent="submitProfile") Submit
+  v-modal(:show.sync="showEditProfileModal")
+    div(slot="content", style="width:320px;")
+      i.modal-close.icon.ion-android-close(@click="showEditProfileModal = false")
+      .spinner__wrapper(v-if="profileInfo === null")
+        v-spinner
+      form(v-else)
+        .form__element
+          .form__label Email address
+          input(type="email", v-model="profileInfo.email", placeholder="juan@student.ph")
+        .form__element
+          .form__label Name
+          .form__note Fill this if you want to pursue legal action when reporting.
+          input(type="text", v-model="profileInfo.name", placeholder="Juan dela Cruz")
+        .form__element
+          .form__label Mobile number
+          .form__note Fill this if you want to pursue legal action when reporting.
+          input(type="text", v-model="profileInfo.contact_number", placeholder="+63 9xx xxx xxxx")
+        .form__element
+          button(type="submit", @click.prevent="submitProfile") Submit
 </template>
 
 <script>

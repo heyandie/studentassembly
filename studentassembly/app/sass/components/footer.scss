@@ -4,4 +4,11 @@
   .nav__wrapper {
     text-align: center;
   }
+
+  .nav__link {
+    &:hover, &.hovered {
+      color: lighten(#6E7783, 50%);
+      background-color: transparent;
+    }
+  }
 }

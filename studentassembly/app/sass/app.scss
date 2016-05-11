@@ -26,6 +26,11 @@
   //   padding-left: 3%;
   // }
 
+  &.page--bg-cubes {
+    background-image: url('/static/img/cubes.png');
+    // background-color: #f5faff;
+  }
+
   &.page--min-height {
     min-height: 100vh;
   }
@@ -134,5 +139,5 @@
 
 .spinner__wrapper {
   text-align: center;
-  padding: 56px 0;
+  padding: 80px 0;
 }

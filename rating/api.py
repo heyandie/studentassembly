@@ -48,7 +48,10 @@ class ListStaffAPIView(generics.ListAPIView):
             school = self.request.GET.get('school')
             queryset = queryset.filter(school=school)
 
-        queryset = queryset.order_by('-created_at')
+        if self.request.GET.get('top', False):
+            queryset = queryset.order_by('-rating')
+        else:
+            queryset = queryset.order_by('-created_at')
 
         if self.request.GET.get('limit', None):
             limit = int(self.request.GET.get('limit'))

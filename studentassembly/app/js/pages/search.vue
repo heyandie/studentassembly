@@ -26,6 +26,11 @@ import ReportList from '../components/report-list.vue'
 import RatingList from '../components/rating-list.vue'
 
 export default {
+  route: {
+    data ({ to: { query: { q }}}) {
+      this.fetchResults()
+    }
+  },
   data () {
     return {
       loadingReports: false,
@@ -55,7 +60,7 @@ export default {
           console.log('Failed to retrieve reports')
         }
       )
-      
+
       this.$http.get('staff?limit=10&q=' + query).then(
         (response) => {
           let ratings = response.data
@@ -76,14 +81,6 @@ export default {
           console.log('Failed to retrieve staff')
         }
       )
-    }
-  },
-  watch: {
-    '$route.query.q': {
-      handler: function() {
-        this.fetchResults()
-      },
-      immediate: true
     }
   },
   components: {

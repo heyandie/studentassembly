@@ -10,19 +10,7 @@ section.page__wrapper.page--min-height
         template(v-if="!$loadingRouteData")
           .form__wrapper
             .button__group.u-fl-r
-              .button.button--tiny.button--simple#share_menu(@click="showShareMenu = !showShareMenu")
-                span.u-c-facebook •
-                span.u-c-twitter •
-                span.u-c-brand •
-                .dropdown__menu(v-bind:class="showShareMenu ? 'dropdown__menu--open' : ''")
-                  .dropdown__menu-header
-                    span Share
-                  a.dropdown__menu-item(target="_blank" href="#0")
-                    img.button__icon(src="/static/img/fb-logo.png", height="15")
-                    span Facebook
-                  a.dropdown__menu-item(target="_blank", href="https://twitter.com/intent/tweet?text=Share%20Report")
-                    img.button__icon(src="/static/img/twitter-logo.png", height="14")
-                    span Twitter
+              v-share-button(type="rate", :type-id="member.id")
             h2.u-mg-b-24
               span {{ member.name }}
               br
@@ -109,6 +97,7 @@ v-modal(:show.sync="showRatingModal")
 import Modal from '../../components/modal.vue'
 import Avatar from '../../components/avatar.vue'
 import Spinner from '../../components/spinner.vue'
+import ShareButton from '../../components/share-button.vue'
 
 function defaultRating () {
   return {
@@ -141,7 +130,6 @@ export default {
       member: null,
       relatedMembers: [],
       showRatingModal: false,
-      showShareMenu: false,
       rating: defaultRating()
     }
   },
@@ -191,20 +179,11 @@ export default {
       )
     }
   },
-  ready () {
-    document.addEventListener("keydown", (e) => {
-      if (this.showShareMenu && e.keyCode == 27)
-        this.showShareMenu = false
-    })
-    document.addEventListener("click", (e) => {
-      if (e.target.id !== 'share_menu')
-        this.showShareMenu = false
-    })
-  },
   components: {
     'v-modal': Modal,
     'v-avatar': Avatar,
-    'v-spinner': Spinner
+    'v-spinner': Spinner,
+    'v-share-button': ShareButton
   }
 }
 </script>

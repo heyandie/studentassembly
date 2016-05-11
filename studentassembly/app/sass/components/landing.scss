@@ -1,22 +1,23 @@
-.landing__wrapper {
+.landing__hero {
   display: flex;
   position: relative;
   align-items: center;
 
   // Photo Credit: https://www.flickr.com/photos/quinnanya/3570356861/
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)),
-              linear-gradient(to top, rgba(50, 50, 50, 0.5), rgba(50, 50, 50, 0.5)),
+  background: linear-gradient(to top, rgba(#000, 0.1), rgba(#000, 0)),
+              linear-gradient(to top, rgba(#293757, 0.85), rgba(#293757, 0.85)),
               url('/static/img/student.jpg');
   background-position: center center;
   background-size: cover;
   overflow: hidden;
 
   @include media("<=tablet") {
-    height: 400px;
-    padding: 100px 0;
+    height: 440px;
+    padding: 80px 0;
   }
   @include media(">tablet") {
-    height: 540px;
+    margin-top: -64px;
+    height: 580px;
     padding: 88px 0;
   }
 
@@ -101,9 +102,8 @@
     transform: translateY(100%);
     animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 250ms forwards; //600ms delay
 
-    @include media("<=tablet") {
-      padding-top: 36px;
-      text-align: center;
+    @include media(">tablet") {
+      padding-top: 48px;
     }
   }
 }
@@ -169,6 +169,11 @@
     margin: 0 auto;
     max-width: 760px;
   }
+}
+
+.landing__cta {
+  padding: 48px 0;
+  text-align: center;
 }
 
 @keyframes slide-right-skewed {
