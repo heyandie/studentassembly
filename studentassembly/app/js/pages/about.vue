@@ -2,7 +2,7 @@
 section.page__wrapper
   .content__wrapper
     .content__section
-      .about__main-logo(keep-alive)
+      .about__main-logo(:keep-alive="true")
         img(src="/static/img/logo.png", height="64")
       article.content__main
         .about__container
