@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from .common import *
 
-DEBUG = True
+DEBUG = False
 DATABASES = {}
 
 # Parse database configuration from $DATABASE_URL
