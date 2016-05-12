@@ -33,8 +33,12 @@ section.page__wrapper.page--min-height
               a.button.button--tiny(@click.prevent="showRatingModal = true") Edit rating
             template(v-else)
               .u-ta-c
-                p You have not rated {{ member.name }}.
-                a.button.button--small(@click.prevent="showRatingModal = true") Add rating
+                template(v-if="userID !== null")
+                  p You have not rated {{ member.name }}.
+                  a.button.button--small(@click.prevent="showRatingModal = true") Add rating
+                template(v-else)
+                  p Log in to rate {{ member.name }}.
+                  a.button.button--small(v-link="{ name: 'login' }") Go to Login
 
           template(v-if="member.ratings.length")
             .form__wrapper(v-for="otherRating in member.ratings")
@@ -115,6 +119,11 @@ function defaultRating () {
 }
 
 export default {
+  vuex: {
+    getters: {
+      userID: ({ user }) => user.id
+    }
+  },
   route: {
     data (transition) {
       return this.$http.get('staff/' + this.$route.params.id).then(

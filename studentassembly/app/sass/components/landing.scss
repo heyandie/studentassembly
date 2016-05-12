@@ -96,14 +96,29 @@
     flex-basis: $content-width;
 
     padding: 0 12px;
-    opacity: 0;
     text-align: center;
-
-    transform: translateY(100%);
-    animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 250ms forwards; //600ms delay
 
     @include media(">tablet") {
       padding-top: 48px;
+    }
+
+    h1, p, .button__group {
+      opacity: 0;
+      animation: slide-up-fade 1s cubic-bezier(.2, 1, .2, 1) 250ms forwards;
+    }
+
+    h1 {
+      transform: translateY(25%);
+    }
+
+    p {
+      transform: translateY(60%);
+      animation-delay: 400ms;
+    }
+
+    .button__group {
+      transform: translateY(80%);
+      animation-delay: 500ms;
     }
   }
 }

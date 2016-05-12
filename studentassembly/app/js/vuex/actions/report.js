@@ -23,12 +23,9 @@ export const getCategories = ({ dispatch }, context) => {
 }
 
 export const getReport = ({ dispatch, state }, context) => {
-  dispatch(types.BUTTON_SUBMIT_LOADING, true)
-
-  context.$http.get('report/' + state.report.view.id).then(
+  return context.$http.get('report/' + state.route.params.id).then(
     (response) => {
       dispatch(types.REPORT_RECEIVE_REPORT, response.data)
-      dispatch(types.BUTTON_SUBMIT_LOADING, false)
     },
     (response) => {
       console.log('Failed to retrieve report.')

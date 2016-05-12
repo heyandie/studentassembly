@@ -10,7 +10,6 @@ import {
   REPORT_UPDATE_ATTACHMENT,
   REPORT_SHOW_ERROR,
   REPORT_CLEAR_ERRORS,
-  REPORT_RECEIVE_ID,
   REPORT_RECEIVE_REPORT,
   REPORT_UPDATE_UPVOTES,
   REPORT_UPDATE_FOLLOW
@@ -108,12 +107,6 @@ const mutations = {
 
   [BUTTON_SUBMIT_LOADING] (state, buttonLoading) {
     state.buttonLoading = buttonLoading
-  },
-
-  [REPORT_RECEIVE_ID] (state, reportId) {
-    state.view = {
-      id: reportId
-    }
   },
 
   [REPORT_RECEIVE_REPORT] (state, report) {
