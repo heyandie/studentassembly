@@ -6,6 +6,7 @@ from .api import (
     RetrieveReportAPIView,
     ListCategoryAPIView,
     ListSchoolsAPIView,
+    RetrieveSchoolAPIView,
     UpvoteReportAPIView,
     UnvoteReportAPIView,
     FollowReportAPIView,
@@ -22,7 +23,8 @@ urlpatterns = [
     url(r'^api/report/(?P<pk>[A-Za-z0-9\-]+)$', RetrieveReportAPIView.as_view({'get':'retrieve'}), name="retrieve-report"),
     url(r'^api/categories',ListCategoryAPIView.as_view({'get': 'list'}), name="list-categories"),
     url(r'^api/schools',ListSchoolsAPIView.as_view({'get': 'list'}), name="list-schools"),
-]
+    url(r'^api/school/(?P<pk>[A-Za-z0-9\-]+)$', RetrieveSchoolAPIView.as_view({'get':'retrieve'}), name="retrieve-school"),
+    ]
 
 
 """

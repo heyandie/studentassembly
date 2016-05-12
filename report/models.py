@@ -19,7 +19,7 @@ class School(models.Model):
 
 class Report(models.Model):
     id = models.UUIDField(primary_key=True, max_length=40, default=uuid.uuid4)
-    category = models.IntegerField(null=False)
+    category = models.IntegerField(null=False, db_index=True)
     text = models.TextField(blank=False)
     answers = JSONField(null=True)
     user_id = models.UUIDField()
@@ -29,7 +29,7 @@ class Report(models.Model):
     deleted_at = models.DateTimeField(null=True)
     allow_publish = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
-    school = models.IntegerField(blank=False)
+    school = models.IntegerField(blank=False, db_index=True)
     status = models.CharField(default="Pending", max_length=20)
 
 class ReportVote(models.Model):
