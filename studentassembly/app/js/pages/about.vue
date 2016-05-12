@@ -2,7 +2,7 @@
 section.page__wrapper
   .content__wrapper
     .content__section
-      .about__main-logo(:keep-alive="true")
+      .about__main-logo
         img(src="/static/img/logo.png", height="64")
       article.content__main
         .about__container
@@ -66,5 +66,8 @@ section.page__wrapper.page--light
 
 <script>
 export default {
+  created () {
+    console.log(this)
+  }
 }
 </script>
