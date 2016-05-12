@@ -66,5 +66,8 @@ section.page__wrapper.page--light
 
 <script>
 export default {
+  created () {
+    console.log(this)
+  }
 }
 </script>

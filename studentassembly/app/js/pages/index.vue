@@ -5,8 +5,9 @@ section.page__wrapper
     .landing__content
       h1 Fight corruption in your university.
       p Student Assembly is where you can anonymously report corruption cases in your university. We’ll ensure your anonymity and help resolve the problem at the same time.
-      a.button(v-link="{ name: 'report' }") File a Report
-      a.button.button--inverted(href="#how-it-works") Learn more
+      .button__group
+        a.button(v-link="{ name: 'report' }") File a Report
+        a.button.button--inverted(href="#how-it-works") Learn more
   .content__wrapper
     .content__section
       article.content__main

@@ -3,10 +3,10 @@ section.page__wrapper.page--light
   .content__wrapper
     .content__section
       article.content__main
-        .spinner__wrapper(v-if="loading")
+        .spinner__wrapper(v-if="$loadingRouteData")
           v-spinner
           h4 Loading report...
-        template(v-if="!loading")
+        template(v-if="!$loadingRouteData")
           .paragraph__section
             .button__group.u-fl-r
               a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport", :disabled="upvoting")
@@ -32,8 +32,8 @@ section.page__wrapper.page--light
             p {{ report.answers[index].text }}
           .paragraph__section
             h3 Details
-            p(v-for="paragraph in detailText") {{ paragraph }}
-          .paragraph__section(v-if="hasAttachments")
+            p {{{ report.text | nl2br }}}
+          .paragraph__section(v-if="report.files")
             h3 Attachments
             .u-cf
               .list__item-attachment(v-for="file in report.files")
@@ -42,22 +42,21 @@ section.page__wrapper.page--light
                   span {{ file.name }}
       aside.content__secondary.content--additional-info
         h4 Other reports in this school
-        template(v-if="relatedReports.length")
+        template(v-if="!$loadingRouteData")
           .u-mg-t-24(v-for="related in relatedReports")
             a(v-link="{ name: 'report-view', params: { id: related.id }}")
               h5 {{ related.category }}
               p.small {{ related.text | truncate 72 }}
-        template(v-else)
-          .u-mg-t-12
+          .u-mg-t-12(v-if="!relatedReports.length")
             p.small There are no related reports.
             a.button.button--mini.button--hollow(
               v-link="{ name: 'file-a-report', query: { school: report.school }}"
             ) File a report
 
-section.page__wrapper(:class="loading ? 'page--min-height' : ''")
+section.page__wrapper(:class="$loadingRouteData ? 'page--min-height' : ''")
   .content__wrapper
     .content__section
-      template(v-if="!loading")
+      template(v-if="!$loadingRouteData")
         .content__half
           h4 {{ report.school }}
           hr.small
@@ -93,14 +92,10 @@ export default {
   vuex: {
     getters: {
       userID: ({ user }) => user.id,
-      report: ({ report }) => report.view,
-      loading: ({ report }) => report.buttonLoading
+      report: ({ report }) => report.view
     },
     actions: {
       getReport,
-      getID: ({ dispatch, state }) => {
-        dispatch('REPORT_RECEIVE_ID', state.route.params.id)
-      },
       updateUpvotes: ({ dispatch, state }, upvotes) => {
         dispatch('REPORT_UPDATE_UPVOTES', upvotes)
       },
@@ -109,15 +104,12 @@ export default {
       }
     }
   },
+  route: {
+    data (transition) {
+      return this.getReport(this)
+    }
+  },
   computed: {
-    hasAttachments () {
-      if (typeof this.report.length !== 'undefined')
-        return this.report.length > 0
-      return false
-    },
-    detailText () {
-      return this.report.text.split('\n\n')
-    },
     googleMap () {
       return 'https://www.google.com/maps?q='
         + encodeURIComponent(this.report.school)
@@ -135,13 +127,6 @@ export default {
     'report': function (val, oldVal) {
       if (typeof val.category !== 'undefined')
         this.getRelatedReports()
-    },
-    '$route.params.id': {
-      handler: function() {
-        this.getID()
-        this.getReport(this)
-      },
-      immediate: true
     }
   },
   methods: {
@@ -155,7 +140,7 @@ export default {
           this.relatedReports = response.data.reports
         },
         (response) => {
-          console.log('Failed')
+          console.log('Failed to retrieve related reports.')
         }
       )
     },
