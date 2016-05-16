@@ -29,6 +29,18 @@ router.map({
     name: 'logout',
     component: require('./pages/auth/logout.vue')
   },
+  '/verify_account/:token': {
+    name: 'verify-account',
+    component: require('./pages/auth/verify-account.vue')
+  },
+  '/reset_password': {
+    name: 'reset-password',
+    component: require('./pages/auth/reset-password.vue')
+  },
+  '/refresh_token': {
+    name: 'refresh-token',
+    component: require('./pages/auth/refresh-token.vue')
+  },
   '/profile': {
     name: 'profile',
     needAuth: true,
@@ -100,10 +112,9 @@ router.beforeEach((transition) => {
       if (timeRemaining < 10) {
         transition.redirect('/logout?s=expired')
       }
-
-      // if (timeRemaining > 10 && timeRemaining < 300) {
-      //   transition.redirect('/refresh_token')
-      // }
+      else if (timeRemaining > 10 && timeRemaining < 43200) {
+        transition.redirect('/refresh_token')
+      }
     }
   }
   if (transition.to.guest) {

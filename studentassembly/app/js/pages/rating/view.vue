@@ -63,37 +63,37 @@ section.page__wrapper.page--min-height
               strong {{ relatedMember.votes || 'No' }} {{ relatedMember.votes | pluralize 'rating' }}
               span(v-if="relatedMember.votes") &nbsp;&mdash; overall: {{ relatedMember.rating.overall }}
 
-v-modal(:show.sync="showRatingModal")
-  div(slot="content", style="width:300px;")
-    i.modal-close.icon.ion-android-close(@click="showRatingModal = false")
-    template(v-if="!$loadingRouteData")
-      form(@submit.prevent="submitRating")
-        .form__element(v-for="(key, val) in member.rating")
-          .form__label.u-mg-b-4 {{ key | toTitleCase '_' }}
-          .form__radio.u-mg-b-0
-            .u-cf
-              .u-fl-l
-                input(
-                  v-for="i in 5",
-                  type="radio",
-                  name="{{ key }}_{{ i + 1 }}",
-                  data-tooltip="Give {{ i + 1 }} points",
-                  value="{{ i + 1 }}",
-                  :checked="checkRating(key, i + 1)",
-                  @click="updateRating(key, $event)"
-                )
-              .u-fl-r
-                small.light {{ rating.values[key] }} / 5
-        .form__element
-          .form__label Comment
-          textarea(
-            rows="2",
-            name="text",
-            placeholder="Write additional comments about {{ member.name }}.",
-            v-model="rating.comment"
-          )
-        .form__element
-          button(type="submit") Submit rating
+  v-modal(:show.sync="showRatingModal")
+    div(slot="content", style="width:300px;")
+      i.modal-close.icon.ion-android-close(@click="showRatingModal = false")
+      template(v-if="!$loadingRouteData")
+        form(@submit.prevent="submitRating")
+          .form__element(v-for="(key, val) in member.rating")
+            .form__label.u-mg-b-4 {{ key | toTitleCase '_' }}
+            .form__radio.u-mg-b-0
+              .u-cf
+                .u-fl-l
+                  input(
+                    v-for="i in 5",
+                    type="radio",
+                    name="{{ key }}_{{ i + 1 }}",
+                    data-tooltip="Give {{ i + 1 }} points",
+                    value="{{ i + 1 }}",
+                    :checked="checkRating(key, i + 1)",
+                    @click="updateRating(key, $event)"
+                  )
+                .u-fl-r
+                  small.light {{ rating.values[key] }} / 5
+          .form__element
+            .form__label Comment
+            textarea(
+              rows="2",
+              name="text",
+              placeholder="Write additional comments about {{ member.name }}.",
+              v-model="rating.comment"
+            )
+          .form__element
+            button(type="submit") Submit rating
 
 </template>
 

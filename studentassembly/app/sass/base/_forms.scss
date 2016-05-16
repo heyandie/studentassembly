@@ -113,10 +113,16 @@ button[type="submit"] {
 
   @include media("<=tablet") {
     padding: 20px;
+    margin-left: -12px;
+    margin-right: -12px;
   }
 
   @include media(">tablet") {
     padding: 28px;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -375,7 +381,36 @@ button[type="submit"] {
     background-repeat: no-repeat;
     background-size: cover;
   }
+}
 
+.form__visible-toggle {
+  position: absolute;
+  top: 36px;
+  right: 12px;
+
+  width: 24px;
+  height: 24px;
+
+  background-image: url('/static/img/icons/action/ic_visibility_24px.svg');
+  background-repeat: no-repeat;
+  user-select: none;
+
+  cursor: pointer;
+  opacity: 0.25;
+  transition: 250ms;
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  &.form__visible-toggle--on {
+    background-image: url('/static/img/icons/action/ic_visibility_off_24px.svg');
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 0.25;
+    }
+  }
 }
 
 .form__error {

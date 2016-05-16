@@ -34,6 +34,21 @@ export const getReport = ({ dispatch, state }, context) => {
   )
 }
 
+export const getRelatedReports = ({ dispatch, state }, context) => {
+  context.$http.get(
+    'report?school=' + state.report.view.school_id +
+    '&exclude=' + state.report.view.id +
+    '&limit=3'
+  ).then(
+    (response) => {
+      dispatch(types.REPORT_RECEIVE_RELATED, response.data.reports)
+    },
+    (response) => {
+      console.log('Failed to retrieve related reports.')
+    }
+  )
+}
+
 export const submitReport = ({ dispatch, state }, context) => {
   dispatch(types.REPORT_CLEAR_ERRORS)
   dispatch(types.BUTTON_SUBMIT_LOADING, true)
@@ -41,6 +56,7 @@ export const submitReport = ({ dispatch, state }, context) => {
   context.$http.post('report/', state.report.request).then(
     (response) => {
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
+      dispatch(types.USER_UPDATE_REPORTS, response.data)
       state.route.path = '/profile'
     },
     (response) => {
@@ -60,6 +76,46 @@ export const submitReport = ({ dispatch, state }, context) => {
         }
       }
       dispatch(types.BUTTON_SUBMIT_LOADING, false)
+    }
+  )
+}
+
+export const upvoteReport = ({ dispatch, state }, context) => {
+  const endpoint = state.report.view.did_upvote ? 'unvote' : 'upvote'
+  let data = {
+    report_id: state.report.view.id,
+    user_id: state.user.id
+  }
+
+  dispatch(types.REPORT_UPVOTE_LOADING, true)
+  context.$http.post('report/' + endpoint, data).then(
+    (response) => {
+      dispatch(types.REPORT_UPDATE_UPVOTES, response.data.upvotes)
+      dispatch(types.USER_UPDATE_UPVOTED, endpoint, state.report.view)
+      dispatch(types.REPORT_UPVOTE_LOADING, false)
+    },
+    (response) => {
+      console.log('Failed to ' + endpoint + ' report.')
+    }
+  )
+}
+
+export const followReport = ({ dispatch, state }, context) => {
+  const endpoint = state.report.view.did_follow ? 'unfollow' : 'follow'
+  let data = {
+    report_id: state.report.view.id,
+    user_id: state.user.id
+  }
+
+  dispatch(types.REPORT_FOLLOW_LOADING, true)
+  context.$http.post('report/' + endpoint, data).then(
+    (response) => {
+      dispatch(types.REPORT_UPDATE_FOLLOW)
+      dispatch(types.USER_UPDATE_FOLLOWING, endpoint, state.report.view)
+      dispatch(types.REPORT_FOLLOW_LOADING, false)
+    },
+    (response) => {
+      console.log('Failed to ' + endpoint)
     }
   )
 }

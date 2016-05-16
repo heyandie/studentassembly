@@ -28,7 +28,7 @@ section.page__wrapper.page--min-height
             p.small
               strong Following
               small.light &nbsp;&nbsp;{{ following.length }}
-              
+
       article.content__main
         .tabs
           .tabs__content
@@ -47,13 +47,13 @@ section.page__wrapper.page--min-height
                   p.small Start by looking for staff members in your school. You can also look for existing ratings by using the search bar on the topmost area of the page.
                   a.button.button--small(v-link="{ name: 'rate-staff' }") Submit a rating
             .tab__content(v-show="activeTab === 'upvoted'")
-              v-report-list(:reports="upvoted", :loading="loading", :filters="true")
+              v-report-list(:reports="upvoted", :loading="loading", :filters="true", :show-alias="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_late_48px.svg")
                   h3 No upvotes to see here.
                   p.small Make other reports visible by upvoting them! Your reports are automatically upvoted, so you won't see them here.
             .tab__content(v-show="activeTab === 'following'")
-              v-report-list(:reports="following", :loading="loading", :filters="true")
+              v-report-list(:reports="following", :loading="loading", :filters="true", :show-alias="true")
                 template(slot="list_empty")
                   img.list__empty-icon(src="/static/img/icons/action/ic_assignment_turned_in_48px.svg")
                   h3 You have not followed any report.
@@ -120,11 +120,6 @@ export default {
   created () {
     this.getReports(this)
     this.getRatings(this)
-  },
-  watch: {
-    'reports': function () {
-      console.log('Reports JSON size: ' + JSON.stringify(this.reports).length + ' bytes')
-    }
   },
   methods: {
     editProfile () {

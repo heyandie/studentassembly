@@ -166,12 +166,12 @@ section.page__wrapper
               li
                 p.small Date, time, and location of the incident
 
-v-modal(:show.sync="showConfirmModal")
-  div(slot="content", style="width:320px;")
-    i.modal-close.icon.ion-android-close(@click="showConfirmModal = false")
-    h3 Do you want to submit the report?
-    p.small You will not be able to edit the report; however, you can add updates about its situation.
-    button(type="submit", @click.prevent="submitThenClose()") Submit report
+  v-modal(:show.sync="showConfirmModal")
+    div(slot="content", style="width:320px;")
+      i.modal-close.icon.ion-android-close(@click="showConfirmModal = false")
+      h3 Do you want to submit the report?
+      p.small You will not be able to edit the report; however, you can add updates about its situation.
+      button(type="submit", @click.prevent="submitThenClose()") Submit report
 </template>
 
 <script>

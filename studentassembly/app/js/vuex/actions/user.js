@@ -7,27 +7,31 @@ export const getProfile = ({ dispatch }) => {
 }
 
 export const getReports = ({ dispatch, state }, context) => {
-  dispatch(types.BUTTON_SUBMIT_LOADING, true)
-  context.$http.get('report?user=' + state.user.id + '&upvoted=True&following=True').then(
-    (response) => {
-      dispatch(types.USER_RECEIVE_REPORTS, response.data)
-      dispatch(types.BUTTON_SUBMIT_LOADING, false)
-    },
-    (response) => {
-      console.log('Failed to retrieve user reports.')
-    }
-  )
+  if (!state.user.reports.length) {
+    dispatch(types.BUTTON_SUBMIT_LOADING, true)
+    context.$http.get('report?user=' + state.user.id + '&upvoted=True&following=True').then(
+      (response) => {
+        dispatch(types.USER_RECEIVE_REPORTS, response.data)
+        dispatch(types.BUTTON_SUBMIT_LOADING, false)
+      },
+      (response) => {
+        console.log('Failed to retrieve user reports.')
+      }
+    )
+  }
 }
 
 export const getRatings = ({ dispatch, state }, context) => {
-  dispatch(types.BUTTON_SUBMIT_LOADING, true)
-  context.$http.get('rating?user=' + state.user.id).then(
-    (response) => {
-      dispatch(types.USER_RECEIVE_RATINGS, response.data)
-      dispatch(types.BUTTON_SUBMIT_LOADING, false)
-    },
-    (response) => {
-      console.log('Failed to retrieve user ratings.')
-    }
-  )
+  if (!state.user.ratings.length) {
+    dispatch(types.BUTTON_SUBMIT_LOADING, true)
+    context.$http.get('rating?user=' + state.user.id).then(
+      (response) => {
+        dispatch(types.USER_RECEIVE_RATINGS, response.data)
+        dispatch(types.BUTTON_SUBMIT_LOADING, false)
+      },
+      (response) => {
+        console.log('Failed to retrieve user ratings.')
+      }
+    )
+  }
 }

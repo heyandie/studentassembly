@@ -11,6 +11,8 @@ from django.template.loader import get_template
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
 from django.utils.translation import ugettext as _
+from django.utils.encoding import smart_bytes, smart_text
+from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.hashers import make_password
 
 from rest_framework.views import APIView
@@ -106,9 +108,11 @@ class RegisterAPIView(mixins.CreateModelMixin,
             user = serializer.save()
             token = VerificationToken.objects.create(user_id=user.id)
             data = serializer.data
-            data['verification_link'] = request.build_absolute_uri(reverse('account:verify', kwargs={'token':token.token}))
 
-            send_verification_request(data.get('email'), data.get('verification_link'))
+            verification_link = request.build_absolute_uri(reverse('account:verify',)).replace('/api', '')
+            verification_link = '{}/{}'.format(verification_link, token.token)
+            send_verification_request(data.get('email'), verification_link)
+
             return Response(data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -133,6 +137,26 @@ class UserContactDetailsAPIView(APIView):
                 'contact_number': request.user.contact_number
             }
         return Response(data)
+
+
+class ActivateAccountAPIView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        token = request.data.get('token')
+
+        try:
+            token = VerificationToken.objects.get(token=token)
+            user = User.objects.get(id=token.user_id)
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+                token.delete()
+                return Response({'success': 'Your account has been verified!'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Account is already verified'}, status.HTTP_400_BAD_REQUEST)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Your verification token is invalid. Please try again.'}, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateUserDetailsAPIView(generics.UpdateAPIView):
@@ -167,8 +191,11 @@ class ResendVerificationAPIView(APIView):
             return Response({'error': 'Account has been already verified'}, status.HTTP_400_BAD_REQUEST)
 
         token = VerificationToken.objects.get(user_id=user.id)
-        verification_link = request.build_absolute_uri(reverse('account:verify', kwargs={'token':token.token}))
+
+        verification_link = request.build_absolute_uri(reverse('account:verify',)).replace('/api', '')
+        verification_link = '{}/{}'.format(verification_link, token.token)
         send_verification_request(email, verification_link)
+
         return Response({},status.HTTP_200_OK)
 
 
@@ -184,12 +211,11 @@ class SendResetPasswordLinkAPIView(APIView):
 
         token, _created = ResetPasswordToken.objects.get_or_create(user_id=user.id)
 
-        reset_link = request.build_absolute_uri(reverse('account:reset-password-view',))
-        reset_link = '{}?username={}&token={}'.format(
-            reset_link,
-            user.username,
-            token.token
-        )
+        reset_link = request.build_absolute_uri(reverse('account:reset-password',)).replace('/api', '')
+        username_encoded = smart_text(urlsafe_base64_encode(smart_bytes(user.username)))
+        token_encoded = smart_text(urlsafe_base64_encode(smart_bytes(token.token)))
+        link_data = username_encoded + '.' + token_encoded
+        reset_link = '{}?token={}'.format(reset_link, link_data)
         send_password_reset_link(email, reset_link)
 
         return Response({},status.HTTP_200_OK)

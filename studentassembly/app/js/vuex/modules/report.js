@@ -11,6 +11,9 @@ import {
   REPORT_SHOW_ERROR,
   REPORT_CLEAR_ERRORS,
   REPORT_RECEIVE_REPORT,
+  REPORT_RECEIVE_RELATED,
+  REPORT_UPVOTE_LOADING,
+  REPORT_FOLLOW_LOADING,
   REPORT_UPDATE_UPVOTES,
   REPORT_UPDATE_FOLLOW
 } from '../mutation-types'
@@ -112,6 +115,27 @@ const mutations = {
   [REPORT_RECEIVE_REPORT] (state, report) {
     state.view = report
     state.view.questions = JSON.parse(report.questions)
+    state.view = Object.assign(
+      {},
+      state.view,
+      {
+        related: [],
+        upvoteLoading: false,
+        followLoading: false
+      }
+    ) // Vue reactivity
+  },
+
+  [REPORT_RECEIVE_RELATED] (state, related) {
+    state.view.related = related
+  },
+
+  [REPORT_UPVOTE_LOADING] (state, related, status) {
+    state.view.upvoteLoading = status
+  },
+
+  [REPORT_FOLLOW_LOADING] (state, related, status) {
+    state.view.followLoading = status
   },
 
   [REPORT_UPDATE_UPVOTES] (state, upvotes) {

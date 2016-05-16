@@ -1,3 +1,9 @@
+.tabs {
+  @include media("<=tablet") {
+    margin: 0 -12px;
+  }
+}
+
 .tabs__nav {
   @include clearfix();
   position: relative;

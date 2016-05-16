@@ -10,7 +10,6 @@ export default {
   route: {
     activate (transition) {
       this.logout()
-      transition.redirect('/login')
     }
   }
 }

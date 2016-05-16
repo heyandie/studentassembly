@@ -3,7 +3,11 @@ import {
   AUTH_LOGOUT_SUCCESS,
   USER_RECEIVE_PROFILE,
   USER_RECEIVE_REPORTS,
-  USER_RECEIVE_RATINGS
+  USER_RECEIVE_RATINGS,
+  USER_UPDATE_REPORTS,
+  USER_UPDATE_RATINGS,
+  USER_UPDATE_UPVOTED,
+  USER_UPDATE_FOLLOWING
 } from '../mutation-types'
 
 function defaultUserState () {
@@ -16,6 +20,13 @@ function defaultUserState () {
     following: []
   }
 }
+
+// Consult API for keys
+const basicReportKeys = [
+  'id', 'category', 'text', 'created_at', 'updated_at',
+  'deleted_at', 'allow_publish', 'is_approved', 'school',
+  'status', 'school_id', 'alias'
+]
 
 const state = defaultUserState()
 
@@ -45,6 +56,57 @@ const mutations = {
 
   [USER_RECEIVE_RATINGS] (state, data) {
     state.ratings = data
+  },
+
+  [USER_UPDATE_REPORTS] (state, data) {
+    console.log(data)
+    let report = {}
+    basicReportKeys.forEach((key) => {
+      report[key] = data[key]
+    })
+    state.reports.unshift(report)
+  },
+
+  [USER_UPDATE_RATINGS] (state, data) {
+    state.ratings = data
+  },
+
+  [USER_UPDATE_UPVOTED] (state, method, data) {
+    let upvoted = {
+      id: data.id
+    }
+
+    if (method === 'upvote') {
+      basicReportKeys.forEach((key) => {
+        upvoted[key] = data[key]
+      })
+      state.upvoted.unshift(upvoted)
+    }
+    else {
+      let index = state.upvoted.findIndex((element, index, array) => {
+        return element.id === upvoted.id
+      })
+      state.upvoted.splice(index, 1)
+    }
+  },
+
+  [USER_UPDATE_FOLLOWING] (state, method, data) {
+    let following = {
+      id: data.id
+    }
+
+    if (method === 'follow') {
+      basicReportKeys.forEach((key) => {
+        following[key] = data[key]
+      })
+      state.following.unshift(following)
+    }
+    else {
+      let index = state.following.findIndex((element, index, array) => {
+        return element.id === following.id
+      })
+      state.following.splice(index, 1)
+    }
   }
 }
 

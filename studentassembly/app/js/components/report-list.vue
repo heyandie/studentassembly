@@ -21,17 +21,15 @@
               option(value="pending") Pending
               option(value="accepted") Accepted
               option(value="resolved") Resolved
+    .list__empty(v-else)
+      slot(name="list_empty")
 
-    template(v-if="!filteredCount")
-      .list__empty(v-if="reports.length")
-        img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
-        h3 No search results for '{{ searchKey }}'
-      .list__empty(v-else)
-        slot(name="list_empty")
+    .list__empty(v-if="(!filteredCount) * (reports.length)")
+      img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+      h3 No search results for '{{ searchKey }}'
 
-    template(v-if="(filteredCount) * (searchKey !== '')")
-      .list__results
-        h5 {{ filteredCount }} {{ filteredCount | pluralize 'result' }}
+    .list__results(v-if="(filteredCount) * (searchKey !== '')")
+      h5 {{ filteredCount }} {{ filteredCount | pluralize 'result' }}
 
     a.list__item(
       v-for="report in reports | filterBy searchKey in 'category' 'school' | count | limitBy limit offset",
@@ -44,7 +42,9 @@
         span {{ report.category }}
         br
         small {{ report.school }}
-      p.small {{ report.updated_at | relativeDate | capitalize }}
+      p.small
+        span(v-if="showAlias") by {{ report.alias }} &mdash;&nbsp;
+        span {{ report.updated_at | relativeDate | capitalize }}
       p {{ report.text | truncate }}
 
     .list__pagination(v-if="moreThanLimit")
@@ -59,7 +59,24 @@
 import Spinner from './spinner.vue'
 
 export default {
-  props: ['loading', 'reports', 'filters'],
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    reports: {
+      type: Array,
+      default: []
+    },
+    filters: {
+      type: Boolean,
+      default: false
+    },
+    showAlias: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       limit: 10,

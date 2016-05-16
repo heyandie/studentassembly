@@ -14,17 +14,15 @@
             v-model="searchKey",
             @input="resetPagination | debounce 250"
           )
+    .list__empty(v-else)
+      slot(name="list_empty")
 
-    template(v-if="!filteredCount")
-      .list__empty(v-if="ratings.length")
-        img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
-        h3 No search results for '{{ searchKey }}'
-      .list__empty(v-else)
-        slot(name="list_empty")
+    .list__empty(v-if="(!filteredCount) * (ratings.length)")
+      img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+      h3 No search results for '{{ searchKey }}'
 
-    template(v-if="(filteredCount) * (searchKey !== '')")
-      .list__results
-        h5 {{ filteredCount }} {{ filteredCount | pluralize 'result' }}
+    .list__results(v-if="(filteredCount) * (searchKey !== '')")
+      h5 {{ filteredCount }} {{ filteredCount | pluralize 'result' }}
 
     a.list__item(
       v-for="rating in ratings | filterBy searchKey in 'staff_name' 'school' | count | limitBy limit offset",

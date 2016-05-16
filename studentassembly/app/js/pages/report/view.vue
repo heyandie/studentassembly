@@ -9,12 +9,12 @@ section.page__wrapper.page--light
         template(v-if="!$loadingRouteData")
           .paragraph__section
             .button__group.u-fl-r
-              a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport", :disabled="upvoting")
-                span(v-show="!upvoting")
+              a.button.button--tiny.button--light(href="#0", @click.prevent="upvoteReport(this)", :disabled="report.upvoteLoading")
+                span(v-show="!report.upvoteLoading")
                   span(:class="!report.did_upvote ? 'button--tiny-header' : ''") {{ report.did_upvote ? 'Upvoted' : 'Upvote' }}
                   span.button--tiny-number {{ report.upvotes }}
-                v-spinner(v-show="upvoting", :on-button="true", color="#999", radius="7")
-              a.button.button--tiny.button--simple(href="#0", @click.prevent="followReport", :disabled="following")
+                v-spinner(v-show="report.upvoteLoading", :on-button="true", color="#999", radius="7")
+              a.button.button--tiny.button--simple(href="#0", @click.prevent="followReport(this)", :disabled="following")
                 span(v-show="!following") {{ report.did_follow ? 'Unfollow' : 'Follow' }}
                 v-spinner(v-show="following", :on-button="true", color="#999", radius="7")
               v-share-button(type="report", :type-id="report.id")
@@ -43,11 +43,11 @@ section.page__wrapper.page--light
       aside.content__secondary.content--additional-info
         h4 Other reports in this school
         template(v-if="!$loadingRouteData")
-          .u-mg-t-24(v-for="related in relatedReports")
+          .u-mg-t-24(v-for="related in report.related")
             a(v-link="{ name: 'report-view', params: { id: related.id }}")
               h5 {{ related.category }}
               p.small {{ related.text | truncate 72 }}
-          .u-mg-t-12(v-if="!relatedReports.length")
+          .u-mg-t-12(v-if="!report.related.length")
             p.small There are no related reports.
             a.button.button--mini.button--hollow(
               v-link="{ name: 'file-a-report', query: { school: report.school }}"
@@ -80,13 +80,12 @@ section.page__wrapper(:class="$loadingRouteData ? 'page--min-height' : ''")
               style="border:0",
               allowfullscreen
             )
-
 </template>
 
 <script>
 import Spinner from '../../components/spinner.vue'
 import ShareButton from '../../components/share-button.vue'
-import { getReport } from '../../vuex/actions/report'
+import { getReport, getRelatedReports, upvoteReport, followReport } from '../../vuex/actions/report'
 
 export default {
   vuex: {
@@ -96,12 +95,9 @@ export default {
     },
     actions: {
       getReport,
-      updateUpvotes: ({ dispatch, state }, upvotes) => {
-        dispatch('REPORT_UPDATE_UPVOTES', upvotes)
-      },
-      updateFollow: ({ dispatch, state }) => {
-        dispatch('REPORT_UPDATE_FOLLOW')
-      }
+      getRelatedReports,
+      upvoteReport,
+      followReport
     }
   },
   route: {
@@ -116,69 +112,10 @@ export default {
         + '&z=15&output=embed'
     }
   },
-  data () {
-    return {
-      upvoting: false,
-      following: false,
-      relatedReports: []
-    }
-  },
   watch: {
     'report': function (val, oldVal) {
       if (typeof val.category !== 'undefined')
-        this.getRelatedReports()
-    }
-  },
-  methods: {
-    getRelatedReports () {
-      this.$http.get(
-        'report?school=' + this.report.school_id +
-        '&exclude=' + this.report.id +
-        '&limit=3'
-      ).then(
-        (response) => {
-          this.relatedReports = response.data.reports
-        },
-        (response) => {
-          console.log('Failed to retrieve related reports.')
-        }
-      )
-    },
-    upvoteReport () {
-      let data = {
-            report_id: this.report.id,
-            user_id: this.userID
-          },
-          endpoint = this.report.did_upvote ? 'unvote' : 'upvote'
-
-      this.upvoting = true
-      this.$http.post('report/' + endpoint, data).then(
-        (response) => {
-          this.updateUpvotes(response.data.upvotes)
-          this.upvoting = false
-        },
-        (response) => {
-          console.log('Failed to ' + endpoint)
-        }
-      )
-    },
-    followReport () {
-      let data = {
-            report_id: this.report.id,
-            user_id: this.userID
-          },
-          endpoint = this.report.did_follow ? 'unfollow' : 'follow'
-
-      this.following = true
-      this.$http.post('report/' + endpoint, data).then(
-        (response) => {
-          this.updateFollow()
-          this.following = false
-        },
-        (response) => {
-          console.log('Failed to ' + endpoint)
-        }
-      )
+        this.getRelatedReports(this)
     }
   },
   components: {
