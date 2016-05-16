@@ -300,3 +300,22 @@ class ListSchoolsAPIView(mixins.ListModelMixin,
         serializer = self.serializer_class(data=self.queryset, many=True)
         serializer.is_valid(raise_exception=False)
         return Response(serializer.data)
+
+
+class RetrieveSchoolAPIView(mixins.RetrieveModelMixin,
+                            viewsets.GenericViewSet):
+    permission_classes = (AllowAny,)
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+
+    def retrieve(self, request, pk):
+
+        school = self.get_object()
+        serializer = self.serializer_class(school)
+
+        data = serializer.data
+
+        data['report_count'] = Report.objects.filter(school=school.id).count()
+        data['resolved_count'] = Report.objects.filter(status='Resolved').count()
+
+        return Response(data)

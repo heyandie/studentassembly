@@ -1,8 +1,7 @@
 #-*- coding: utf-8 -*-
 from .common import *
 
-DEBUG = False
-ALLOWED_HOSTS = ['.studentassembly.herokuapp.com',]
+DEBUG = True
 DATABASES = {}
 
 # Parse database configuration from $DATABASE_URL
@@ -19,7 +18,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
