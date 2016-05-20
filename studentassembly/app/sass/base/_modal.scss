@@ -21,12 +21,13 @@
     top: 0;
     left: 0;
 
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     height: 100vh;
-    overflow-y: auto;
-    // padding-bottom: 150px;
-    padding-bottom: 15vh;
+    width: 100%;
+    padding-bottom: 40px;
 
     cursor: pointer;
     cursor: -webkit-zoom-out;
@@ -41,13 +42,8 @@
     border: 1px #888 solid;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.09);
     padding: 28px;
-    display: inline-block;
     transition: 250ms;
     cursor: default;
-
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     -webkit-font-smoothing: subpixel-antialiased;
   }
