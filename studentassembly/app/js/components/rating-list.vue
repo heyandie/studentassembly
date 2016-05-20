@@ -32,7 +32,7 @@
         span {{ rating.staff_name }}
         br
         small {{ rating.school }}
-      ul.stats.u-mg-t-16
+      ul.stats.u-mg-t-12
         li.stat.stat--small(v-for="val in rating.values | orderObjectKeys")
           p.stat__header {{ $key | toTitleCase '_' }}
           span.stat__value {{ val }} / 5

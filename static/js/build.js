@@ -16064,7 +16064,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<div class=\"list\"><div v-if=\"loading\" class=\"spinner__wrapper\"><v-spinner></v-spinner><h4>Loading ratings...</h4></div><div v-else=\"v-else\" class=\"list__group\"><template v-if=\"ratings.length\"><div v-if=\"filters\" class=\"list__filters\"><div class=\"list__search list__search--full\"><input type=\"text\" placeholder=\"Search by name or school\" v-model=\"searchKey\" @input=\"resetPagination | debounce 250\"/></div></div></template><div v-else=\"v-else\" class=\"list__empty\"><slot name=\"list_empty\"></slot></div><div v-if=\"(!filteredCount) * (ratings.length)\" class=\"list__empty\"><img src=\"/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg\" class=\"list__empty-icon\"/><h3>No search results for '{{ searchKey }}'</h3></div><div v-if=\"(filteredCount) * (searchKey !== '')\" class=\"list__results\"><h5>{{ filteredCount }} {{ filteredCount | pluralize 'result' }}</h5></div><a v-for=\"rating in ratings | filterBy searchKey in 'staff_name' 'school' | count | limitBy limit offset\" v-link=\"{ name: 'rate-view', params: { id: rating.staff_id } }\" class=\"list__item\"><h4><span>{{ rating.staff_name }}</span><br/><small>{{ rating.school }}</small></h4><ul class=\"stats u-mg-t-16\"><li v-for=\"val in rating.values | orderObjectKeys\" class=\"stat stat--small\"><p class=\"stat__header\">{{ $key | toTitleCase '_' }}</p><span class=\"stat__value\">{{ val }} / 5</span></li></ul></a><div v-if=\"moreThanLimit\" class=\"list__pagination\"><div v-for=\"i in ratings.length / limit\" :class=\"i === currentPage ? 'list__page--current' : ''\" @click=\"setPage(i)\" class=\"list__page\">{{ i + 1 }}</div></div></div></div>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<div class=\"list\"><div v-if=\"loading\" class=\"spinner__wrapper\"><v-spinner></v-spinner><h4>Loading ratings...</h4></div><div v-else=\"v-else\" class=\"list__group\"><template v-if=\"ratings.length\"><div v-if=\"filters\" class=\"list__filters\"><div class=\"list__search list__search--full\"><input type=\"text\" placeholder=\"Search by name or school\" v-model=\"searchKey\" @input=\"resetPagination | debounce 250\"/></div></div></template><div v-else=\"v-else\" class=\"list__empty\"><slot name=\"list_empty\"></slot></div><div v-if=\"(!filteredCount) * (ratings.length)\" class=\"list__empty\"><img src=\"/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg\" class=\"list__empty-icon\"/><h3>No search results for '{{ searchKey }}'</h3></div><div v-if=\"(filteredCount) * (searchKey !== '')\" class=\"list__results\"><h5>{{ filteredCount }} {{ filteredCount | pluralize 'result' }}</h5></div><a v-for=\"rating in ratings | filterBy searchKey in 'staff_name' 'school' | count | limitBy limit offset\" v-link=\"{ name: 'rate-view', params: { id: rating.staff_id } }\" class=\"list__item\"><h4><span>{{ rating.staff_name }}</span><br/><small>{{ rating.school }}</small></h4><ul class=\"stats u-mg-t-12\"><li v-for=\"val in rating.values | orderObjectKeys\" class=\"stat stat--small\"><p class=\"stat__header\">{{ $key | toTitleCase '_' }}</p><span class=\"stat__value\">{{ val }} / 5</span></li></ul></a><div v-if=\"moreThanLimit\" class=\"list__pagination\"><div v-for=\"i in ratings.length / limit\" :class=\"i === currentPage ? 'list__page--current' : ''\" @click=\"setPage(i)\" class=\"list__page\">{{ i + 1 }}</div></div></div></div>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -16773,9 +16773,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _getOwnPropertyDescriptor = require('babel-runtime/core-js/object/get-own-property-descriptor');
+
+var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
+
+var _defineProperty = require('babel-runtime/core-js/object/define-property');
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
 var _reportList = require('../components/report-list.vue');
 
 var _reportList2 = _interopRequireDefault(_reportList);
+
+var _ratingList = require('../components/rating-list.vue');
+
+var _ratingList2 = _interopRequireDefault(_ratingList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16784,7 +16796,12 @@ exports.default = {
     return {
       reports: [],
       staff: [],
-      loading: true
+      loading: true,
+      ratingKeys: {
+        id: 'staff_id',
+        name: 'staff_name',
+        rating: 'values'
+      }
     };
   },
   created: function created() {
@@ -16798,18 +16815,33 @@ exports.default = {
     });
 
     this.$http.get('staff?top=True&limit=5').then(function (response) {
-      _this.staff = response.data;
+      var ratings = response.data;
+
+      var _loop = function _loop(oldKey) {
+        var newKey = _this.ratingKeys[oldKey];
+        ratings.forEach(function (rating) {
+          (0, _defineProperty2.default)(rating, newKey, (0, _getOwnPropertyDescriptor2.default)(rating, oldKey));
+          delete rating[oldKey];
+        });
+      };
+
+      for (var oldKey in _this.ratingKeys) {
+        _loop(oldKey);
+      }
+
+      _this.staff = ratings;
     }, function (response) {
       console.log('Failed to retrieve staff members.');
     });
   },
 
   components: {
-    'v-report-list': _reportList2.default
+    'v-report-list': _reportList2.default,
+    'v-rating-list': _ratingList2.default
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<section class=\"page__wrapper\"><div class=\"landing__hero\"><div class=\"landing__content\"><h1>Fight corruption in your university.</h1><p>Student Assembly is where you can anonymously report corruption cases in your university. We’ll ensure your anonymity and help resolve the problem at the same time.</p><div class=\"button__group\"><a v-link=\"{ name: 'report' }\" class=\"button\">File a Report</a><a href=\"#how-it-works\" class=\"button button--inverted\">Learn more</a></div></div></div><div class=\"content__wrapper\"><div class=\"content__section\"><article class=\"content__main\"><h3>Latest reports</h3><v-report-list :reports=\"reports\" :loading=\"loading\" :filters=\"false\"><template slot=\"list_empty\"><img src=\"/static/img/icons/action/ic_assignment_48px.svg\" class=\"list__empty-icon\"/><p class=\"small\">Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.</p><a v-link=\"{ name: 'file-a-report' }\" class=\"button button--small\">File a report</a></template></v-report-list></article><aside class=\"content__secondary\"><h3>Top staff ratings</h3><div v-for=\"member in staff\" class=\"u-mg-t-24\"><a v-link=\"{ name: 'rate-view', params: { 'id': member.id } }\"><h5>{{ member.name }}</h5><p class=\"small\"><span>{{ member.school | truncate 36 }}</span><br/><strong>{{ member.votes || 'No' }} {{ member.votes | pluralize 'rating' }}</strong><span v-if=\"member.votes\">&nbsp;— overall: {{ member.rating.overall }}</span></p></a></div></aside></div></div></section><section class=\"page__wrapper page--light\"><div class=\"content__wrapper\"><div class=\"content__section\"><div id=\"how-it-works\" class=\"landing__hiw\"><h2>How Student Assembly Works</h2><p class=\"small\">Corruption is the abuse of entrusted power for private gain. It occurs in universities because students aren’t empowered to report while schools want to keep their reputation. Student Assembly tackles this double barrier by providing students with an anonymous reporting platform and giving universities an efficient report management tool.</p></div><div class=\"landing__features\"><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_assignment_late_48px.svg\" height=\"40\"/></div><h3>Report</h3><p>You deserve to be heard. Report quiet and hard corruption cases in your school and attach evidence via photos, audio/visual recordings or documents.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_grade_48px.svg\" height=\"40\"/></div><h3>Rate</h3><p>Inform others about underperformers and celebrate those who perform well! Rate the performance of your professors, school administration and staff.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_record_voice_over_48px.svg\" height=\"40\"/></div><h3>Amplify</h3><p>Every problem is a community problem! Vote and share reports you like to get it more noticed. Subscribe to reports to get updates about its status.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_timeline_48px.svg\" height=\"40\"/></div><h3>Manage</h3><p>School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!</p></div></div></div></div></section><section class=\"page__wrapper page--bg-cubes\"><div class=\"content__wrapper\"><div class=\"content__section\"><div class=\"landing__cta\"><h1>You deserve to be heard.</h1><p>Start using Student Assembly now!</p><a v-link=\"{ name: 'report' }\" class=\"button\">File a Report</a></div></div></div></section>"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "<section class=\"page__wrapper\"><div class=\"landing__hero\"><div class=\"landing__content\"><h1>Fight corruption in your university.</h1><p>Student Assembly is where you can anonymously report corruption cases in your university. We’ll ensure your anonymity and help resolve the problem at the same time.</p><div class=\"button__group\"><a v-link=\"{ name: 'report' }\" class=\"button\">File a Report</a><a href=\"#how-it-works\" class=\"button button--inverted\">Learn more</a></div></div></div><div class=\"content__wrapper content--large\"><div class=\"content__section\"><div class=\"content__full\"><div class=\"content__half\"><h3>Latest reports</h3><v-report-list :reports=\"reports\" :loading=\"loading\"><template slot=\"list_empty\"><img src=\"/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg\" class=\"list__empty-icon\"/><p class=\"small\">Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.</p><a v-link=\"{ name: 'file-a-report' }\" class=\"button button--small\">File a report</a></template></v-report-list></div><div class=\"content__half\"><h3>Top staff ratings</h3><v-rating-list :ratings=\"staff\" :loading=\"loading\"><template slot=\"list_empty\"><img src=\"/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg\" class=\"list__empty-icon\"/><p class=\"small\">See the full list on the rate page.</p><a v-link=\"{ name: 'rate-staff' }\" class=\"button button--small\">Submit a rating</a></template></v-rating-list></div></div></div></div></section><section class=\"page__wrapper page--light\"><div class=\"content__wrapper\"><div class=\"content__section\"><div id=\"how-it-works\" class=\"landing__hiw\"><h2>How Student Assembly Works</h2><p class=\"small\">Corruption is the abuse of entrusted power for private gain. It occurs in universities because students aren’t empowered to report while schools want to keep their reputation. Student Assembly tackles this double barrier by providing students with an anonymous reporting platform and giving universities an efficient report management tool.</p></div><div class=\"landing__features\"><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_assignment_late_48px.svg\" height=\"40\"/></div><h3>Report</h3><p>You deserve to be heard. Report quiet and hard corruption cases in your school and attach evidence via photos, audio/visual recordings or documents.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_grade_48px.svg\" height=\"40\"/></div><h3>Rate</h3><p>Inform others about underperformers and celebrate those who perform well! Rate the performance of your professors, school administration and staff.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_record_voice_over_48px.svg\" height=\"40\"/></div><h3>Amplify</h3><p>Every problem is a community problem! Vote and share reports you like to get it more noticed. Subscribe to reports to get updates about its status.</p></div><div class=\"landing__feature\"><div class=\"landing__feature-icon\"><img src=\"/static/img/icons/action/ic_timeline_48px.svg\" height=\"40\"/></div><h3>Manage</h3><p>School admins and student councils can manage and resolve reports. Help your school become more transparent, accountable and efficient!</p></div></div></div></div></section><section class=\"page__wrapper page--bg-cubes\"><div class=\"content__wrapper\"><div class=\"content__section\"><div class=\"landing__cta\"><h1>You deserve to be heard.</h1><p>Start using Student Assembly now!</p><a v-link=\"{ name: 'report' }\" class=\"button\">File a Report</a></div></div></div></section>"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -16821,7 +16853,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/report-list.vue":62,"vue":50,"vue-hot-reload-api":24}],75:[function(require,module,exports){
+},{"../components/rating-list.vue":61,"../components/report-list.vue":62,"babel-runtime/core-js/object/define-property":1,"babel-runtime/core-js/object/get-own-property-descriptor":2,"vue":50,"vue-hot-reload-api":24}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

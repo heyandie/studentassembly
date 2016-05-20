@@ -8,26 +8,42 @@ section.page__wrapper
       .button__group
         a.button(v-link="{ name: 'report' }") File a Report
         a.button.button--inverted(href="#how-it-works") Learn more
-  .content__wrapper
+  .content__wrapper.content--large
     .content__section
-      article.content__main
-        h3 Latest reports
-        v-report-list(:reports="reports", :loading="loading", :filters="false")
-          template(slot="list_empty")
-            img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
-            p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
-            a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+      .content__full
+        .content__half
+          h3 Latest reports
+          v-report-list(:reports="reports", :loading="loading")
+            template(slot="list_empty")
+              img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+              p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
+              a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+        .content__half
+          h3 Top staff ratings
+          v-rating-list(:ratings="staff", :loading="loading")
+            template(slot="list_empty")
+              img.list__empty-icon(src="/static/img/icons/social/ic_sentiment_dissatisfied_48px.svg")
+              p.small See the full list on the rate page.
+              a.button.button--small(v-link="{ name: 'rate-staff' }") Submit a rating
 
-      aside.content__secondary
-        h3 Top staff ratings
-        .u-mg-t-24(v-for="member in staff")
-          a(v-link="{ name: 'rate-view', params: { 'id': member.id } }")
-            h5 {{ member.name }}
-            p.small
-              span {{ member.school | truncate 36 }}
-              br
-              strong {{ member.votes || 'No' }} {{ member.votes | pluralize 'rating' }}
-              span(v-if="member.votes") &nbsp;&mdash; overall: {{ member.rating.overall }}
+    //-   article.content__main
+    //-     h3 Latest reports
+    //-     v-report-list(:reports="reports", :loading="loading", :filters="false")
+    //-       template(slot="list_empty")
+    //-         img.list__empty-icon(src="/static/img/icons/action/ic_assignment_48px.svg")
+    //-         p.small Start by filing a corruption report. You can also look for existing reports by using the search bar on the topmost area of the page.
+    //-         a.button.button--small(v-link="{ name: 'file-a-report' }") File a report
+    //-
+    //-   aside.content__secondary
+    //-     h3 Top staff ratings
+    //-     .u-mg-t-24(v-for="member in staff")
+    //-       a(v-link="{ name: 'rate-view', params: { 'id': member.id } }")
+    //-         h5 {{ member.name }}
+    //-         p.small
+    //-           span {{ member.school | truncate 36 }}
+    //-           br
+    //-           strong {{ member.votes || 'No' }} {{ member.votes | pluralize 'rating' }}
+    //-           span(v-if="member.votes") &nbsp;&mdash; overall: {{ member.rating.overall }}
 
 section.page__wrapper.page--light
   .content__wrapper
@@ -69,6 +85,7 @@ section.page__wrapper.page--bg-cubes
 
 <script>
 import ReportList from '../components/report-list.vue'
+import RatingList from '../components/rating-list.vue'
 
 export default {
   data () {
@@ -76,6 +93,11 @@ export default {
       reports: [],
       staff: [],
       loading: true,
+      ratingKeys: {
+        id: 'staff_id',
+        name: 'staff_name',
+        rating: 'values'
+      }
     }
   },
   created () {
@@ -91,7 +113,18 @@ export default {
 
     this.$http.get('staff?top=True&limit=5').then(
       (response) => {
-        this.staff = response.data
+        let ratings = response.data
+
+        for (let oldKey in this.ratingKeys) {
+          const newKey = this.ratingKeys[oldKey]
+          ratings.forEach((rating) => {
+            Object.defineProperty(rating, newKey,
+              Object.getOwnPropertyDescriptor(rating, oldKey))
+            delete rating[oldKey]
+          })
+        }
+
+        this.staff = ratings
       },
       (response) => {
         console.log('Failed to retrieve staff members.')
@@ -99,7 +132,8 @@ export default {
     )
   },
   components: {
-    'v-report-list': ReportList
+    'v-report-list': ReportList,
+    'v-rating-list': RatingList
   }
 }
 </script>

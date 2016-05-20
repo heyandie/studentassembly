@@ -1150,7 +1150,7 @@ button[type="submit"] {
     align-items: center;
     height: 100vh;
     overflow-y: auto;
-    padding-bottom: 150px;
+    padding-bottom: 15vh;
     cursor: pointer;
     cursor: -webkit-zoom-out;
     cursor: zoom-out; }
@@ -1256,10 +1256,18 @@ button[type="submit"] {
     margin-bottom: 0;
     border-bottom: none;
     padding-bottom: 0; }
-  .stat.stat--small .stat__header {
-    font-size: 11px; }
-  .stat.stat--small .stat__value {
-    font-size: 20px; }
+  .stat.stat--small {
+    padding-bottom: 9px; }
+    .stat.stat--small:not(:nth-child(-n+3)) {
+      padding-top: 9px; }
+    .stat.stat--small:nth-last-child(-n+3) {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0; }
+    .stat.stat--small .stat__header {
+      font-size: 11px; }
+    .stat.stat--small .stat__value {
+      font-size: 20px; }
 
 .stat__value {
   font-size: 28px;
