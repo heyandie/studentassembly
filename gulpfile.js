@@ -8,6 +8,13 @@ elixir.config.js.browserify.transformers.push({
   name: 'vueify'
 });
 
+elixir.config.js.browserify.watchify = {
+    enabled: true,
+    options: {
+        poll: true
+    }
+}
+
 elixir(function(mix) {
   mix.sass('./studentassembly/app/sass/app.scss', './static/css/app.css');
   mix.browserify('./studentassembly/app/js/build.js', './static/js/build.js');
