@@ -238,7 +238,9 @@ class ResetPasswordAPIView(generics.UpdateAPIView):
             serializer = self.get_serializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 self.perform_update(serializer)
-            return Response({},status.HTTP_200_OK)
+                return Response({},status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
         except ObjectDoesNotExist:
             return Response({'error': 'Invalid reset password credentials'}, status.HTTP_400_BAD_REQUEST)
 
@@ -256,7 +258,9 @@ class ChangePasswordAPIView(generics.UpdateAPIView):
                 serializer = self.get_serializer(user, data=request.data, partial=True)
                 if serializer.is_valid():
                     self.perform_update(serializer)
-                return Response({},status.HTTP_200_OK)
+                    return Response({},status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors,status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'error': 'Invalid old password'}, status.HTTP_400_BAD_REQUEST)
 
