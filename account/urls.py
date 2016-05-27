@@ -8,7 +8,8 @@ from .api import (
     UpdateUserDetailsAPIView,
     ActivateAccountAPIView,
     SendResetPasswordLinkAPIView,
-    ResetPasswordAPIView
+    ResetPasswordAPIView,
+    ChangePasswordAPIView,
 )
 
 
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^api/resend_verification$', ResendVerificationAPIView.as_view(), name='resend-verification'),
     url(r'^api/send_password_reset_link$', SendResetPasswordLinkAPIView.as_view(), name='request-reset-password'),
     url(r'^api/reset_password$', ResetPasswordAPIView.as_view(), name='reset-password'),
+    url(r'^api/change_password$', ChangePasswordAPIView.as_view(), name='change-password'),
 ]
 
 """

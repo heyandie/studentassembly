@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_bytes, smart_text
 from django.utils.http import urlsafe_base64_encode
@@ -239,5 +239,26 @@ class ResetPasswordAPIView(generics.UpdateAPIView):
             if serializer.is_valid():
                 self.perform_update(serializer)
             return Response({},status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Invalid reset password credentials'}, status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordAPIView(generics.UpdateAPIView):
+
+    queryset = User.objects.all()
+    serializer_class = UpdatePasswordSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def partial_update(self, request, *args, **kwargs):
+        user = self.request.user
+        try:
+            if user.check_password(request.data.get('old_password')):
+                serializer = self.get_serializer(user, data=request.data, partial=True)
+                if serializer.is_valid():
+                    self.perform_update(serializer)
+                return Response({},status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid old password'}, status.HTTP_400_BAD_REQUEST)
+
         except ObjectDoesNotExist:
             return Response({'error': 'Invalid reset password credentials'}, status.HTTP_400_BAD_REQUEST)

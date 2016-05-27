@@ -1,16 +1,19 @@
 [
 {
-  "model": "account.user",
-  "pk": "2a0b5cc1-530e-4e2a-9cd3-bcd3c29de637",
-  "fields": {
-    "password": "bcrypt_sha256$$2b$12$UlWsvDHtQ3ULZbhm1ky4qu7qXHpJnZPTBrfxlvW5H75Jqj3/pl.Dm",
-    "last_login": null,
-    "username": "FZRYUJ",
-    "email": "rabinoandie@gmail.com",
-    "registered_at": "2016-02-22T07:45:06.091Z",
-    "is_verified": true
-  }
-},
+    "model": "account.user",
+    "pk": "1cbcd02c-a152-48af-868d-7e34803680bb",
+    "fields": {
+        "password": "bcrypt_sha256$$2b$12$CbO21JYN3X.QT3lpAm66keVlMCmBQ0iVTpexQDGWw8jhl7Skw5AW.",
+        "last_login": null,
+        "name": null,
+        "contact_number": null,
+        "username": "OYMGMJ",
+        "email": "rabinoandie@gmail.com",
+        "registered_at": "2016-04-22T01:44:02.434Z",
+        "is_verified": true
+    }
+}
+,
 {
   "model": "account.verificationtoken",
   "pk": "0bff4e88-5abe-4dc1-88dd-c23c88df91e7",

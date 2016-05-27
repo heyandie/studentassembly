@@ -28,4 +28,16 @@ class UserAPITest(APITestCase):
                 "contact_number": '09175226502'
             }, HTTP_AUTHORIZATION=auth, format='json')
 
-        print (response.content)
+    def testChangePassword(self):
+        auth = 'JWT {0}'.format(self.token)
+        user = User.objects.get(email='rabinoandie@gmail.com')
+
+        response = self.client.patch('/api/change_password'.format(self.user.id),
+            {
+                "password": 'corruptionsucks',
+                "old_password": 'abcdefgh1'
+            }, HTTP_AUTHORIZATION=auth, format='json')
+
+        print(user.password)
+        user = User.objects.get(email='rabinoandie@gmail.com')
+        print(user.password)

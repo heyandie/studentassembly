@@ -41,7 +41,7 @@ class Staff(models.Model):
                 _sum[key] += item['values'].get(key, 0)
             count += 1
 
-        self.rating = {key: _sum[key]/count for key in _sum}
+        self.rating = {key: round(_sum[key]/count,1) for key in _sum}
         self.save()
 
 
